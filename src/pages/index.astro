@@ -6,11 +6,11 @@ import { LandingClient } from "../components/reactJS/LandingClient";
 
 const projects = (await getCollection("work"))
   .sort((a, b) => b.data.number - a.data.number)
-  .slice(0, 3);
+  .slice(0, 4);
 
 const pageTitle = `${dataUser.firstName} ${dataUser.lastName} | Développeur web & mobile`;
 const pageDescription =
-  "Landing page de {firstName} {lastName}, développeur web et mobile basé à {city}. Découvrez sa stack principale, une sélection de projets et son portfolio complet sur my.zodev.live.";
+  "Landing premium de {firstName} {lastName}, développeur web et mobile basé à {city}. Découvrez une sélection de projets, sa stack principale et un accès clair vers le portfolio complet sur my.zodev.live.";
 const description = pageDescription
   .replace("{firstName}", dataUser.firstName)
   .replace("{lastName}", dataUser.lastName)
