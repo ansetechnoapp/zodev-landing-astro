@@ -1,0 +1,24 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { EmailVerificationStatus } from "../../components/reactJS/EmailVerification";
+---
+
+<Layout
+  title="Vérification d'Email - Plateforme de Documentation"
+  description="Vérification de votre adresse email pour la plateforme de documentation collaborative"
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
+      <div class="p-6">
+        <div class="text-center mb-8">
+          <h1 class="text-2xl font-bold">Vérification d'Email</h1>
+          <p class="text-gray-600 mt-2">
+            Nous vérifions votre adresse email
+          </p>
+        </div>
+        
+        <EmailVerificationStatus client:load />
+      </div>
+    </div>
+  </main>
+</Layout>

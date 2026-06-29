@@ -1,0 +1,86 @@
+---
+// Composant de sélection de langue
+import { getLangFromCookies, type Lang } from '../i18n/index';
+
+const currentLang: Lang = getLangFromCookies(Astro.cookies);
+---
+
+<div class="language-toggle">
+  <button class="language-btn" data-lang="fr" aria-label="Français" class:list={[{ active: currentLang === 'fr' }]}>FR</button>
+  <span class="divider">|</span>
+  <button class="language-btn" data-lang="en" aria-label="English" class:list={[{ active: currentLang === 'en' }]}>EN</button>
+</div>
+
+<script>
+  function initLanguageToggle() {
+    // Lire la langue depuis le cookie ou utiliser 'fr' par défaut
+    const getCookie = (name: string): string | null => {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? match[2] : null;
+    };
+
+    const currentLang = getCookie('preferredLanguage') || 'en';
+
+    // Marquer le bouton actif
+    document.querySelectorAll('.language-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+    });
+
+    // Ajouter les écouteurs d'événements
+    document.querySelectorAll('.language-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.getAttribute('data-lang');
+        if (lang && lang !== currentLang) {
+          // Sauvegarder dans le cookie (accessible côté serveur) et localStorage
+          document.cookie = `preferredLanguage=${lang};path=/;max-age=31536000;SameSite=Lax`;
+          localStorage.setItem('preferredLanguage', lang);
+          document.documentElement.setAttribute('lang', lang);
+
+          // Recharger la page pour appliquer la nouvelle langue
+          window.location.reload();
+        }
+      });
+    });
+  }
+
+  // Initialiser le cookie au premier chargement s'il n'existe pas
+  if (!document.cookie.includes('preferredLanguage=')) {
+    // Par défaut 'fr', sauf si l'utilisateur a déjà choisi via localStorage
+    const storedLang = localStorage.getItem('preferredLanguage');
+    const langToSet = (storedLang === 'fr' || storedLang === 'en') ? storedLang : 'en';
+    document.cookie = `preferredLanguage=${langToSet};path=/;max-age=31536000;SameSite=Lax`;
+    localStorage.setItem('preferredLanguage', langToSet);
+    // Recharger une seule fois pour que le serveur puisse lire le cookie
+    window.location.reload();
+  }
+
+  initLanguageToggle();
+  document.addEventListener('astro:page-load', initLanguageToggle);
+</script>
+
+<style>
+  .language-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .language-btn {
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    color: inherit;
+  }
+
+  .language-btn:hover, .language-btn.active {
+    opacity: 1;
+  }
+
+  .divider {
+    opacity: 0.5;
+  }
+</style>

@@ -1,0 +1,515 @@
+---
+// Canvas Background Options for Hero Section
+// Choose one of these modern animated backgrounds
+---
+
+<!-- Option 1: Floating Geometric Particles -->
+<div class="canvas-container" id="geometric-particles">
+  <canvas id="geometricCanvas"></canvas>
+</div>
+
+<!-- Option 2: Interactive Network Connections -->
+<div class="canvas-container" id="network-connections">
+  <canvas id="networkCanvas"></canvas>
+</div>
+
+<!-- Option 3: Floating Orbs with Glow -->
+<div class="canvas-container" id="floating-orbs">
+  <canvas id="orbsCanvas"></canvas>
+</div>
+
+<!-- Option 4: Morphing Shapes -->
+<div class="canvas-container" id="morphing-shapes">
+  <canvas id="morphingCanvas"></canvas>
+</div>
+
+<style>
+  .canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>
+
+<script>
+  // Option 1: Floating Geometric Particles
+  class GeometricParticles {
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+    particles: Array<{
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      rotation: number;
+      rotationSpeed: number;
+      shape: number;
+      opacity: number;
+    }>;
+    mouse: { x: number; y: number };
+
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas 2D context not supported');
+      this.ctx = ctx;
+      this.particles = [];
+      this.mouse = { x: 0, y: 0 };
+      
+      this.resize();
+      this.createParticles();
+      this.animate();
+      
+      window.addEventListener('resize', () => this.resize());
+      window.addEventListener('mousemove', (e) => {
+        this.mouse.x = e.clientX;
+        this.mouse.y = e.clientY;
+      });
+    }
+    
+    resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
+    
+    createParticles() {
+      const particleCount = Math.min(50, Math.floor(window.innerWidth / 30));
+      
+      for (let i = 0; i < particleCount; i++) {
+        this.particles.push({
+          x: Math.random() * this.canvas.width,
+          y: Math.random() * this.canvas.height,
+          size: Math.random() * 4 + 2,
+          speedX: (Math.random() - 0.5) * 0.5,
+          speedY: (Math.random() - 0.5) * 0.5,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.02,
+          shape: Math.floor(Math.random() * 3), // 0: circle, 1: square, 2: triangle
+          opacity: Math.random() * 0.5 + 0.1
+        });
+      }
+    }
+    
+    drawParticle(particle: {
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      rotation: number;
+      rotationSpeed: number;
+      shape: number;
+      opacity: number;
+    }) {
+      this.ctx.save();
+      this.ctx.translate(particle.x, particle.y);
+      this.ctx.rotate(particle.rotation);
+      this.ctx.globalAlpha = particle.opacity;
+      
+      const gradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, particle.size);
+      gradient.addColorStop(0, '#14b8a6');
+      gradient.addColorStop(0.5, '#7611a6');
+      gradient.addColorStop(1, 'transparent');
+      
+      this.ctx.fillStyle = gradient;
+      
+      switch (particle.shape) {
+        case 0: // Circle
+          this.ctx.beginPath();
+          this.ctx.arc(0, 0, particle.size, 0, Math.PI * 2);
+          this.ctx.fill();
+          break;
+        case 1: // Square
+          this.ctx.fillRect(-particle.size, -particle.size, particle.size * 2, particle.size * 2);
+          break;
+        case 2: // Triangle
+          this.ctx.beginPath();
+          this.ctx.moveTo(0, -particle.size);
+          this.ctx.lineTo(-particle.size, particle.size);
+          this.ctx.lineTo(particle.size, particle.size);
+          this.ctx.closePath();
+          this.ctx.fill();
+          break;
+      }
+      
+      this.ctx.restore();
+    }
+    
+    animate() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      
+      this.particles.forEach(particle => {
+        // Mouse interaction
+        const dx = this.mouse.x - particle.x;
+        const dy = this.mouse.y - particle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+          particle.x -= dx * 0.001;
+          particle.y -= dy * 0.001;
+        }
+        
+        // Update position
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+        particle.rotation += particle.rotationSpeed;
+        
+        // Wrap around edges
+        if (particle.x < -10) particle.x = this.canvas.width + 10;
+        if (particle.x > this.canvas.width + 10) particle.x = -10;
+        if (particle.y < -10) particle.y = this.canvas.height + 10;
+        if (particle.y > this.canvas.height + 10) particle.y = -10;
+        
+        this.drawParticle(particle);
+      });
+      
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+  
+  // Option 2: Interactive Network Connections
+  class NetworkConnections {
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+    nodes: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+    }>;
+    mouse: { x: number; y: number };
+
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas 2D context not supported');
+      this.ctx = ctx;
+      this.nodes = [];
+      this.mouse = { x: 0, y: 0 };
+      
+      this.resize();
+      this.createNodes();
+      this.animate();
+      
+      window.addEventListener('resize', () => this.resize());
+      window.addEventListener('mousemove', (e) => {
+        this.mouse.x = e.clientX;
+        this.mouse.y = e.clientY;
+      });
+    }
+    
+    resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
+    
+    createNodes() {
+      const nodeCount = Math.min(40, Math.floor(window.innerWidth / 40));
+      
+      for (let i = 0; i < nodeCount; i++) {
+        this.nodes.push({
+          x: Math.random() * this.canvas.width,
+          y: Math.random() * this.canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          radius: Math.random() * 3 + 1
+        });
+      }
+    }
+    
+    drawConnections() {
+      for (let i = 0; i < this.nodes.length; i++) {
+        for (let j = i + 1; j < this.nodes.length; j++) {
+          const dx = this.nodes[i].x - this.nodes[j].x;
+          const dy = this.nodes[i].y - this.nodes[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 120) {
+            const opacity = (120 - distance) / 120 * 0.3;
+            this.ctx.strokeStyle = `rgba(20, 184, 166, ${opacity})`;
+            this.ctx.lineWidth = 1;
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.nodes[i].x, this.nodes[i].y);
+            this.ctx.lineTo(this.nodes[j].x, this.nodes[j].y);
+            this.ctx.stroke();
+          }
+        }
+      }
+    }
+    
+    animate() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      
+      // Draw connections
+      this.drawConnections();
+      
+      // Update and draw nodes
+      this.nodes.forEach(node => {
+        // Mouse interaction
+        const dx = this.mouse.x - node.x;
+        const dy = this.mouse.y - node.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 80) {
+          node.x -= dx * 0.002;
+          node.y -= dy * 0.002;
+        }
+        
+        // Update position
+        node.x += node.vx;
+        node.y += node.vy;
+        
+        // Bounce off edges
+        if (node.x < 0 || node.x > this.canvas.width) node.vx *= -1;
+        if (node.y < 0 || node.y > this.canvas.height) node.vy *= -1;
+        
+        // Draw node
+        this.ctx.beginPath();
+        this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = '#14b8a6';
+        this.ctx.fill();
+      });
+      
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+  
+  // Option 3: Floating Orbs with Glow
+  class FloatingOrbs {
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+    orbs: Array<{
+      x: number;
+      y: number;
+      baseX: number;
+      baseY: number;
+      radius: number;
+      speed: number;
+      phase: number;
+      color: string;
+    }>;
+    time: number;
+
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas 2D context not supported');
+      this.ctx = ctx;
+      this.orbs = [];
+      this.time = 0;
+      
+      this.resize();
+      this.createOrbs();
+      this.animate();
+      
+      window.addEventListener('resize', () => this.resize());
+    }
+    
+    resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
+    
+    createOrbs() {
+      const orbCount = Math.min(15, Math.floor(window.innerWidth / 100));
+      
+      for (let i = 0; i < orbCount; i++) {
+        this.orbs.push({
+          x: Math.random() * this.canvas.width,
+          y: Math.random() * this.canvas.height,
+          baseX: Math.random() * this.canvas.width,
+          baseY: Math.random() * this.canvas.height,
+          radius: Math.random() * 30 + 10,
+          speed: Math.random() * 0.02 + 0.005,
+          phase: Math.random() * Math.PI * 2,
+          color: ['#14b8a6', '#7611a6', '#6366f1'][Math.floor(Math.random() * 3)]
+        });
+      }
+    }
+    
+    animate() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.time += 0.01;
+      
+      this.orbs.forEach(orb => {
+        // Floating motion
+        orb.x = orb.baseX + Math.sin(this.time * orb.speed + orb.phase) * 50;
+        orb.y = orb.baseY + Math.cos(this.time * orb.speed + orb.phase) * 30;
+        
+        // Create glow effect
+        const gradient = this.ctx.createRadialGradient(
+          orb.x, orb.y, 0,
+          orb.x, orb.y, orb.radius * 2
+        );
+        gradient.addColorStop(0, orb.color + '40');
+        gradient.addColorStop(0.5, orb.color + '20');
+        gradient.addColorStop(1, 'transparent');
+        
+        this.ctx.fillStyle = gradient;
+        this.ctx.beginPath();
+        this.ctx.arc(orb.x, orb.y, orb.radius * 2, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        // Draw core
+        this.ctx.fillStyle = orb.color + '60';
+        this.ctx.beginPath();
+        this.ctx.arc(orb.x, orb.y, orb.radius * 0.3, 0, Math.PI * 2);
+        this.ctx.fill();
+      });
+      
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+  
+  // Option 4: Morphing Shapes
+  class MorphingShapes {
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+    shapes: Array<{
+      x: number;
+      y: number;
+      size: number;
+      rotation: number;
+      rotationSpeed: number;
+      morphSpeed: number;
+      phase: number;
+      color: string;
+    }>;
+    time: number;
+
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas 2D context not supported');
+      this.ctx = ctx;
+      this.shapes = [];
+      this.time = 0;
+      
+      this.resize();
+      this.createShapes();
+      this.animate();
+      
+      window.addEventListener('resize', () => this.resize());
+    }
+    
+    resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
+    
+    createShapes() {
+      const shapeCount = Math.min(8, Math.floor(window.innerWidth / 200));
+      
+      for (let i = 0; i < shapeCount; i++) {
+        this.shapes.push({
+          x: Math.random() * this.canvas.width,
+          y: Math.random() * this.canvas.height,
+          size: Math.random() * 60 + 40,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.01,
+          morphSpeed: Math.random() * 0.02 + 0.01,
+          phase: Math.random() * Math.PI * 2,
+          color: ['#14b8a6', '#7611a6', '#6366f1'][Math.floor(Math.random() * 3)]
+        });
+      }
+    }
+    
+    drawMorphingShape(shape: {
+      x: number;
+      y: number;
+      size: number;
+      rotation: number;
+      rotationSpeed: number;
+      morphSpeed: number;
+      phase: number;
+      color: string;
+    }) {
+      this.ctx.save();
+      this.ctx.translate(shape.x, shape.y);
+      this.ctx.rotate(shape.rotation);
+      
+      const points = 6;
+      const morphFactor = Math.sin(this.time * shape.morphSpeed + shape.phase) * 0.3 + 1;
+      
+      this.ctx.beginPath();
+      for (let i = 0; i <= points; i++) {
+        const angle = (i / points) * Math.PI * 2;
+        const radius = shape.size * (0.7 + 0.3 * Math.sin(angle * 3 + this.time * 2) * morphFactor);
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        
+        if (i === 0) {
+          this.ctx.moveTo(x, y);
+        } else {
+          this.ctx.lineTo(x, y);
+        }
+      }
+      this.ctx.closePath();
+      
+      // Gradient fill
+      const gradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, shape.size);
+      gradient.addColorStop(0, shape.color + '30');
+      gradient.addColorStop(1, 'transparent');
+      
+      this.ctx.fillStyle = gradient;
+      this.ctx.fill();
+      
+      // Stroke
+      this.ctx.strokeStyle = shape.color + '60';
+      this.ctx.lineWidth = 2;
+      this.ctx.stroke();
+      
+      this.ctx.restore();
+    }
+    
+    animate() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.time += 0.01;
+      
+      this.shapes.forEach(shape => {
+        shape.rotation += shape.rotationSpeed;
+        this.drawMorphingShape(shape);
+      });
+      
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+  
+  // Initialize based on user preference
+  document.addEventListener('DOMContentLoaded', () => {
+    // Change this to switch between different canvas backgrounds
+    const canvasType = 'geometric-particles' as 'geometric-particles' | 'network-connections' | 'floating-orbs' | 'morphing-shapes';
+    
+    let canvas: HTMLCanvasElement | null;
+    switch (canvasType) {
+      case 'geometric-particles':
+        canvas = document.getElementById('geometricCanvas') as HTMLCanvasElement;
+        if (canvas) new GeometricParticles(canvas);
+        break;
+      case 'network-connections':
+        canvas = document.getElementById('networkCanvas') as HTMLCanvasElement;
+        if (canvas) new NetworkConnections(canvas);
+        break;
+      case 'floating-orbs':
+        canvas = document.getElementById('orbsCanvas') as HTMLCanvasElement;
+        if (canvas) new FloatingOrbs(canvas);
+        break;
+      case 'morphing-shapes':
+        canvas = document.getElementById('morphingCanvas') as HTMLCanvasElement;
+        if (canvas) new MorphingShapes(canvas);
+        break;
+    }
+  });
+</script>

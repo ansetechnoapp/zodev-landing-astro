@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git stash)",
+      "Bash(git branch backup/pre-modifications)",
+      "Bash(git stash pop)",
+      "Read(//c/Users/kevin/.claude/projects/c--Users-kevin-Allproject-portfolio/f496ce77-a9ae-479b-8d47-b34f5a1420f4/tool-results/**)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s http://localhost:4322/)",
+      "Bash(npx astro dev --host)",
+      "Bash(xargs ls -la)",
+      "Bash(npm run build)",
+      "Read(//c/Users/kevin/**)",
+      "Bash(npx --help)",
+      "Bash(npm list -g sharp)",
+      "Bash(node -e \":*)"
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+---
+import MainHead from "../components/MainHead.astro";
+import BodyHeader from "../components/BodyHeader.astro";
+interface Props {
+  title?: string | undefined;
+  description?: string | undefined;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <MainHead title={title} description={description} />
+  </head>
+  <body>
+    <header>
+      <BodyHeader />
+    </header>
+    <slot />
+  </body>
+  <style>
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: transparent;
+      padding: 22px 15%;
+      border-bottom: 1px solid transparent;
+      transition: all 0.45s ease;
+    }
+
+    header.sticky {
+      background: var(--bg-color);
+      border-bottom: 1px solid #ffffff1a;
+      padding: 12px 15%;
+    }
+    @media (max-width: 1480px) {
+      header {
+        padding: 12px 2.5%;
+        transition: 0.1s;
+      }
+
+      header.sticky {
+        padding: 10px 2.5%;
+        transition: 0.1s;
+      }
+    }
+  </style>
+  <script>
+    const header = document.querySelector("header");
+    window.addEventListener("scroll", function () {
+      header.classList.toggle("sticky", window.scrollY > 100);
+    });
+
+    let menu = document.querySelector("#menu-icon") as HTMLElement;
+    let navlist = document.querySelector(".navlist");
+
+    menu.onclick = () => {
+      menu.classList.toggle("bx-x");
+      navlist.classList.toggle("open");
+    };
+
+    window.onscroll = () => {
+      menu.classList.remove("bx-x");
+      navlist.classList.remove("open");
+    };
+  </script>
+</html>

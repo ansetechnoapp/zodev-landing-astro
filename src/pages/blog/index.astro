@@ -1,0 +1,1514 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import MenuLinkNav from "../../components/menuLinkNav.astro";
+import {
+  getAllPosts,
+  getAllTags,
+  parsePostDates,
+} from "../../data/blog/index.js";
+
+// Get all posts sorted by date
+const posts = getAllPosts().map((post) => ({
+  ...post,
+  data: {
+    ...post,
+    pubDate: new Date(post.pubDate),
+    updatedDate: post.updatedDate ? new Date(post.updatedDate) : undefined,
+  },
+}));
+
+// Get featured posts (top 3) 
+const featuredPosts = posts.slice(0, 3);
+// Get remaining posts
+const remainingPosts = posts.slice(3);
+
+// Extract all unique tags from posts
+const allTags = getAllTags();
+
+import { getLangFromCookies, getTranslations } from "../../i18n/index";
+const lang = getLangFromCookies(Astro.cookies);
+const i18n = getTranslations(lang);
+---
+
+<Layout
+  title={i18n.blog.pageTitle}
+  description={i18n.blog.pageDescription}
+  image="/assets/social-preview.jpg"
+  type="website"
+>
+  <MenuLinkNav namepage="blog" />
+
+  <section class="presentation-section mt-16">
+    <div class="wrapper">
+      <div class="presentation-content">
+        <h1>{i18n.blog.title}</h1>
+        <p>
+          {i18n.blog.intro1}
+        </p>
+        <p>
+          {i18n.blog.intro2}
+        </p>
+        <div class="presentation-cta">
+          <a href="#featured" class="btn">{i18n.blog.readLatest}</a>
+          <a href="#categories" class="btn">{i18n.blog.browseTopics}</a> 
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container mx-auto px-4 py-20">
+    <!-- Featured Section -->
+    <section id="featured" class="mb-24">
+      <div class="flex items-center justify-between mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white relative">
+          <span class="relative z-10">{i18n.blog.featuredArticles}</span>
+          <span
+            class="absolute bottom-0 left-0 h-3 w-24 bg-indigo-500/20 dark:bg-indigo-500/30 -z-0"
+          ></span>
+        </h2>
+        <div class="flex gap-2">
+          <button
+            id="prev-featured"
+            aria-label="Previous articles"
+            class="p-2 rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-chevron-left"
+              ><path d="m15 18-6-6 6-6"></path></svg
+            >
+          </button>
+          <button
+            id="next-featured"
+            aria-label="Next articles"
+            class="p-2 rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-chevron-right"
+              ><path d="m9 18 6-6-6-6"></path></svg
+            >
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+          featuredPosts.map((post, index) => (
+            <article
+              class={`group rounded-xl bg-white dark:bg-gray-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 ${index === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
+            >
+              <div class="relative aspect-video md:aspect-auto md:h-64 overflow-hidden">
+                {post.data.heroImage && (
+                  <Image
+                    src={post.data.heroImage}
+                    alt={post.data.title}
+                    width={800}
+                    height={600}
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                )}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                <div class="absolute top-4 left-4 z-10">
+                  {post.data.tags &&
+                    post.data.tags
+                      .slice(0, 2)
+                      .map((tag) => (
+                        <span class="inline-block bg-indigo-600 text-white text-xs font-medium px-3 py-1 rounded-full mr-2 mb-2">
+                          {tag}
+                        </span>
+                      ))}
+                </div>
+              </div>
+
+              <div class="p-6">
+                <time
+                  datetime={post.data.pubDate.toISOString()}
+                  class="text-sm text-indigo-500 dark:text-indigo-400 font-medium mb-2 block"
+                >
+                  {post.data.pubDate.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+
+                <h3
+                  class={`font-bold mb-3 text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors ${index === 0 ? "text-2xl md:text-3xl" : "text-xl"}`}
+                >
+                  <a href={`/blog/${post.slug}`} class="block">
+                    {post.data.title}
+                  </a>
+                </h3>
+
+                <p class="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3">
+                  {post.data.description}
+                </p>
+
+                <a
+                  href={`/blog/${post.slug}`}
+                  class="inline-flex items-center font-medium text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors"
+                >
+                  Read article
+                  <svg
+                    class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="mb-24">
+      <div class="categories-header mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white relative">
+          <span class="relative z-10 font-display">Browse by Topic</span>
+          <span
+            class="absolute bottom-0 left-0 h-3 w-28 -z-0"
+            style="background: var(--accent-gradient); opacity: 0.2;"></span>
+        </h2>
+        <p class="mt-3 text-lg" style="color: var(--secondary-text);">
+          Explore articles by subject to find exactly what interests you
+        </p>
+      </div>
+
+      <!-- Mobile-First Responsive Filter Controls -->
+      <div class="filter-controls mb-12">
+        <!-- Filter Tags Section -->
+        <div class="filter-tags-section mb-6">
+          <h3 class="filter-section-title text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wide">
+            Filter by Topic 
+          </h3>
+          <div class="filter-tags-container">
+            <div class="filter-tags-scroll">
+              <div class="filter-tags-grid">
+                <button
+                  class="filter-btn active"
+                  style="background: var(--accent-regular); box-shadow: var(--accent-soft-glow);"
+                  data-tag="all"
+                  aria-label="Show all topics"
+                >
+                  <span class="filter-btn-text">All Topics</span>
+                  <span class="filter-btn-count" id="all-count"></span>
+                </button>
+                {
+                  allTags.slice(0, 6).map((tag) => (
+                    <button
+                      class="filter-btn tag-visible"
+                      data-tag={tag}
+                      aria-label={`Filter by ${tag}`}
+                    >
+                      <span class="filter-btn-text">{tag}</span>
+                      <span class="filter-btn-count" id={`${tag}-count`}></span>
+                    </button>
+                  ))
+                }
+                {
+                  allTags.slice(6).map((tag) => (
+                    <button
+                      class="filter-btn tag-hidden"
+                      data-tag={tag}
+                      aria-label={`Filter by ${tag}`}
+                      style="display: none;"
+                    >
+                      <span class="filter-btn-text">{tag}</span>
+                      <span class="filter-btn-count" id={`${tag}-count`}></span>
+                    </button>
+                  ))
+                }
+                {
+                  allTags.length > 6 && (
+                    <button
+                      id="show-more-tags"
+                      class="filter-btn show-more-btn"
+                      aria-label="Show more tags"
+                    >
+                      <span class="filter-btn-text">See More</span>
+                      <svg class="show-more-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </button>
+                  )
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="controls-section">
+          <div class="controls-grid">
+            <!-- Sort Controls -->
+            <div class="sort-controls-container">
+              <label for="sort-select" class="control-label">
+                <svg class="control-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
+                </svg>
+                Sort by
+              </label>
+              <select id="sort-select" class="sort-select">
+                <option value="date-desc">Newest First</option>
+                <option value="date-asc">Oldest First</option>
+                <option value="title-asc">Title A-Z</option>
+                <option value="title-desc">Title Z-A</option>
+              </select>
+            </div>
+
+            <!-- View Toggle -->
+            <div class="view-toggle-container">
+              <span class="control-label">
+                <svg class="control-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                </svg>
+                View
+              </span>
+              <div class="view-toggle">
+                <button id="grid-view" class="view-btn active" aria-label="Grid view">
+                  <svg class="view-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                  </svg>
+                  <span class="view-btn-text">Grid</span>
+                </button>
+                <button id="masonry-view" class="view-btn" aria-label="Masonry view">
+                  <svg class="view-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                  </svg>
+                  <span class="view-btn-text">Masonry</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Results Info -->
+            <div class="results-info-container">
+              <div class="results-info">
+                <span class="results-count" id="results-count">0 articles</span>
+                <button class="clear-filters" id="clear-filters" style="display: none;" aria-label="Clear all filters">
+                  <svg class="clear-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                  Clear
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="posts-container" class="posts-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+          remainingPosts.map((post) => (
+            <article
+              class="post-card group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+              data-tags={post.data.tags?.join(",")}
+            >
+              <div class="relative aspect-video overflow-hidden">
+                {post.data.heroImage && (
+                  <Image
+                    src={post.data.heroImage}
+                    alt={post.data.title}
+                    width={800}
+                    height={600}
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                )}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div class="p-6">
+                <div class="flex flex-wrap mb-3">
+                  {post.data.tags &&
+                    post.data.tags.map((tag) => (
+                      <span
+                        class="inline-block text-xs font-medium px-2.5 py-1 rounded-full mr-2 mb-1 transition-all duration-300 border border-white/40"
+                        style={{
+                          background: "var(--accent-light)",
+                          color: "var(--accent-text-over)",
+                          opacity: "0.9",
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                </div>
+
+                <h3
+                  class="text-xl font-bold mb-3 text-gray-900 dark:text-white transition-colors"
+                  style="font-family: var(--font-display);"
+                >
+                  <a
+                    href={`/blog/${post.slug}`}
+                    class="block transition-all duration-300"
+                    style="&:hover { color: var(--accent-regular); }"
+                  >
+                    {post.data.title}
+                  </a>
+                </h3>
+
+                <p
+                  class="mb-6 line-clamp-3"
+                  style="color: var(--secondary-text); line-height: var(--line-height-relaxed);"
+                >
+                  {post.data.description}
+                </p>
+
+                <div class="flex items-center justify-between">
+                  <time
+                    datetime={post.data.pubDate.toISOString()}
+                    class="text-sm text-gray-500 dark:text-gray-400"
+                  >
+                    {post.data.pubDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+
+                  <a
+                    href={`/blog/${post.slug}`}
+                    class="inline-flex items-center font-medium transition-all duration-300"
+                    style="color: var(--accent-regular);"
+                  >
+                    Read more
+                    <svg
+                      class="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section
+      class="relative overflow-hidden rounded-3xl"
+      style="background: var(--accent-gradient);"
+    >
+      <div
+        class="absolute top-0 left-0 w-full h-full bg-[url('/images/dots-pattern.svg')] opacity-10"
+      >
+      </div>
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-black/5"
+      >
+      </div>
+      <div
+        class="relative z-10 py-16 px-8 md:px-16 flex flex-col md:flex-row items-center justify-between gap-12"
+      >
+        <div class="md:w-1/2">
+          <h2
+            class="text-3xl md:text-4xl font-extrabold text-white mb-4"
+            style="font-family: var(--font-display);"
+          >
+            Get the latest insights straight to your inbox
+          </h2>
+          <p
+            class="text-white/90 text-lg mb-0 max-w-lg"
+            style="line-height: var(--line-height-relaxed);"
+          >
+            Join my newsletter for exclusive content, early access to new
+            articles, and actionable insights you won't find anywhere else.
+          </p>
+        </div>
+        <div class="md:w-1/2 w-full max-w-md">
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl">
+            <h3
+              class="text-xl font-bold mb-4 text-gray-900 dark:text-white"
+              style="font-family: var(--font-display);"
+            >
+              Subscribe to my newsletter
+            </h3>
+            <form class="space-y-4">
+              <div>
+                <label
+                  for="full-name"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Full name</label
+                >
+                <input
+                  id="full-name"
+                  type="text"
+                  placeholder="John Doe"
+                  class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all"
+                  style="focus:ring-color: var(--accent-regular);"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Email address</label
+                >
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="john@example.com"
+                  class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all"
+                  style="focus:ring-color: var(--accent-regular);"
+                  required
+                />
+              </div>
+              <div class="flex items-start">
+                <input
+                  id="terms"
+                  type="checkbox"
+                  class="h-4 w-4 mt-1 border-gray-300 rounded focus:ring-2 transition-all"
+                  style="color: var(--accent-regular); focus:ring-color: var(--accent-regular);"
+                  required
+                />
+                <label
+                  for="terms"
+                  class="ml-2 block text-sm text-gray-500 dark:text-gray-400"
+                >
+                  I agree to receive emails and accept the <strong
+                    class="font-medium"
+                    style="color: var(--accent-regular);">Privacy Policy</strong
+                  >
+                </label>
+              </div>
+              <button
+                type="submit"
+                class="w-full inline-flex justify-center items-center py-3 px-4 border border-transparent shadow-sm text-base font-medium rounded-lg text-white transition-all duration-300"
+                style="background: var(--accent-regular); box-shadow: var(--accent-soft-glow);"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(118, 17, 166, 0.3)';"
+                onmouseout="this.style.transform=''; this.style.boxShadow='var(--accent-soft-glow)';"
+              >
+                Subscribe
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="ml-2 h-5 w-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m5 9 7 7 7-7"></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* Fix for top navigation overflow */
+  :global(header) {
+    margin-bottom: 0;
+  }
+
+  .presentation-section {
+    padding: 8rem 0 4rem;
+    text-align: center;
+    margin-top: -4rem; /* Pull up to close the gap */
+    position: relative;
+    z-index: 0; /* Lower z-index than header */
+    overflow: hidden;
+  }
+
+  .mt-16 {
+    margin-top: 4rem;
+  }
+
+  .presentation-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at top right,
+        var(--accent-regular-alpha, rgba(74, 58, 183, 0.2)),
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at bottom left,
+        var(--accent-dark-alpha, rgba(43, 31, 129, 0.2)),
+        transparent 60%
+      );
+    opacity: 0.4;
+    z-index: -1;
+  }
+
+  .presentation-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .presentation-content h1 {
+    font-size: var(--text-3xl, 2.5rem);
+    color: var(--gray-0, #ffffff);
+    margin-bottom: 1.5rem;
+  }
+
+  .presentation-content p {
+    font-size: var(--text-lg, 1.125rem);
+    color: var(--gray-200, #e2e8f0);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .presentation-cta {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(
+      --gradient-accent,
+      linear-gradient(45deg, #4c1d95, #6d28d9)
+    );
+    color: var(--accent-text-over, #ffffff);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn:hover {
+    box-shadow: 0 0 12px var(--accent-regular, rgba(99, 102, 241, 0.8));
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid white;
+  }
+
+  .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Mobile-First Responsive Filter Controls */
+  .filter-controls {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 3rem;
+  }
+
+  /* Filter Tags Section */
+  .filter-tags-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-section-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-tags-container {
+    position: relative;
+  }
+
+  .filter-tags-scroll {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 0.5rem;
+  }
+
+  .filter-tags-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-tags-grid {
+    display: flex;
+    gap: 0.75rem;
+    min-width: max-content;
+    padding: 0.25rem 0;
+  }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 2rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--gray-700);
+    backdrop-filter: blur(8px);
+    min-height: 44px; /* Touch-friendly minimum */
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .filter-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .filter-btn:hover::before {
+    left: 100%;
+  }
+
+  .filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .filter-btn.active {
+    background: var(--accent-regular);
+    color: white;
+    border-color: var(--accent-regular);
+    box-shadow: var(--accent-soft-glow);
+  }
+
+  .filter-btn-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  .filter-btn-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: currentColor;
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 1.5rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .filter-btn.active .filter-btn-count {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  /* Show More Button */
+  .show-more-btn {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px dashed rgba(255, 255, 255, 0.3) !important;
+    color: var(--gray-600) !important;
+  }
+
+  .show-more-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    color: var(--gray-700) !important;
+  }
+
+  .show-more-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .show-more-btn.expanded .show-more-icon {
+    transform: rotate(180deg);
+  }
+
+  .tag-hidden {
+    display: none !important;
+  }
+
+  .tag-visible {
+    display: flex !important;
+  }
+
+  /* Controls Section */
+  .controls-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+  }
+
+  .controls-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Sort Controls */
+  .sort-controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .control-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-600);
+  }
+
+  .control-icon {
+    width: 1rem;
+    height: 1rem;
+    opacity: 0.7;
+  }
+
+  .sort-select {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    color: var(--gray-700);
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    min-height: 44px;
+    cursor: pointer;
+  }
+
+  .sort-select:focus {
+    outline: none;
+    border-color: var(--accent-regular);
+    box-shadow: 0 0 0 3px rgba(118, 17, 166, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* View Toggle */
+  .view-toggle-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .view-toggle {
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 0.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+  }
+
+  .view-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    background: transparent;
+    color: var(--gray-600);
+    cursor: pointer;
+    flex: 1;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .view-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--gray-700);
+  }
+
+  .view-btn.active {
+    background: var(--accent-regular);
+    color: white;
+    box-shadow: 0 2px 8px rgba(118, 17, 166, 0.3);
+  }
+
+  .view-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .view-btn-text {
+    display: none;
+  }
+
+  /* Results Info */
+  .results-info-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .results-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .results-count {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-600);
+  }
+
+  .clear-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .clear-filters:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+
+  .clear-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  /* Masonry layout styles */
+  .posts-masonry .post-card {
+    break-inside: avoid;
+    margin-bottom: 2rem;
+    display: inline-block;
+    width: 100%;
+  }
+
+  /* Animation for filtered posts */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Enhanced card hover effects */
+  .post-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--accent-regular), var(--accent-light));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .post-card:hover::before {
+    opacity: 0.05;
+  }
+
+  .post-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-card:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Responsive Design - Mobile First */
+
+  /* Small screens (sm: 640px+) */
+  @media (min-width: 640px) {
+    .filter-controls {
+      padding: 1.25rem;
+    }
+
+    .filter-tags-grid {
+      gap: 1rem;
+    }
+
+    .filter-btn {
+      padding: 0.75rem 1.25rem;
+    }
+
+    .controls-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .view-btn-text {
+      display: inline;
+    }
+
+    .results-info-container {
+      grid-column: 1 / -1;
+      justify-content: flex-end;
+    }
+  }
+
+  /* Medium screens (md: 768px+) */
+  @media (min-width: 768px) {
+    .filter-controls {
+      padding: 1.5rem;
+    }
+
+    .filter-tags-scroll {
+      overflow-x: visible;
+    }
+
+    .filter-tags-grid {
+      flex-wrap: wrap;
+      min-width: auto;
+    }
+
+    .controls-grid {
+      grid-template-columns: 1fr auto auto;
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .sort-controls-container,
+    .view-toggle-container {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sort-select {
+      min-width: 160px;
+    }
+
+    .view-toggle {
+      min-width: auto;
+    }
+
+    .results-info-container {
+      grid-column: auto;
+      justify-content: flex-start;
+    }
+  }
+
+  /* Large screens (lg: 1024px+) */
+  @media (min-width: 1024px) {
+    .filter-controls {
+      padding: 2rem;
+    }
+
+    .filter-tags-grid {
+      gap: 1.25rem;
+    }
+
+    .filter-btn {
+      padding: 0.875rem 1.5rem;
+      font-size: 0.9375rem;
+    }
+
+    .controls-grid {
+      gap: 3rem;
+    }
+
+    .control-label {
+      font-size: 0.9375rem;
+    }
+
+    .sort-select {
+      padding: 0.875rem 1.25rem;
+      font-size: 0.9375rem;
+      min-width: 180px;
+    }
+
+    .view-btn {
+      padding: 0.875rem 1.25rem;
+      font-size: 0.9375rem;
+    }
+  }
+
+  /* Extra large screens (xl: 1280px+) */
+  @media (min-width: 1280px) {
+    .filter-controls {
+      padding: 2.5rem;
+    }
+
+    .controls-section {
+      padding-top: 2rem;
+    }
+
+    .controls-grid {
+      gap: 4rem;
+    }
+  }
+
+  /* Dark mode adjustments */
+  @media (prefers-color-scheme: dark) {
+    .filter-section-title {
+      color: var(--gray-300);
+    }
+
+    .filter-btn {
+      color: var(--gray-200);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .control-label {
+      color: var(--gray-300);
+    }
+
+    .sort-select {
+      color: var(--gray-200);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .sort-select:focus {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .view-btn {
+      color: var(--gray-300);
+    }
+
+    .view-btn:hover:not(.active) {
+      color: var(--gray-200);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .results-count {
+      color: var(--gray-300);
+    }
+
+    .results-info {
+      background: rgba(255, 255, 255, 0.02);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .filter-btn {
+      border-width: 2px;
+    }
+
+    .filter-btn.active {
+      border-color: var(--accent-regular);
+    }
+
+    .sort-select {
+      border-width: 2px;
+    }
+
+    .view-toggle {
+      border-width: 2px;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .filter-btn,
+    .sort-select,
+    .view-btn,
+    .clear-filters {
+      transition: none;
+    }
+
+    .filter-btn::before {
+      display: none;
+    }
+
+    .filter-btn:hover {
+      transform: none;
+    }
+  }
+
+  /* Legacy mobile support */
+  @media (max-width: 639px) {
+    .posts-masonry {
+      columns: 1 !important;
+    }
+
+    .filter-btn {
+      min-width: 120px;
+      justify-content: center;
+    }
+
+    .view-toggle {
+      width: 100%;
+    }
+
+    .view-btn {
+      flex: 1;
+    }
+  }
+</style>
+
+<script>
+  // Enhanced blog functionality with filtering, sorting, and view modes
+  document.addEventListener("DOMContentLoaded", () => {
+    const filterButtons = document.querySelectorAll<HTMLElement>(".filter-btn");
+    const postCards = document.querySelectorAll<HTMLElement>(".post-card");
+    const sortSelect = document.getElementById("sort-select") as HTMLSelectElement;
+    const postsContainer = document.getElementById("posts-container") as HTMLElement;
+    const gridViewBtn = document.getElementById("grid-view") as HTMLButtonElement;
+    const masonryViewBtn = document.getElementById("masonry-view") as HTMLButtonElement;
+    const resultsCount = document.getElementById("results-count") as HTMLElement;
+    const clearFiltersBtn = document.getElementById("clear-filters") as HTMLButtonElement;
+    const showMoreBtn = document.getElementById("show-more-tags");
+    const searchParams = new URLSearchParams(window.location.search);
+
+    let currentFilter = "all";
+    let currentSort = "date-desc";
+    let currentView = "grid";
+    let areHiddenTagsExpanded = false;
+
+    // Initialize posts array for sorting
+    const postsData = Array.from(postCards).map((card) => {
+      const titleElement = card.querySelector("h3 a");
+      const dateElement = card.querySelector("time");
+      return {
+        element: card,
+        title: titleElement?.textContent || "",
+        date: dateElement?.getAttribute("datetime") || "",
+        tags: card.getAttribute("data-tags") || ""
+      };
+    });
+
+    // Initialize post counts
+    function updatePostCounts() {
+      const allCount = postsData.length;
+      const allCountElement = document.getElementById("all-count");
+      if (allCountElement) {
+        allCountElement.textContent = allCount.toString();
+      }
+
+      // Count posts for each tag
+      filterButtons.forEach((button) => {
+        const tag = button.getAttribute("data-tag");
+        if (tag && tag !== "all") {
+          const count = postsData.filter(({ tags }) => tags.includes(tag)).length;
+          const countElement = document.getElementById(`${tag}-count`);
+          if (countElement) {
+            countElement.textContent = count.toString();
+          }
+        }
+      });
+    }
+
+    // Update results count and clear button visibility
+    function updateResultsInfo() {
+      const visiblePosts = postsData.filter(({ element }) =>
+        element.style.display !== "none"
+      ).length;
+
+      if (resultsCount) {
+        resultsCount.textContent = `${visiblePosts} article${visiblePosts !== 1 ? 's' : ''}`;
+      }
+
+      if (clearFiltersBtn) {
+        clearFiltersBtn.style.display = currentFilter !== "all" ? "flex" : "none";
+      }
+    }
+
+    function syncTagQueryParam(tag: string) {
+      const nextUrl = new URL(window.location.href);
+
+      if (tag && tag !== "all") {
+        nextUrl.searchParams.set("tag", tag);
+        nextUrl.hash = "categories";
+      } else {
+        nextUrl.searchParams.delete("tag");
+      }
+
+      window.history.replaceState({}, "", nextUrl);
+    }
+
+    function setActiveFilterButton(activeTag: string) {
+      filterButtons.forEach((btn) => {
+        btn.classList.remove("active");
+        btn.style.background = "";
+        btn.style.boxShadow = "";
+        btn.style.color = "";
+        btn.style.borderColor = "";
+      });
+
+      const activeButton = Array.from(filterButtons).find(
+        (btn) => btn.getAttribute("data-tag") === activeTag
+      );
+
+      if (activeButton) {
+        activeButton.classList.add("active");
+        activeButton.style.background = "var(--accent-regular)";
+        activeButton.style.boxShadow = "var(--accent-soft-glow)";
+        activeButton.style.color = "white";
+        activeButton.style.borderColor = "var(--accent-regular)";
+      }
+    }
+
+    function expandHiddenTags() {
+      const hiddenTags = document.querySelectorAll<HTMLElement>(".tag-hidden");
+      hiddenTags.forEach((tag) => {
+        tag.style.display = "flex";
+        tag.classList.remove("tag-hidden");
+        tag.classList.add("tag-visible");
+      });
+
+      const btnText = showMoreBtn?.querySelector(".filter-btn-text");
+      showMoreBtn?.classList.add("expanded");
+      if (btnText) btnText.textContent = "See Less";
+      areHiddenTagsExpanded = true;
+    }
+
+    function collapseHiddenTags() {
+      const allFilterBtns = document.querySelectorAll<HTMLElement>(
+        ".filter-btn[data-tag]:not(#show-more-tags)"
+      );
+      const tagsToHide = Array.from(allFilterBtns).slice(6);
+
+      tagsToHide.forEach((tag) => {
+        tag.style.display = "none";
+        tag.classList.remove("tag-visible");
+        tag.classList.add("tag-hidden");
+      });
+
+      const btnText = showMoreBtn?.querySelector(".filter-btn-text");
+      showMoreBtn?.classList.remove("expanded");
+      if (btnText) btnText.textContent = "See More";
+      areHiddenTagsExpanded = false;
+    }
+
+    // Filter functionality
+    function filterPosts(tag: string, updateUrl = true) {
+      currentFilter = tag;
+      postsData.forEach(({ element, tags }) => {
+        const shouldShow = tag === "all" || tags.includes(tag);
+        element.style.display = shouldShow ? "block" : "none";
+
+        if (shouldShow) {
+          element.style.animation = "fadeInUp 0.3s ease-out";
+        }
+      });
+
+      updateResultsInfo();
+      if (updateUrl) {
+        syncTagQueryParam(tag);
+      }
+    }
+
+    // Sort functionality
+    function sortPosts(sortBy: string) {
+      currentSort = sortBy;
+      const sortedPosts = [...postsData].sort((a, b) => {
+        switch (sortBy) {
+          case "date-desc":
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          case "date-asc":
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          case "title-asc":
+            return a.title.localeCompare(b.title);
+          case "title-desc":
+            return b.title.localeCompare(a.title);
+          default:
+            return 0;
+        }
+      });
+
+      // Reorder DOM elements
+      sortedPosts.forEach(({ element }) => {
+        postsContainer.appendChild(element);
+      });
+
+      // Reapply current filter
+      filterPosts(currentFilter);
+    }
+
+    // Clear all filters
+    function clearAllFilters() {
+      currentFilter = "all";
+
+      // Reset filter buttons
+      filterButtons.forEach((btn) => {
+        btn.classList.remove("active");
+        btn.style.background = "";
+        btn.style.boxShadow = "";
+        btn.style.color = "";
+        btn.style.borderColor = "";
+      });
+
+      // Activate "All Topics" button
+      setActiveFilterButton("all");
+
+      // Show all posts
+      filterPosts("all");
+    }
+
+    // View mode functionality
+    function setViewMode(mode: string) {
+      currentView = mode;
+
+      if (mode === "masonry") {
+        postsContainer.className = "posts-masonry columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8";
+        postsContainer.style.columnGap = "2rem";
+      } else {
+        postsContainer.className = "posts-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
+      }
+
+      // Update view toggle buttons
+      document.querySelectorAll(".view-btn").forEach(btn => {
+        btn.classList.remove("active", "bg-white", "dark:bg-gray-700", "text-gray-900", "dark:text-white");
+        btn.classList.add("text-gray-500", "dark:text-gray-400");
+      });
+
+      const activeBtn = mode === "grid" ? gridViewBtn : masonryViewBtn;
+      activeBtn.classList.add("active", "bg-white", "dark:bg-gray-700", "text-gray-900", "dark:text-white");
+      activeBtn.classList.remove("text-gray-500", "dark:text-gray-400");
+    }
+
+    // Event listeners
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const tag = button.getAttribute("data-tag") || "";
+        setActiveFilterButton(tag);
+        filterPosts(tag);
+      });
+    });
+
+    sortSelect.addEventListener("change", (e) => {
+      const target = e.target as HTMLSelectElement;
+      sortPosts(target.value);
+    });
+
+    gridViewBtn.addEventListener("click", () => setViewMode("grid"));
+    masonryViewBtn.addEventListener("click", () => setViewMode("masonry"));
+
+    // Clear filters button
+    if (clearFiltersBtn) {
+      clearFiltersBtn.addEventListener("click", clearAllFilters);
+    }
+
+    // Show More/Less functionality for tags
+    if (showMoreBtn) {
+      showMoreBtn.addEventListener("click", () => {
+        if (!areHiddenTagsExpanded) {
+          expandHiddenTags();
+        } else {
+          collapseHiddenTags();
+        }
+      });
+    }
+
+    // Featured posts navigation
+    const prevButton = document.getElementById("prev-featured");
+    const nextButton = document.getElementById("next-featured");
+
+    if (prevButton && nextButton) {
+      prevButton.addEventListener("click", () => {
+        // Implement carousel functionality if needed
+      });
+
+      nextButton.addEventListener("click", () => {
+        // Implement carousel functionality if needed
+      });
+    }
+
+    // Initialize
+    updatePostCounts();
+    setViewMode("grid");
+    const initialTag = searchParams.get("tag");
+
+    if (initialTag) {
+      const matchingButton = Array.from(filterButtons).find(
+        (button) => button.getAttribute("data-tag") === initialTag
+      );
+
+      if (matchingButton) {
+        if (matchingButton.classList.contains("tag-hidden")) {
+          expandHiddenTags();
+        }
+        setActiveFilterButton(initialTag);
+        filterPosts(initialTag, false);
+      } else {
+        setActiveFilterButton("all");
+        updateResultsInfo();
+      }
+    } else {
+      setActiveFilterButton("all");
+      updateResultsInfo();
+    }
+  });
+</script>

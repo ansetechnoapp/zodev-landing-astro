@@ -1,0 +1,323 @@
+---
+// Composant pour les données structurées Schema.org
+import dataUser from "../data/User.json";
+import { canonicalSiteUrl } from "../config/site.js";
+
+interface Props {
+  type?: string;
+  name?: string;
+  description?: string;
+  image?: string;
+  datePublished?: string;
+  dateModified?: string;
+  url?: string | URL;
+}
+
+const {
+  type = "Person",
+  name = `${dataUser.firstName} ${dataUser.lastName}`,
+  description = `Développeur Web & Mobile freelance spécialisé en React, React Native, Astro.js et technologies web modernes.`,
+  image = "/assets/social-preview.jpg",
+  datePublished = new Date().toISOString(),
+  dateModified = new Date().toISOString(),
+  url = Astro.site?.toString() || canonicalSiteUrl,
+} = Astro.props;
+
+const siteRoot = new URL(
+  "/",
+  Astro.site?.toString() || canonicalSiteUrl
+).href;
+const pageUrl = typeof url === "string" ? url : url.toString();
+const resolveSiteUrl = (pathname: string) => new URL(pathname, siteRoot).href;
+
+// Enhanced person schema with comprehensive professional information
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${pageUrl}#person`,
+  name: name,
+  givenName: dataUser.firstName,
+  familyName: dataUser.lastName,
+  description: description,
+  image: {
+    "@type": "ImageObject",
+    url: typeof image === "string" ? resolveSiteUrl(image) : image,
+    width: 1200,
+    height: 630,
+  },
+  url: pageUrl,
+  mainEntityOfPage: pageUrl,
+  jobTitle: "Développeur Web & Mobile Freelance",
+  hasOccupation: {
+    "@type": "Occupation",
+    name: "Développeur Web & Mobile",
+    occupationLocation: {
+      "@type": "Place",
+      name: dataUser.address.city,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: dataUser.address.city,
+        addressCountry: dataUser.address.country,
+      },
+    },
+    skills: [
+      "React Development",
+      "React Native Development",
+      "Astro.js Development",
+      "Next.js Development",
+      "TypeScript Programming",
+      "JavaScript Programming",
+      "Mobile App Development",
+      "Web Application Development",
+      "Frontend Development",
+      "Backend Development",
+    ],
+  },
+  worksFor: {
+    "@type": "Organization",
+    "@id": `${pageUrl}#organization`,
+    name: "zoddev",
+    url: siteRoot,
+    logo: {
+      "@type": "ImageObject",
+      url: resolveSiteUrl("/assets/zoddev_logo/zoddev_logo_dark_mode.png"),
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: dataUser.phone,
+      email: dataUser.email,
+      contactType: "customer service",
+      availableLanguage: ["French", "English"],
+    },
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: dataUser.address.city,
+    addressCountry: dataUser.address.country,
+  },
+  email: dataUser.email,
+  telephone: dataUser.phone,
+  nationality: dataUser.nationality,
+  sameAs: [
+    `https://${dataUser.socialMedia.linkedin}`,
+    `https://${dataUser.socialMedia.github}`,
+    `https://${dataUser.socialMedia.pinterest}`,
+    `https://${dataUser.socialMedia.instagram}`,
+  ],
+  knowsAbout: [
+    "Développement Web",
+    "Développement Mobile",
+    "React",
+    "React Native",
+    "Astro.js",
+    "Next.js",
+    "TypeScript",
+    "JavaScript",
+    "Supabase",
+    "Firebase",
+    "Tailwind CSS",
+    "Laravel",
+    "WordPress",
+    "Python",
+    "PostgreSQL",
+    "MySQL",
+  ],
+  knowsLanguage: [
+    {
+      "@type": "Language",
+      name: "French",
+      proficiencyLevel: "Native",
+    },
+    {
+      "@type": "Language",
+      name: "English",
+      proficiencyLevel: "Intermediate",
+    },
+  ],
+  hasCredential: {
+    "@type": "EducationalOccupationalCredential",
+    name: "Licence en Systèmes Informatiques et Logiciels",
+    credentialCategory: "Bachelor's Degree",
+    educationalLevel: "Bachelor",
+  },
+};
+
+// Données pour un article de blog
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: name,
+  description: description,
+  image: typeof image === "string" ? resolveSiteUrl(image) : image,
+  datePublished: datePublished,
+  dateModified: dateModified,
+  author: {
+    "@type": "Person",
+    name: `${dataUser.firstName} ${dataUser.lastName}`,
+    url: pageUrl,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "zoddev",
+    logo: {
+      "@type": "ImageObject",
+      url: resolveSiteUrl("/assets/zoddev_logo/zoddev_logo_dark_mode.png"),
+    },
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": pageUrl,
+  },
+};
+
+// Enhanced project schema with comprehensive details
+const projectSchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "@id": `${pageUrl}#project`,
+  name: name,
+  headline: name,
+  description: description,
+  image: {
+    "@type": "ImageObject",
+    url: typeof image === "string" ? resolveSiteUrl(image) : image,
+    width: 1200,
+    height: 630,
+  },
+  datePublished: datePublished,
+  dateModified: dateModified,
+  dateCreated: datePublished,
+  author: {
+    "@type": "Person",
+    "@id": `${siteRoot}#person`,
+    name: `${dataUser.firstName} ${dataUser.lastName}`,
+    url: siteRoot,
+    jobTitle: "Développeur Web & Mobile Freelance",
+  },
+  creator: {
+    "@type": "Person",
+    "@id": `${siteRoot}#person`,
+    name: `${dataUser.firstName} ${dataUser.lastName}`,
+  },
+  publisher: {
+    "@type": "Organization",
+    "@id": `${siteRoot}#organization`,
+    name: "zoddev",
+    url: siteRoot,
+    logo: {
+      "@type": "ImageObject",
+      url: resolveSiteUrl("/assets/zoddev_logo/zoddev_logo_dark_mode.png"),
+    },
+  },
+  url: pageUrl,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": pageUrl,
+  },
+  genre: ["Web Development", "Mobile Development", "Software Development"],
+  keywords: ["React", "React Native", "Astro.js", "TypeScript", "JavaScript", "Web Development", "Mobile Development"],
+  inLanguage: "fr-FR",
+  isAccessibleForFree: true,
+  isFamilyFriendly: true,
+  copyrightHolder: {
+    "@type": "Person",
+    name: `${dataUser.firstName} ${dataUser.lastName}`,
+  },
+  copyrightYear: new Date(datePublished).getFullYear(),
+  license: "All rights reserved",
+};
+
+// Organization schema for business/freelance entity
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${siteRoot}#organization`,
+  name: "zoddev",
+  alternateName: `${dataUser.firstName} ${dataUser.lastName} - Développeur Freelance`,
+  description: `Agence de développement web et mobile dirigée par ${dataUser.firstName} ${dataUser.lastName}, spécialisée dans la création d'applications web et mobiles modernes et performantes.`,
+  url: siteRoot,
+  logo: {
+    "@type": "ImageObject",
+    url: resolveSiteUrl("/assets/zoddev_logo/zoddev_logo_dark_mode.png"),
+    width: 512,
+    height: 512,
+  },
+  image: {
+    "@type": "ImageObject",
+    url: resolveSiteUrl("/assets/social-preview.jpg"),
+    width: 1200,
+    height: 630,
+  },
+  founder: {
+    "@type": "Person",
+    "@id": `${siteRoot}#person`,
+    name: `${dataUser.firstName} ${dataUser.lastName}`,
+  },
+  employee: {
+    "@type": "Person",
+    "@id": `${siteRoot}#person`,
+    name: `${dataUser.firstName} ${dataUser.lastName}`,
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: dataUser.address.city,
+    addressCountry: dataUser.address.country,
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: dataUser.phone,
+    email: dataUser.email,
+    contactType: "customer service",
+    availableLanguage: ["French", "English"],
+    areaServed: "Worldwide",
+  },
+  sameAs: [
+    `https://${dataUser.socialMedia.linkedin}`,
+    `https://${dataUser.socialMedia.github}`,
+    `https://${dataUser.socialMedia.pinterest}`,
+    `https://${dataUser.socialMedia.instagram}`,
+  ],
+  serviceType: [
+    "Web Development",
+    "Mobile App Development",
+    "Frontend Development",
+    "Backend Development",
+    "React Development",
+    "React Native Development",
+  ],
+  areaServed: {
+    "@type": "Place",
+    name: "Worldwide",
+  },
+  knowsAbout: [
+    "React",
+    "React Native",
+    "Astro.js",
+    "Next.js",
+    "TypeScript",
+    "JavaScript",
+    "Web Development",
+    "Mobile Development",
+  ],
+};
+
+// Sélectionner le schéma approprié en fonction du type
+let schema;
+switch (type) {
+  case "Article":
+    schema = articleSchema;
+    break;
+  case "CreativeWork":
+  case "Project":
+    schema = projectSchema;
+    break;
+  case "Organization":
+    schema = organizationSchema;
+    break;
+  case "Person":
+  default:
+    schema = personSchema;
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

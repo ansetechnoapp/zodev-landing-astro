@@ -1,0 +1,312 @@
+---
+import IdentityCard from "./IdentityCard.astro";
+import DiagonalCard from "./DiagonalCard.astro";
+import HeroDecorations from "./HeroDecorations.astro";
+import { getLangFromCookies, getTranslations } from "../i18n/index";
+
+const lang = getLangFromCookies(Astro.cookies);
+const i18n = getTranslations(lang);
+
+interface Props {
+  title: string;
+  tagline?: string;
+  tagline1?: string;
+  align?: "start" | "center";
+}
+
+const { align = "center", tagline, tagline1, title } = Astro.props;
+---
+
+<div class:list={["hero-modern stack gap-4", align]} data-typing-words={JSON.stringify(i18n.hero.typingWords)}>
+  <!-- Enhanced Background with Modern Gradient -->
+  <div class="hero-background-modern">
+    <div class="hero-gradient-overlay"></div>
+  </div>
+
+  <div class="hero-container-modern">
+    <div class="hero-left">
+      <IdentityCard>
+        <slot name="social" slot="social" />
+        <slot name="photo" slot="photo" />
+      </IdentityCard>
+    </div>
+
+    <HeroDecorations />
+
+    <div class="hero-right">
+      <DiagonalCard tagline1={tagline1} />
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="scroll-mouse">
+      <div class="scroll-dot"></div>
+    </div>
+    <span class="scroll-text">{i18n.hero.scroll}</span>
+  </div>
+</div>
+
+<style>
+  /* Modern Hero Styles - Shared Orchestrator Styles */
+  .hero-modern {
+    --ease-out-quint: cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(135deg,
+      #ffffff2b 0%,
+      rgba(20, 184, 166, 0.03) 20%,
+      rgba(20, 25, 37, 0.2) 40%,
+      var(--gray-999) 50%
+    );
+  }
+
+  /* Enhanced Modern Background */
+  .hero-background-modern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 70%, rgba(116, 17, 166, 0.04), transparent 70%),
+                radial-gradient(circle at 80% 20%, rgba(20, 184, 166, 0.03), transparent 70%),
+                radial-gradient(circle at 60% 90%, rgba(99, 102, 241, 0.02), transparent 70%);
+  }
+
+  /* Split Container Layout - Side by Side */
+  .hero-container-modern {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 1024px;
+    margin: 3rem auto 0;
+    padding: 0 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 768px) {
+    .hero-container-modern {
+      flex-direction: row;
+    }
+  }
+
+  /* LEFT & RIGHT Layout Units */
+  .hero-left {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding-left: 2rem;
+    animation: slideInLeft 0.9s var(--ease-out-quint) 0.1s backwards;
+  }
+
+  .hero-right {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    padding-right: 2rem;
+    animation: slideInRight 0.9s var(--ease-out-quint) 0.35s backwards;
+  }
+
+  /* Animations for Layout Units */
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll Indicator - Mouse */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 3;
+    animation: fadeInUp 1s var(--ease-out-quint) 1s backwards;
+  }
+
+  .scroll-mouse {
+    width: 26px;
+    height: 42px;
+    border: 2px solid var(--gray-500);
+    border-radius: 13px;
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+    transition: border-color 0.3s ease;
+  }
+
+  .scroll-indicator:hover .scroll-mouse {
+    border-color: var(--accent-teal);
+  }
+
+  .scroll-dot {
+    width: 4px;
+    height: 8px;
+    background: var(--accent-teal);
+    border-radius: 2px;
+    animation: scrollDown 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollDown {
+    0% { opacity: 1; transform: translateY(0); }
+    50% { opacity: 0.3; transform: translateY(14px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-text {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gray-400);
+    font-weight: 500;
+  }
+
+  /* Tablet & Mobile Layout Logic */
+  @media (max-width: 768px) {
+    .scroll-indicator { display: none; }
+    .hero-left, .hero-right {
+      align-self: center;
+      padding: 0;
+      width: 100%;
+      max-width: 420px;
+    }
+    .hero-right { text-align: center; margin-top: 0; justify-content: center; }
+  }
+
+  :root {
+    --accent-teal: #14b8a6;
+    --accent-electric: #6366f1;
+    --accent-amber: #f59e0b;
+    --accent-purple: #7611a6;
+  }
+</style>
+
+<script>
+  function initTypingEffect() {
+    const heroEl = document.querySelector('.hero-modern');
+    const words = heroEl?.getAttribute('data-typing-words')
+      ? JSON.parse(heroEl.getAttribute('data-typing-words')!)
+      : ["Développeur", "Designer", "Freelance", "Créatif"];
+    const el = document.getElementById("typing-text");
+    if (!el) return;
+
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function type() {
+      const current = words[wordIndex];
+
+      if (isDeleting) {
+        el.textContent = current.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        el.textContent = current.substring(0, charIndex + 1);
+        charIndex++;
+      }
+
+      let delay = isDeleting ? 50 : 100;
+
+      if (!isDeleting && charIndex === current.length) {
+        delay = 2000;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        delay = 300;
+      }
+
+      setTimeout(type, delay);
+    }
+
+    type();
+  }
+
+  function initTiltEffect() {
+      const cards = document.querySelectorAll('.identity-card, .diagonal-card');
+      
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          const rotateX = ((y - centerY) / centerY) * 10;
+          const rotateY = ((centerX - x) / centerX) * 10;
+          
+          // @ts-ignore
+          card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
+          // @ts-ignore
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`;
+          
+          const shadowX = (x - centerX) / 10;
+          const shadowY = (y - centerY) / 10;
+          // @ts-ignore
+          card.style.boxShadow = `${shadowX}px ${shadowY}px 30px rgba(20, 184, 166, 0.2), 0 32px 64px rgba(0, 0, 0, 0.2)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          // @ts-ignore
+          card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease';
+          // @ts-ignore
+          card.style.transform = '';
+          // @ts-ignore
+          card.style.boxShadow = '';
+        });
+      });
+    }
+
+    if (!(window as any).heroInitialized) {
+      initTypingEffect();
+      initTiltEffect();
+      (window as any).heroInitialized = true;
+    }
+    
+    document.addEventListener("astro:page-load", () => {
+      initTypingEffect();
+      initTiltEffect();
+    });
+</script>

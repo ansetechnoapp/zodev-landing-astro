@@ -1,0 +1,15 @@
+---
+export const prerender = true;
+
+import Hero from "../components/Hero.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Page Non Trouvée - 404 | Kevin Otty Portfolio"
+  description="La page que vous recherchez n'existe pas ou a été déplacée. Retournez à l'accueil pour découvrir mes projets de développement web et mobile, ou explorez mon portfolio de développeur freelance spécialisé en React et React Native."
+  image="/assets/social-preview.jpg"
+  type="website"
+>
+  <Hero title="Page Not Found" tagline="Not found" />
+</Layout>

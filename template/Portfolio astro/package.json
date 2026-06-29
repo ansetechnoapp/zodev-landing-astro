@@ -1,0 +1,16 @@
+{
+  "name": "proto-pegasi",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/preact": "^3.0.2",
+    "astro": "^4.0.7"
+  }
+}

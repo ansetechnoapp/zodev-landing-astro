@@ -1,0 +1,108 @@
+---
+/**
+ * Composant d'image optimisé qui utilise automatiquement les formats modernes
+ * et les images responsives si disponibles, sinon utilise le composant Image d'Astro
+ */
+
+import { Image } from "astro:assets";
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: "lazy" | "eager";
+  sizes?: string;
+  quality?: number;
+  format?: string;
+  priority?: boolean;
+}
+
+const {
+  src,
+  alt,
+  width = 800,
+  height = 600,
+  class: className = "",
+  loading = "lazy",
+  sizes = "(max-width: 768px) 100vw, 800px",
+  quality = 80,
+  format = "webp",
+  priority = false
+} = Astro.props;
+
+// Fonction pour vérifier si les images optimisées existent
+function getOptimizedImagePaths(originalSrc: string) {
+  const pathWithoutExt = originalSrc.replace(/\.(jpg|jpeg|png|gif)$/i, '');
+  
+  return {
+    avif: `${pathWithoutExt}_optimized.avif`,
+    webp: `${pathWithoutExt}_optimized.webp`,
+    avif640: `${pathWithoutExt}_640w.avif`,
+    webp640: `${pathWithoutExt}_640w.webp`,
+    avif1024: `${pathWithoutExt}_1024w.avif`,
+    webp1024: `${pathWithoutExt}_1024w.webp`,
+    fallback: originalSrc
+  };
+}
+
+// Vérifier si l'image est dans le dossier public (commence par /)
+const isPublicImage = src.startsWith('/');
+const useOptimizedImages = isPublicImage;
+
+let optimizedPaths;
+if (useOptimizedImages) {
+  optimizedPaths = getOptimizedImagePaths(src);
+}
+---
+
+{useOptimizedImages ? (
+  <!-- Images manuellement optimisées avec picture element -->
+  <picture>
+    <!-- AVIF format -->
+    <source
+      type="image/avif"
+      srcset={`${optimizedPaths.avif} 1x, ${optimizedPaths.avif640} 640w, ${optimizedPaths.avif1024} 1024w`}
+      sizes={sizes}
+    />
+    <!-- WebP format -->
+    <source
+      type="image/webp"
+      srcset={`${optimizedPaths.webp} 1x, ${optimizedPaths.webp640} 640w, ${optimizedPaths.webp1024} 1024w`}
+      sizes={sizes}
+    />
+    <!-- Fallback format -->
+    <img
+      src={optimizedPaths.fallback}
+      alt={alt}
+      width={width}
+      height={height}
+      class={className}
+      loading={priority ? "eager" : loading}
+      decoding="async"
+      fetchpriority={priority ? "high" : "auto"}
+    />
+  </picture>
+) : (
+  <!-- Utiliser le composant Image d'Astro pour l'optimisation automatique -->
+  <Image
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    class={className}
+    loading={priority ? "eager" : loading}
+    quality={quality}
+    format={format}
+    sizes={sizes}
+  />
+)}
+
+<style>
+  picture img,
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

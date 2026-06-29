@@ -1,0 +1,82 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Project from "../components/Project.astro";
+import Home from "../components/Home.astro";
+import About from "../components/About.astro";
+import Services from "../components/Services.astro";
+import Contact from "../components/Contact.astro";
+import End from "../components/End.astro";
+import "../styles/style.css";
+---
+<Layout title="Welcome to Astro." description="welcome hi">
+  <section class="home" id="home">
+    <Home />
+  </section>
+  <section class="about" id="about">
+    <About />
+  </section>
+  <section class="services" id="services">
+    <Services />
+  </section>
+  <section class="portfolio" id="portfolio">
+    <Project>
+    </Project>
+  </section>
+  <section class="contact" id="contact">
+    <Contact />
+  </section>
+  <section class="end">
+    <End />
+  </section>
+</Layout>
+<style>
+  .home {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background-image: url(../img/background.jpg);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .about {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .contact {
+    background: var(--second-bg-color);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .end {
+  padding: 20px 15%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: var(--bg-color);
+}
+  @media (max-width: 920px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 920px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 1480px) {
+    .end {
+      padding: 15px 3%;
+    }
+  }
+</style>

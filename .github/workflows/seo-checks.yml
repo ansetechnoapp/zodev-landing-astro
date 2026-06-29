@@ -1,0 +1,40 @@
+name: SEO Checks
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  seo-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run SEO analysis
+      run: npm run seo:analyze
+    
+    - name: Check sitemap
+      run: npm run seo:pre-deploy
+    
+    - name: Build site
+      run: npm run build
+      
+    - name: Archive SEO reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: seo-reports
+        path: |
+          public/sitemap.xml
+          unused_images.txt

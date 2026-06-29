@@ -1,0 +1,77 @@
+---
+// Composant SEO Head pour les meta tags et JSON-LD
+import { generateSEOTags, generateJSONLD } from '../integrations/seo-integration-serverless.js';
+import { canonicalSiteUrl } from '../config/site.js';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: string;
+  url?: string;
+}
+
+const {
+  title = 'zoddev Portfolio',
+  description = 'Portfolio de développeur web et mobile freelance spécialisé en React, React Native, Astro.js et technologies web modernes.',
+  image = '/assets/social-preview.jpg',
+  type = 'website',
+  url = Astro.url.href
+} = Astro.props;
+
+const config = {
+  titleTemplate: '%s | zoddev Portfolio',
+  defaultTitle: 'zoddev Portfolio',
+  defaultDescription: description,
+  defaultImage: image,
+  siteUrl: canonicalSiteUrl,
+  twitterHandle: '@zoddev',
+  language: 'fr',
+};
+
+const pageData = {
+  title,
+  description,
+  image,
+  type,
+  url
+};
+
+const seoTags = generateSEOTags(pageData, config);
+const jsonLD = generateJSONLD(pageData, config);
+---
+
+<!-- SEO Meta Tags -->
+<Fragment set:html={seoTags} />
+
+<!-- JSON-LD Schema -->
+<Fragment set:html={jsonLD} />
+
+<!-- Additional Meta Tags -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+
+<!-- Sitemap -->
+<link rel="sitemap" href="/sitemap.xml" />
+
+<!-- RSS Feed (if available) -->
+<!-- <link rel="alternate" type="application/rss+xml" title="zoddev Blog" href="/rss.xml" /> -->
+
+<!-- Preconnect to external domains for performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Web App Manifest -->
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" href="/assets/zoddev_logo/icon-192x192.png" />
+
+<!-- Microsoft Tiles -->
+<meta name="msapplication-TileColor" content="#6e56cf" />
+<meta name="msapplication-config" content="/browserconfig.xml" />

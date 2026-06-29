@@ -1,0 +1,928 @@
+/* @import "tailwindcss"; */
+@import "tailwindcss/tailwind.css";
+@import "./enhanced-components.css";
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+/* Tailwind CSS custom colors */
+/* Noise Texture Utility */
+.bg-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Border Beam Effect Animation */
+@keyframes border-beam {
+  0% { offset-distance: 0%; opacity: 0; }
+  2% { opacity: 1; }
+  98% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+.border-beam {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-clip: content-box, border-box;
+  mask-clip: content-box, border-box;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.border-beam::after {
+  content: "";
+  position: absolute;
+  aspect-ratio: 1;
+  width: 15rem;
+  background: linear-gradient(to right, var(--accent-light), var(--accent-secondary-light), transparent);
+  offset-path: rect(0 100% 100% 0 round 24px);
+  animation: border-beam 4s infinite linear;
+}
+
+@layer base {
+  :root {
+    --primary: var(--accent-regular);
+    --primary-foreground: var(--gray-999);
+  }
+  
+  :root.theme-dark {
+    --primary: var(--accent-regular);
+    --primary-foreground: var(--gray-0);
+  }
+}
+
+@layer utilities {
+  .bg-primary {
+    background-color: var(--primary);
+  }
+  
+  .text-primary {
+    color: var(--primary);
+  }
+  
+  .text-primary-foreground {
+    color: var(--primary-foreground);
+  }
+  
+  .hover\:bg-primary\/90:hover {
+    background-color: color-mix(in srgb, var(--primary) 90%, transparent);
+  }
+  
+  .hover\:bg-primary\/80:hover {
+    background-color: color-mix(in srgb, var(--primary) 80%, transparent);
+  }
+}
+
+/* Global variables */
+:root {
+	/* Colors - Enhanced Palette */
+	--gray-0: #090b11;
+	--gray-50: #141925;
+	--gray-100: #283044;
+	--gray-200: #3d4663;
+	--gray-300: #505d84;
+	--gray-400: #6474a2;
+	--gray-500: #8490b5;
+	--gray-600: #a3acc8;
+	--gray-700: #c3cadb;
+	--gray-800: #e3e6ee;
+	--gray-900: #f3f4f7;
+	--gray-999-basis: 0, 0%, 100%;
+	--gray-999_40: hsla(var(--gray-999-basis), 0.4);
+	--gray-999: #ffffff;
+	--gray-1001: rgb(237 237 238);
+	--gray-1002: #fdfdfd33;
+	--gray-1003: #f4f5f733;
+	--secondary-text: #7a7a8c;
+
+	/* Variables pour les textes */
+	--text-primary-color: var(--gray-200);
+	--text-secondary-color: var(--gray-300);
+	--text-muted-color: var(--gray-400);
+	--text-gray-600: rgb(75 85 99); /* Équivalent à la classe Tailwind text-gray-600 */
+
+	/* Primary Accent - Purple */
+	--accent-light: #9d4eff;
+	--accent-regular: #7611a6;
+	--accent-dark: #1c0056;
+
+	/* Secondary Accent - Teal */
+	--accent-secondary-light: #4ecdc4;
+	--accent-secondary: #33a6a0;
+	--accent-secondary-dark: #2a7a76;
+
+	/* Tertiary Accent - Amber */
+	--accent-tertiary-light: #ffb74d;
+	--accent-tertiary: #ff9800;
+	--accent-tertiary-dark: #f57c00;
+
+	/* Modern Hero Colors */
+	--accent-teal: #14b8a6;
+	--accent-electric: #6366f1;
+	--accent-amber: #f59e0b;
+
+	/* Overlays and Effects */
+	--accent-overlay: hsla(265, 100%, 65%, 0.33);
+	--accent-subtle-overlay: hsla(265, 100%, 65%, 0.15);
+	--accent-text-over: var(--gray-999);
+	--accent-gradient: linear-gradient(45deg, var(--accent-light), var(--accent-secondary-light) 30%, var(--accent-tertiary-light) 60%);
+	--accent-soft-glow: 0 0 15px rgba(157, 78, 255, 0.5);
+
+	--link-color: var(--accent-regular);
+
+	/* Gradients */
+	--gradient-stop-1: var(--accent-light);
+	--gradient-stop-2: var(--accent-regular);
+	--gradient-stop-3: var(--accent-dark);
+	--gradient-subtle: linear-gradient(150deg, var(--gray-900) 19%, var(--gray-999) 150%);
+	--gradient-accent: linear-gradient(
+		150deg,
+		var(--gradient-stop-1),
+		var(--gradient-stop-2),
+		var(--gradient-stop-3)
+	);
+	--gradient-accent-orange: linear-gradient(
+		135deg,
+		#ca7879cc,
+		var(--accent-regular),
+		var(--accent-dark)
+	);
+	--gradient-stroke: linear-gradient(180deg, var(--gray-900), var(--gray-700));
+
+	/* Shadows */
+	--shadow-sm: 0px 6px 3px rgba(9, 11, 17, 0.01), 0px 4px 2px rgba(9, 11, 17, 0.01),
+		0px 2px 2px rgba(9, 11, 17, 0.02), 0px 0px 1px rgba(9, 11, 17, 0.03);
+	--shadow-md: 0px 28px 11px rgba(9, 11, 17, 0.01), 0px 16px 10px rgba(9, 11, 17, 0.03),
+		0px 7px 7px rgba(9, 11, 17, 0.05), 0px 2px 4px rgba(9, 11, 17, 0.06);
+	--shadow-lg: 0px 62px 25px rgba(9, 11, 17, 0.01), 0px 35px 21px rgba(9, 11, 17, 0.05),
+		0px 16px 16px rgba(9, 11, 17, 0.1), 0px 4px 9px rgba(9, 11, 17, 0.12);
+
+	/* Text Sizes - Improved Scale */
+	--text-xs: 0.75rem;
+	--text-sm: 0.875rem;
+	--text-sm1: 0.675rem;
+	--text-base: 1rem;
+	--text-md: 1.125rem;
+	--text-lg: 1.35rem;
+	--text-xl: 1.75rem;
+	--text-2xl: 2.25rem;
+	--text-3xl: 3rem;
+	--text-4xl: 3.75rem;
+	--text-5xl: 4.75rem;
+	--text-6xl: 6rem;
+
+	/* Fonts - Enhanced Typography */
+	--font-system: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	--font-body: 'Inter', var(--font-system);
+	--font-brand: 'Outfit', var(--font-system);
+	--font-mono: 'JetBrains Mono', monospace;
+	--font-display: 'Outfit', var(--font-system);
+
+	/* Line Heights */
+	--line-height-tight: 1.1;
+	--line-height-normal: 1.5;
+	--line-height-relaxed: 1.75;
+
+	/* Letter Spacing */
+	--letter-spacing-tight: -0.025em;
+	--letter-spacing-normal: 0;
+	--letter-spacing-wide: 0.025em;
+	--letter-spacing-wider: 0.05em;
+
+	/* Transitions & Animations */
+	--transition-fast: 0.15s ease-in-out;
+	--transition-medium: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+	--transition-slow: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+	--theme-transition: var(--transition-medium);
+	--menu-transition: var(--transition-medium);
+
+	/* Layout & Spacing */
+	--container-max-width: 96rem; /* 1536px */
+	--container-padding: 1.5rem; /* 24px par défaut */
+	--container-padding-mobile: 1rem; /* 16px sur mobile */
+	--container-padding-sm: 0.875rem; /* 14px pour très petits écrans */
+	--section-spacing: 5rem; /* 80px entre les sections */
+	--section-spacing-mobile: 3rem; /* 48px entre les sections sur mobile */
+	--section-spacing-sm: 2rem; /* 32px pour très petits écrans */
+
+	/* Variables pour la navigation fixe */
+	--nav-height: 70px; /* Hauteur de la navigation sur desktop */
+	--mobile-nav-height: 60px; /* Hauteur de la navigation sur mobile */
+
+	/* Container widths */
+	--container-sm: 640px;
+	--container-md: 768px;
+	--container-lg: 1024px;
+	--container-xl: 1280px;
+
+	/* Spacing System */
+	--space-xs: 0.25rem;  /* 4px */
+	--space-sm: 0.5rem;   /* 8px */
+	--space-md: 1rem;     /* 16px */
+	--space-lg: 1.5rem;   /* 24px */
+	--space-xl: 2rem;     /* 32px */
+	--space-2xl: 3rem;    /* 48px */
+	--space-3xl: 4rem;    /* 64px */
+
+	/* Component Specific Spacing */
+	--header-padding: var(--space-lg);
+	--footer-padding: var(--space-xl);
+	--section-gap: var(--space-2xl);
+	--card-padding: var(--space-lg);
+
+	/* Content Width Constraints */
+	--content-width-sm: 40ch;   /* For short text content */
+	--content-width-md: 65ch;   /* For optimal reading length */
+	--content-width-lg: 85ch;   /* For wider content */
+
+	/* Mobile Specific Variables */
+	--mobile-padding: 1rem;
+	--mobile-section-gap: 2rem;
+	--mobile-button-size: 42px;
+}
+
+:root.theme-dark {
+	--gray-0: #ffffff;
+	--gray-50: #f3f4f7;
+	--gray-100: #e3e6ee;
+	--gray-200: #c3cadb;
+	--gray-300: #a3acc8;
+	--gray-400: #8490b5;
+	--gray-500: #6474a2;
+	--gray-600: #505d84;
+	--gray-700: #3d4663;
+	--gray-800: #283044;
+	--gray-900: #141925;
+	--gray-999-basis: 225, 31%, 5%;
+	--gray-999: #090b11;
+	--gray-1001:#2a2a2a;
+	--gray-1002:#fdfdfd12;
+	--gray-1003:#f8f9fa20;
+	--secondary-text: #b8b8b8;
+
+	/* Variables pour les textes en mode sombre */
+	--text-primary-color: var(--gray-200);
+	--text-secondary-color: var(--gray-300);
+	--text-muted-color: var(--gray-0); /* Blanc en mode sombre pour meilleure lisibilité */
+	--text-gray-600: var(--gray-0); /* Blanc en mode sombre pour meilleure lisibilité */
+
+	--accent-light: #9b4ddb;
+	--accent-regular: #7611a6;
+	--accent-dark: #c561f6;
+	--accent-overlay: hsla(280, 89%, 67%, 0.33);
+	--accent-subtle-overlay: hsla(281, 81%, 36%, 0.33);
+	--accent-text-over: var(--gray-0);
+
+	--link-color: var(--accent-dark);
+
+	--gradient-stop-1: #4c11c6;
+	--gradient-subtle: linear-gradient(150deg, var(--gray-900) 19%, var(--gray-999) 81%);
+	--gradient-accent-orange: linear-gradient(
+		135deg,
+		#ca7879cc,
+		var(--accent-regular),
+		var(--accent-light)
+	);
+	--gradient-stroke: linear-gradient(180deg, var(--gray-600), var(--gray-800));
+
+	--shadow-sm: 0px 6px 3px rgba(255, 255, 255, 0.01), 0px 4px 2px rgba(255, 255, 255, 0.01),
+		0px 2px 2px rgba(255, 255, 255, 0.02), 0px 0px 1px rgba(255, 255, 255, 0.03);
+	--shadow-md: 0px 28px 11px rgba(255, 255, 255, 0.01), 0px 16px 10px rgba(255, 255, 255, 0.03),
+		0px 7px 7px rgba(255, 255, 255, 0.05), 0px 2px 4px rgba(255, 255, 255, 0.06);
+	--shadow-lg: 0px 62px 25px rgba(255, 255, 255, 0.01), 0px 35px 21px rgba(255, 255, 255, 0.05),
+		0px 16px 16px rgba(255, 255, 255, 0.1), 0px 4px 9px rgba(255, 255, 255, 0.12);
+}
+
+html,
+body {
+	height: 100%;
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+	scroll-padding-top: var(--nav-height);
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: var(--gray-999);
+	color: var(--gray-200);
+	font-family: var(--font-body);
+	-webkit-font-smoothing: antialiased;
+	line-height: 1.5;
+	--sb-track-color: #fff;
+	--sb-thumb-color: #7611a6;
+	--sb-size: 0.2rem;
+}
+
+  body::-webkit-scrollbar {
+	width: var(--sb-size)
+  }
+
+  /* body::-webkit-scrollbar-track {
+	background: var(--sb-track-color);
+	border-radius: 5px;
+  } */
+
+  body::-webkit-scrollbar-thumb {
+	background: var(--sb-thumb-color);
+	border-radius: 5px;
+	border: 2px solid #000;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+	body {
+	  scrollbar-color: var(--sb-thumb-color)
+					   var(--sb-track-color);
+	}
+}
+
+a {
+	color: var(--link-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	line-height: 1.1;
+	font-family: var(--font-brand);
+	font-weight: 600;
+	color: var(--gray-100);
+}
+
+h1 {
+	font-size: var(--text-5xl);
+}
+
+h2 {
+	font-size: var(--text-4xl);
+}
+
+h3 {
+	font-size: var(--text-3xl);
+}
+
+h4 {
+	font-size: var(--text-2xl);
+}
+
+h5 {
+	font-size: var(--text-xl);
+}
+
+/* Focus styles for accessibility */
+a:focus-visible,
+button:focus-visible {
+	outline: 2px solid var(--accent-regular);
+	outline-offset: 2px;
+	border-radius: 0.25rem;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+	:root {
+		--text-5xl: 3.5rem;
+		--text-4xl: 2.75rem;
+		--text-3xl: 2.25rem;
+		--text-2xl: 1.75rem;
+		--container-padding: var(--container-padding-mobile);
+		--section-spacing: var(--section-spacing-mobile);
+	}
+
+	/* Improved mobile spacing */
+	section {
+		padding: 2rem 1rem;
+	}
+
+	h1, h2, h3 {
+		margin-bottom: 1rem;
+	}
+
+	p {
+		margin-bottom: 1.25rem;
+	}
+}
+
+@media (max-width: 480px) {
+	:root {
+		--text-5xl: 3rem;
+		--text-4xl: 2.5rem;
+		--text-3xl: 2rem;
+		--text-2xl: 1.5rem;
+	}
+
+	/* Extra tight spacing for very small screens */
+	section {
+		padding: 1.5rem 0.875rem;
+	}
+}
+
+/* Utilities */
+
+.gap-2 {
+	gap: 0.5rem;
+}
+.gap-4 {
+	gap: 1rem;
+}
+.gap-8 {
+	gap: 2rem;
+}
+.gap-10 {
+	gap: 2.5rem;
+}
+.gap-15 {
+	gap: 3.75rem;
+}
+.gap-20 {
+	gap: 5rem;
+}
+.gap-30 {
+	gap: 7.5rem;
+}
+.gap-35 {
+	gap: 9rem;
+}
+.gap-48 {
+	gap: 12rem;
+}
+
+.gap-xs { gap: var(--space-xs); }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
+.gap-xl { gap: var(--space-xl); }
+.gap-2xl { gap: var(--space-2xl); }
+.gap-3xl { gap: var(--space-3xl); }
+
+@media (min-width: 48em) {
+	.lg\:gap-2 {
+		gap: 0.5rem;
+	}
+	.lg\:gap-4 {
+		gap: 1rem;
+	}
+	.lg\:gap-8 {
+		gap: 2rem;
+	}
+	.lg\:gap-10 {
+		gap: 2.5rem;
+	}
+	.lg\:gap-15 {
+		gap: 3.75rem;
+	}
+	.lg\:gap-20 {
+		gap: 5rem;
+	}
+	.lg\:gap-30 {
+		gap: 7.5rem;
+	}
+	.lg\:gap-35 {
+		gap: 9rem;
+	}
+	.lg\:gap-48 {
+		gap: 12rem;
+	}
+
+}
+
+/* Container class de base - classe centralisée pour tous les conteneurs du site */
+.container, .wrapper, .content-container, .section-inner {
+	width: 100%;
+	max-width: var(--container-max-width);
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--container-padding);
+	padding-right: var(--container-padding);
+	box-sizing: border-box; /* Pour s'assurer que le padding est inclus dans la largeur */
+}
+
+/* Container sizes */
+.container-sm, .wrapper-sm {
+	max-width: var(--container-sm);
+}
+
+.container-md, .wrapper-md {
+	max-width: var(--container-md);
+}
+
+.container-lg, .wrapper-lg {
+	max-width: var(--container-lg);
+}
+
+.container-xl, .wrapper-xl {
+	max-width: var(--container-xl);
+}
+
+/* Section spacing */
+section, .section {
+	padding-top: var(--section-spacing);
+	padding-bottom: var(--section-spacing);
+}
+
+/* Classe helper pour le contenu centré */
+.content-wrapper {
+	max-width: var(--content-width-md);
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--container-padding);
+	padding-right: var(--container-padding);
+}
+
+/* Content Width Classes */
+.content-width-sm {
+  max-width: var(--content-width-sm);
+  margin-inline: auto;
+}
+
+.content-width-md {
+  max-width: var(--content-width-md);
+  margin-inline: auto;
+}
+
+.content-width-lg {
+  max-width: var(--content-width-lg);
+  margin-inline: auto;
+}
+
+/* Padding & Margin Utilities */
+.m-xs { margin: var(--space-xs); }
+.m-sm { margin: var(--space-sm); }
+.m-md { margin: var(--space-md); }
+.m-lg { margin: var(--space-lg); }
+.m-xl { margin: var(--space-xl); }
+
+.mx-xs { margin-inline: var(--space-xs); }
+.mx-sm { margin-inline: var(--space-sm); }
+.mx-md { margin-inline: var(--space-md); }
+.mx-lg { margin-inline: var(--space-lg); }
+.mx-xl { margin-inline: var(--space-xl); }
+
+.my-xs { margin-block: var(--space-xs); }
+.my-sm { margin-block: var(--space-sm); }
+.my-md { margin-block: var(--space-md); }
+.my-lg { margin-block: var(--space-lg); }
+.my-xl { margin-block: var(--space-xl); }
+
+.mt-xs { margin-top: var(--space-xs); }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+.mt-xl { margin-top: var(--space-xl); }
+
+.mb-xs { margin-bottom: var(--space-xs); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+.mb-xl { margin-bottom: var(--space-xl); }
+
+.p-xs { padding: var(--space-xs); }
+.p-sm { padding: var(--space-sm); }
+.p-md { padding: var(--space-md); }
+.p-lg { padding: var(--space-lg); }
+.p-xl { padding: var(--space-xl); }
+
+.px-xs { padding-inline: var(--space-xs); }
+.px-sm { padding-inline: var(--space-sm); }
+.px-md { padding-inline: var(--space-md); }
+.px-lg { padding-inline: var(--space-lg); }
+.px-xl { padding-inline: var(--space-xl); }
+
+.py-xs { padding-block: var(--space-xs); }
+.py-sm { padding-block: var(--space-sm); }
+.py-md { padding-block: var(--space-md); }
+.py-lg { padding-block: var(--space-lg); }
+.py-xl { padding-block: var(--space-xl); }
+
+/* Section Layout */
+section {
+  padding-block: var(--section-gap);
+}
+
+.section-inner {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+/* Media Queries for responsive layout */
+@media (max-width: 1024px) {
+  :root {
+    --container-padding: 1.25rem;
+    --section-spacing: 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+	:root {
+		--text-5xl: 3.5rem;
+		--text-4xl: 2.75rem;
+		--text-3xl: 2.25rem;
+		--text-2xl: 1.75rem;
+		--container-padding: var(--container-padding-mobile);
+		--section-spacing: var(--section-spacing-mobile);
+	}
+
+	/* Improved mobile spacing */
+	section, .section {
+		padding-top: var(--section-spacing);
+		padding-bottom: var(--section-spacing);
+	}
+
+	h1, h2, h3 {
+		margin-bottom: 1rem;
+	}
+
+	p {
+		margin-bottom: 1.25rem;
+	}
+}
+
+@media (max-width: 640px) {
+  :root {
+    /* Réduire les espacements sur mobile */
+    --container-padding: var(--container-padding-mobile);
+    --section-spacing: 2.5rem;
+    --space-2xl: 1.75rem;
+    --space-xl: 1.25rem;
+    --space-lg: 0.875rem;
+
+    /* Ajuster la typographie pour mobile */
+    --text-5xl: 2.25rem;
+    --text-4xl: 1.875rem;
+    --text-3xl: 1.625rem;
+    --text-2xl: 1.375rem;
+    --text-xl: 1.125rem;
+  }
+
+  /* Ajustements container sur mobile */
+  .container, .wrapper, .content-container, .section-inner {
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Ajuster les marges des sections sur mobile */
+  section, .section {
+    padding-top: var(--section-spacing);
+    padding-bottom: var(--section-spacing);
+  }
+
+  body {
+    scroll-padding-top: var(--mobile-nav-height);
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --container-padding: var(--container-padding-sm);
+    --section-spacing: var(--section-spacing-sm);
+  }
+  
+  /* Ajuster les marges des sections sur très petits écrans */
+  section, .section {
+    padding-top: var(--section-spacing);
+    padding-bottom: var(--section-spacing);
+  }
+}
+
+/* Classes utilitaires responsives */
+.hide-on-mobile {
+  @media (max-width: 640px) {
+    display: none !important;
+  }
+}
+
+.show-on-mobile {
+  @media (min-width: 641px) {
+    display: none !important;
+  }
+}
+
+/* Ajustements de la navigation sur mobile */
+@media (max-width: 640px) {
+  nav {
+    padding: var(--space-sm) var(--container-padding);
+    height: var(--mobile-nav-height);
+    display: flex;
+    align-items: center;
+  }
+
+  .menu-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0.5rem var(--container-padding);
+    width: 100%;
+  }
+
+  /* Améliorer l'apparence du menu mobile */
+  .menu-content {
+    position: fixed;
+    top: var(--mobile-nav-height);
+    left: 0;
+    right: 0;
+    background-color: var(--gray-999);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateY(-100%);
+    opacity: 0;
+    max-height: calc(100vh - var(--mobile-nav-height));
+    overflow-y: auto;
+    z-index: 998;
+  }
+  
+  .menu-content.menu-visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .nav-items {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-items a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .nav-items a:active {
+    background-color: rgba(var(--gray-999-basis), 0.1);
+  }
+
+  /* Ajuster les icônes sociales sur mobile */
+  .socials {
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+  }
+  
+  .menu-footer {
+    padding: 0.75rem 1rem 1.25rem;
+    border-top: 1px solid rgba(var(--gray-999-basis), 0.1);
+  }
+}
+
+/* Ajout d'une classe pour forcer l'affichage sur une seule colonne sur mobile */
+@media (max-width: 640px) {
+  .mobile-stack {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .mobile-center {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+  .mobile-padding {
+    padding: var(--mobile-padding) !important;
+  }
+  
+  .mobile-small-text {
+    font-size: 0.9rem !important;
+  }
+  
+  .mobile-touch-target {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+}
+
+/* Utility classes for scrollbar hiding */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Utilitaires pour améliorer l'ergonomie sur appareils tactiles */
+@media (max-width: 1024px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .touch-spacing > * + * {
+    margin-top: 0.5rem;
+  }
+  
+  /* Améliorations pour les formulaires sur mobile */
+  input, select, textarea {
+    font-size: 16px !important; /* Évite le zoom automatique iOS */
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+  }
+}
+
+/* Nouvelle classe utilitaire pour appliquer un espacement cohérent */
+.site-content-spacing {
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+/* Variantes de largeur pour site-content-spacing */
+.site-content-spacing-sm {
+  max-width: var(--container-sm);
+}
+
+.site-content-spacing-md {
+  max-width: var(--container-md);
+}
+
+.site-content-spacing-lg {
+  max-width: var(--container-lg);
+}
+
+.site-content-spacing-xl {
+  max-width: var(--container-xl);
+}
+
+/* Classe pour contenu étroit comme du texte */
+.site-content-narrow {
+  max-width: var(--content-width-md);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  width: 100%;
+}
+
+/* Classe pour contenu très étroit */
+.site-content-very-narrow {
+  max-width: var(--content-width-sm);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  width: 100%;
+}
+
+/* Classe pour contenu large */
+.site-content-wide {
+  max-width: var(--content-width-lg);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  width: 100%;
+}
+
+/* Styles pour s'assurer que la classe backgrounds est collée en haut */
+.backgrounds {
+  min-height: 100%;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+@media (max-width: 640px) {
+  .stack.backgrounds {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+/* Assurer que le bloc stack backgrounds est collé en haut */
+.stack.backgrounds {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  position: relative;
+  top: 0;
+}

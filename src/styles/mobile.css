@@ -1,0 +1,245 @@
+/* 
+  mobile.css - Utilitaires et styles spécifiques aux appareils mobiles
+  Ce fichier contient des améliorations pour l'expérience mobile du portfolio
+*/
+
+/* ===== VARIABLES SPÉCIFIQUES MOBILE ===== */
+:root {
+  --mobile-header-height: 60px;
+  --mobile-padding: 1rem;
+  --mobile-touch-target: 44px;
+  --mobile-border-radius: 12px;
+  --mobile-content-padding: 1rem;
+  --mobile-bottom-nav-height: 56px;
+}
+
+@media (max-width: 380px) {
+  :root {
+    --mobile-header-height: 50px;
+    --mobile-padding: 0.75rem;
+    --mobile-touch-target: 40px;
+    --mobile-content-padding: 0.75rem;
+  }
+}
+
+/* ===== CLASSES UTILITAIRES MOBILE ===== */
+
+/* Classe pour forcer l'affichage sur une seule colonne sur mobile */
+@media (max-width: 640px) {
+  .mobile-stack {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .mobile-row {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .mobile-center {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  .mobile-left {
+    text-align: left !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+  }
+  
+  .mobile-right {
+    text-align: right !important;
+    justify-content: flex-end !important;
+    align-items: flex-end !important;
+  }
+  
+  .mobile-padding {
+    padding: var(--mobile-padding) !important;
+  }
+  
+  .mobile-padding-x {
+    padding-left: var(--mobile-padding) !important;
+    padding-right: var(--mobile-padding) !important;
+  }
+  
+  .mobile-padding-y {
+    padding-top: var(--mobile-padding) !important;
+    padding-bottom: var(--mobile-padding) !important;
+  }
+  
+  .mobile-margin {
+    margin: var(--mobile-padding) !important;
+  }
+  
+  .mobile-margin-x {
+    margin-left: var(--mobile-padding) !important;
+    margin-right: var(--mobile-padding) !important;
+  }
+  
+  .mobile-margin-y {
+    margin-top: var(--mobile-padding) !important;
+    margin-bottom: var(--mobile-padding) !important;
+  }
+  
+  .mobile-no-padding {
+    padding: 0 !important;
+  }
+  
+  .mobile-no-margin {
+    margin: 0 !important;
+  }
+  
+  .mobile-small-text {
+    font-size: 0.9rem !important;
+  }
+  
+  .mobile-touch-target {
+    min-height: var(--mobile-touch-target) !important;
+    min-width: var(--mobile-touch-target) !important;
+  }
+  
+  .mobile-rounded {
+    border-radius: var(--mobile-border-radius) !important;
+  }
+  
+  .mobile-hide {
+    display: none !important;
+  }
+  
+  .mobile-show {
+    display: block !important;
+  }
+  
+  .mobile-flex {
+    display: flex !important;
+  }
+
+  /* Mobile-specific tab navigation improvements */
+  .mobile-tab-scroll {
+    overflow-x: auto !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .mobile-tab-scroll::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .mobile-tab-button {
+    min-height: var(--mobile-touch-target) !important;
+    min-width: var(--mobile-touch-target) !important;
+    padding: 0.75rem 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .mobile-tab-vertical {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 0.25rem !important;
+  }
+}
+
+/* ===== AMÉLIORATION DE L'ACCESSIBILITÉ TACTILE ===== */
+
+/* Assurer que tous les éléments interactifs sont facilement accessibles sur mobile */
+@media (max-width: 1024px) {
+  .touch-target, 
+  button, 
+  select,
+  input[type="submit"],
+  input[type="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: var(--mobile-touch-target);
+    min-width: var(--mobile-touch-target);
+  }
+  
+  /* Espacement vertical pour les éléments interactifs séquentiels */
+  .touch-spacing > * + * {
+    margin-top: 0.5rem;
+  }
+  
+  /* Améliorations pour les formulaires sur mobile */
+  input, select, textarea {
+    font-size: 16px !important; /* Évite le zoom automatique iOS */
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+  }
+  
+  /* Meilleur espacement pour les liens & boutons adjacents */
+  a + a, 
+  button + button,
+  .btn + .btn {
+    margin-left: 0.5rem !important;
+  }
+}
+
+/* ===== OPTIMISATIONS DE MISE EN PAGE POUR MOBILE ===== */
+
+/* Ajustement du corps du document */
+@media (max-width: 640px) {
+  body {
+    padding-top: var(--mobile-header-height);
+  }
+  
+  /* Ajustement des sections */
+  section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  /* Mise en page des conteneurs */
+  .container {
+    padding-left: var(--mobile-padding);
+    padding-right: var(--mobile-padding);
+  }
+  
+  /* Ajustement des grilles */
+  .grid {
+    gap: 1rem;
+  }
+  
+  /* Cartes et blocs de contenu */
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Fixe les problèmes de défilement horizontal */
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Ajuster les images responsives */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ===== OPTIMISATIONS DE PERFORMANCE POUR MOBILE ===== */
+
+@media (max-width: 640px) {
+  /* Réduire les animations coûteuses sur mobile */
+  .reduce-motion-mobile {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  /* Arrière-plans moins complexes sur mobile */
+  .simplify-bg-mobile {
+    background-image: none !important;
+    background: var(--bg-color, transparent) !important;
+  }
+} 

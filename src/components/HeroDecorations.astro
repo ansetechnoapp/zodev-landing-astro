@@ -1,0 +1,191 @@
+---
+---
+
+<div class="hero-decorations" aria-hidden="true">
+  <div class="deco-circle deco-circle-1"></div>
+  <div class="deco-circle deco-circle-2"></div>
+  <div class="deco-circle deco-circle-3"></div>
+  <div class="deco-diamond deco-diamond-1"></div>
+  <div class="deco-diamond deco-diamond-2"></div>
+  <div class="deco-line deco-line-1"></div>
+  <div class="deco-line deco-line-2"></div>
+  <div class="deco-dot deco-dot-1"></div>
+  <div class="deco-dot deco-dot-2"></div>
+  <div class="deco-dot deco-dot-3"></div>
+  <div class="deco-dot deco-dot-4"></div>
+  <div class="deco-ring deco-ring-1"></div>
+</div>
+
+<style>
+  /* ===== Decorative Elements Layer ===== */
+  .hero-decorations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* Floating Circles */
+  .deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.12;
+  }
+
+  .deco-circle-1 {
+    width: 180px;
+    height: 180px;
+    top: 30%;
+    left: 40%;
+    background: radial-gradient(circle, var(--accent-teal), transparent 70%);
+    animation: floatDeco 12s ease-in-out infinite;
+  }
+
+  .deco-circle-2 {
+    width: 120px;
+    height: 120px;
+    top: 50%;
+    left: 55%;
+    background: radial-gradient(circle, var(--accent-purple), transparent 70%);
+    animation: floatDeco 16s ease-in-out infinite reverse;
+  }
+
+  .deco-circle-3 {
+    width: 80px;
+    height: 80px;
+    top: 25%;
+    left: 60%;
+    background: radial-gradient(circle, var(--accent-electric), transparent 70%);
+    animation: floatDeco 10s ease-in-out infinite;
+    animation-delay: -4s;
+  }
+
+  /* Rotating Diamonds */
+  .deco-diamond {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid var(--accent-teal);
+    opacity: 0.2;
+    animation: spinFloat 20s linear infinite;
+  }
+
+  .deco-diamond-1 {
+    top: 40%;
+    left: 48%;
+    transform: rotate(45deg);
+  }
+
+  .deco-diamond-2 {
+    top: 55%;
+    left: 38%;
+    width: 24px;
+    height: 24px;
+    border-color: var(--accent-purple);
+    animation-duration: 15s;
+    animation-direction: reverse;
+  }
+
+  /* Animated Lines */
+  .deco-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-teal), transparent);
+    opacity: 0.15;
+    animation: pulseLine 4s ease-in-out infinite;
+  }
+
+  .deco-line-1 {
+    width: 200px;
+    top: 45%;
+    left: 30%;
+    transform: rotate(-35deg);
+  }
+
+  .deco-line-2 {
+    width: 150px;
+    top: 55%;
+    left: 50%;
+    transform: rotate(-35deg);
+    animation-delay: -2s;
+    background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+  }
+
+  /* Floating Dots */
+  .deco-dot {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent-teal);
+    opacity: 0.3;
+    animation: floatDot 8s ease-in-out infinite;
+  }
+
+  .deco-dot-1 { top: 35%; left: 45%; animation-delay: 0s; }
+  .deco-dot-2 { top: 45%; left: 52%; animation-delay: -2s; background: var(--accent-purple); }
+  .deco-dot-3 { top: 55%; left: 42%; animation-delay: -4s; background: var(--accent-electric); }
+  .deco-dot-4 { top: 60%; left: 50%; animation-delay: -6s; }
+
+  /* Pulsing Ring */
+  .deco-ring {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid var(--accent-electric);
+    opacity: 0.1;
+    top: 42%;
+    left: 46%;
+    animation: pulseRing 6s ease-in-out infinite;
+  }
+
+  /* Animations */
+  @keyframes floatDeco {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(15px, -20px); }
+    50% { transform: translate(-10px, 15px); }
+    75% { transform: translate(20px, 10px); }
+  }
+
+  @keyframes spinFloat {
+    0% { transform: rotate(45deg) translate(0, 0); }
+    25% { transform: rotate(135deg) translate(10px, -10px); }
+    50% { transform: rotate(225deg) translate(-5px, 5px); }
+    75% { transform: rotate(315deg) translate(8px, 8px); }
+    100% { transform: rotate(405deg) translate(0, 0); }
+  }
+
+  @keyframes pulseLine {
+    0%, 100% { opacity: 0.05; transform: rotate(-35deg) scaleX(0.8); }
+    50% { opacity: 0.2; transform: rotate(-35deg) scaleX(1.2); }
+  }
+
+  @keyframes floatDot {
+    0%, 100% { transform: translateY(0); opacity: 0.3; }
+    50% { transform: translateY(-12px); opacity: 0.6; }
+  }
+
+  @keyframes pulseRing {
+    0%, 100% { transform: scale(1); opacity: 0.08; }
+    50% { transform: scale(1.15); opacity: 0.18; }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-decorations {
+      display: none;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .deco-circle, .deco-diamond, .deco-line, .deco-dot, .deco-ring {
+      animation: none;
+    }
+  }
+</style>

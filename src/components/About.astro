@@ -1,0 +1,155 @@
+---
+import AboutRedesign from "./reactJS/AboutRedesign";
+import { getLangFromCookies, getTranslations } from "../i18n/index";
+import dataUser from "../data/User.json";
+
+const lang = getLangFromCookies(Astro.cookies);
+const i18n = getTranslations(lang);
+
+// Define props interface
+interface Props {
+  title?: string;
+  description?: string;
+  secondaryDescription?: string;
+  imageSrc: { src: string };
+  optimizedImageSrc?: {
+    avif: string;
+    webp: string;
+    fallback: string;
+    srcsetAvif: string;
+    srcsetWebp: string;
+  };
+  yearsExperience?: number;
+  skills?: {
+    webDev?: string[];
+    mobileDev?: string[];
+    other?: string[];
+  };
+  languages?: {
+    name: string;
+    level: string;
+    percentage: number;
+  }[];
+  contactInfo?: {
+    city?: string;
+    street?: string;
+    email?: string;
+    phone?: string;
+    phonePrefix?: string;
+    occupation?: string;
+    availability?: string;
+    website?: string;
+  };
+}
+
+// Set default values
+const {
+  description = i18n.about.description,
+  imageSrc,
+  yearsExperience = 7,
+  skills = {
+    webDev: [
+      "React JS",
+      "Next.js",
+      "Astro JS",
+      "TypeScript",
+      "JavaScript",
+      "TailwindCSS",
+      "SCSS",
+      "HTML5/CSS3",
+    ],
+    mobileDev: ["React Native", "Flutter", "iOS/Android Development"],
+    other: [
+      "Firebase",
+      "Supabase",
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "Docker",
+      "AWS",
+      "CI/CD",
+      "Jest",
+      "Webpack",
+      "Agile/Scrum",
+      "Git/GitHub",
+      "RESTful APIs",
+      "GraphQL",
+    ],
+  },
+  languages = [
+    { name: i18n.languages.french, level: i18n.languages.native, percentage: 100 },
+    {
+      name: i18n.languages.english,
+      level: i18n.languages.professional,
+      percentage: 70,
+    },
+  ],
+  contactInfo = {
+    city: "Cotonou",
+    street: "",
+    email: dataUser.email,
+    phone: "",
+    phonePrefix: "",
+    occupation: i18n.about.occupation,
+    availability: i18n.about.availability,
+    website: dataUser.website,
+  },
+} = Astro.props;
+
+// Prepare data for the React component
+const skillGroups = [
+  {
+    title: i18n.services.webDev.title,
+    skills: skills.webDev || [],
+    iconClass: "fas fa-layer-group",
+    color: "bg-blue-500/10 text-blue-500"
+  },
+  {
+    title: i18n.services.mobileDev.title,
+    skills: skills.mobileDev || [],
+    iconClass: "fas fa-mobile-alt",
+    color: "bg-pink-500/10 text-pink-500"
+  },
+  {
+    title: i18n.about.otherTechnologies,
+    skills: skills.other || [],
+    iconClass: "fas fa-microchip",
+    color: "bg-green-500/10 text-green-500"
+  }
+];
+
+const personalInfo = [
+  { label: "Location", value: contactInfo.city, iconClass: "fas fa-map-marker-alt" },
+  { label: "Email", value: contactInfo.email, iconClass: "fas fa-envelope" },
+  { label: "Occupation", value: contactInfo.occupation, iconClass: "fas fa-briefcase" },
+  { label: "Website", value: contactInfo.website, iconClass: "fas fa-globe" }
+];
+---
+
+<section id="about" class="bg-white dark:bg-[#090b11] relative overflow-hidden">
+  <AboutRedesign 
+    client:load 
+    i18n={i18n}
+    imageSrc={imageSrc.src}
+    yearsExperience={yearsExperience}
+    skillGroups={skillGroups}
+    languages={languages}
+    personalInfo={personalInfo}
+    description={description}
+  />
+</section>
+
+<style>
+  /* Base section styling */
+  section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  
+  @media (max-width: 768px) {
+    section {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+</style>

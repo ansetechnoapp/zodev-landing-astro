@@ -1,0 +1,190 @@
+---
+export const prerender = true;
+
+import Layout from "../layouts/Layout.astro";
+import OptimizedImage from "../components/OptimizedImage.astro";
+import { Image } from "astro:assets";
+---
+
+<Layout title="Démonstration - Optimisation d'Images">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8 text-center">
+      🖼️ Démonstration d'Optimisation d'Images
+    </h1>
+    
+    <div class="prose max-w-4xl mx-auto">
+      <p class="text-lg mb-8">
+        Cette page démontre les différentes méthodes d'optimisation d'images 
+        disponibles dans ce projet Astro.
+      </p>
+      
+      <!-- Section 1: OptimizedImage Component -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">
+          1. Composant OptimizedImage (Recommandé)
+        </h2>
+        <p class="mb-4">
+          Utilise automatiquement les images optimisées si disponibles, 
+          sinon utilise le composant Image d'Astro.
+        </p>
+        
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <h3 class="font-medium mb-2">Image de test optimisée :</h3>
+            <OptimizedImage
+              src="/assets/test-image.jpg"
+              alt="Image de test optimisée automatiquement"
+              width={400}
+              height={267}
+              class="rounded-lg shadow-md"
+              loading="lazy"
+            />
+          </div>
+          
+          <div>
+            <h3 class="font-medium mb-2">Image at-work optimisée :</h3>
+            <OptimizedImage
+              src="/assets/at-work.jpg"
+              alt="Image at-work optimisée"
+              width={400}
+              height={267}
+              class="rounded-lg shadow-md"
+              loading="lazy"
+            />
+          </div>
+        </div>
+        
+        <details class="mb-6">
+          <summary class="cursor-pointer font-medium">Voir le code</summary>
+          <pre class="bg-gray-100 p-4 rounded mt-2 overflow-x-auto"><code>{`<OptimizedImage
+  src="/assets/test-image.jpg"
+  alt="Image de test optimisée automatiquement"
+  width={400}
+  height={267}
+  class="rounded-lg shadow-md"
+  loading="lazy"
+/>`}</code></pre>
+        </details>
+      </section>
+      
+      <!-- Section 2: Astro Image Component -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">
+          2. Composant Image d'Astro
+        </h2>
+        <p class="mb-4">
+          Optimisation automatique à la volée par Astro avec Sharp.
+        </p>
+        
+        <div class="mb-6">
+          <h3 class="font-medium mb-2">Image optimisée par Astro :</h3>
+          <Image
+            src="/assets/test-image.jpg"
+            alt="Image optimisée par Astro"
+            width={400}
+            height={267}
+            format="webp"
+            quality={80}
+            class="rounded-lg shadow-md"
+            loading="lazy"
+          />
+        </div>
+        
+        <details class="mb-6">
+          <summary class="cursor-pointer font-medium">Voir le code</summary>
+          <pre class="bg-gray-100 p-4 rounded mt-2 overflow-x-auto"><code>{`<Image
+  src="/assets/test-image.jpg"
+  alt="Image optimisée par Astro"
+  width={400}
+  height={267}
+  format="webp"
+  quality={80}
+  class="rounded-lg shadow-md"
+  loading="lazy"
+/>`}</code></pre>
+        </details>
+      </section>
+      
+      <!-- Section 3: Performance Comparison -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">
+          3. Comparaison des Performances
+        </h2>
+        
+        <div class="bg-blue-50 p-6 rounded-lg mb-6">
+          <h3 class="font-medium mb-3">📊 Métriques d'optimisation :</h3>
+          <ul class="space-y-2">
+            <li><strong>Format AVIF :</strong> ~50-60% plus petit que JPEG</li>
+            <li><strong>Format WebP :</strong> ~25-35% plus petit que JPEG</li>
+            <li><strong>Images responsives :</strong> 60-80% de réduction sur mobile</li>
+            <li><strong>Lazy loading :</strong> Améliore le temps de chargement initial</li>
+          </ul>
+        </div>
+        
+        <div class="bg-green-50 p-6 rounded-lg">
+          <h3 class="font-medium mb-3">✅ Avantages du système actuel :</h3>
+          <ul class="space-y-2">
+            <li>Optimisation automatique lors du build</li>
+            <li>Formats modernes avec fallbacks</li>
+            <li>Images responsives automatiques</li>
+            <li>Compatible avec tous les navigateurs</li>
+            <li>Optimisé pour Vercel</li>
+          </ul>
+        </div>
+      </section>
+      
+      <!-- Section 4: Best Practices -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">
+          4. Bonnes Pratiques
+        </h2>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-yellow-50 p-6 rounded-lg">
+            <h3 class="font-medium mb-3">✅ À faire :</h3>
+            <ul class="space-y-2 text-sm">
+              <li>Toujours spécifier alt, width, height</li>
+              <li>Utiliser loading="lazy" sauf above-the-fold</li>
+              <li>Optimiser les images source avant ajout</li>
+              <li>Tester sur différents appareils</li>
+              <li>Utiliser OptimizedImage par défaut</li>
+            </ul>
+          </div>
+          
+          <div class="bg-red-50 p-6 rounded-lg">
+            <h3 class="font-medium mb-3">❌ À éviter :</h3>
+            <ul class="space-y-2 text-sm">
+              <li>Images sans attribut alt</li>
+              <li>Dimensions non spécifiées</li>
+              <li>Images trop lourdes en source</li>
+              <li>Loading eager sur toutes les images</li>
+              <li>Formats obsolètes uniquement</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .prose img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .prose details {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .prose summary {
+    margin-bottom: 0.5rem;
+  }
+  
+  .prose pre {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+</style>

@@ -1,0 +1,324 @@
+.hidden {
+  display: none;
+}
+
+.portfolio_item {
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background: var(--gradient-subtle, rgba(0, 0, 0, 0.02));
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--gray-999-basis), 0.1);
+}
+
+.portfolio_item-tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.portfolio_item-tag {
+  background: rgba(var(--gray-999-basis), 0.1);
+  color: var(--text-secondary-color);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.portfolio_item-content {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio_item-title {
+  font-size: 1.25rem;
+  margin: 0.5rem 0;
+  text-align: center;
+  color: var(--text-primary-color);
+} 
+
+.portfolio_item-description {
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-secondary-color);
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.layer {
+  width: 100%;
+  height: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), var(--accent-regular, #7611a6));
+  position: absolute;
+  border-radius: 0.75rem 0.75rem 0 0;
+  left: 0;
+  bottom: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1.5rem;
+  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+}
+
+.layer p {
+  color: white;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+.layer a {
+  color: var(--accent-regular, #7611a6);
+  background: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.5s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio_item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(118, 17, 166, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portfolio_item:hover .layer {
+  height: 100%;
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portfolio_item:hover .layer p,
+.portfolio_item:hover .layer a {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portfolio_item-image {
+  border-radius: 0.75rem 0.75rem 0 0;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 16/9;
+}
+
+.portfolio_item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.portfolio_item:hover .portfolio_item-image img {
+  transform: scale(1.1);
+}
+
+/* Prevent hover effects when modal is open */
+body:has(.project-modal-backdrop) .portfolio_item:hover {
+  transform: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--gray-999-basis), 0.1);
+}
+
+body:has(.project-modal-backdrop) .portfolio_item:hover .layer {
+  height: 0;
+}
+
+body:has(.project-modal-backdrop) .portfolio_item:hover .layer p,
+body:has(.project-modal-backdrop) .portfolio_item:hover .layer a {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+body:has(.project-modal-backdrop) .portfolio_item:hover .portfolio_item-image img {
+  transform: none;
+}
+
+.portfolio_item-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding: 0.75rem;
+  border-top: 1px solid rgba(var(--gray-999-basis), 0.05);
+}
+
+.portfolio_item-cta a {
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portfolio_item-cta a.primary {
+  background-color: var(--accent-regular);
+  color: white;
+}
+
+.portfolio_item-cta a.secondary {
+  background-color: rgba(var(--gray-999-basis), 0.1);
+  color: var(--text-primary-color);
+}
+
+/* Mobile styles */
+@media (max-width: 640px) {
+  .portfolio_item {
+    border-radius: 0.75rem;
+  }
+  
+  .portfolio_item-image {
+    aspect-ratio: 16/10;
+  }
+  
+  .portfolio_item-content {
+    padding: 0.875rem;
+  }
+  
+  .portfolio_item-title {
+    font-size: 1.125rem;
+    margin: 0.375rem 0;
+  }
+  
+  .portfolio_item-description {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .portfolio_item-tags {
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .portfolio_item-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .portfolio_item-cta {
+    padding: 0.625rem;
+    gap: 0.5rem;
+  }
+  
+  .portfolio_item-cta a {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.8rem;
+    min-height: 34px;
+    min-width: 80px;
+  }
+  
+  .layer {
+    padding: 0 1rem;
+  }
+  
+  .layer p {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  
+  .layer a {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 380px) {
+  .portfolio_item-content {
+    padding: 0.75rem;
+  }
+  
+  .portfolio_item-title {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+  }
+  
+  .portfolio_item-description {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .portfolio_item-cta {
+    padding: 0.5rem;
+    gap: 0.4rem;
+  }
+  
+  .portfolio_item-cta a {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+    min-height: 32px;
+    min-width: 70px;
+  }
+  
+  .portfolio_item-tags {
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .portfolio_item-tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.35rem;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .portfolio_item-content {
+    padding: 1rem;
+  }
+  
+  .portfolio_item-cta {
+    justify-content: space-around;
+  }
+  
+  .portfolio_item-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 1025px) {
+  .portfolio_item-content {
+    padding: 1.25rem;
+  }
+  
+  .portfolio_item-title {
+    font-size: 1.3rem;
+  }
+  
+  .portfolio_item-cta {
+    justify-content: space-around;
+  }
+}

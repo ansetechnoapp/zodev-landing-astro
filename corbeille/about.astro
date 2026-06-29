@@ -1,0 +1,133 @@
+<!-- ---
+import Layout from "../layouts/Layout.astro";
+
+import ContactCTA from "../components/ContactCTA.astro";
+import Hero from "../components/Hero.astro";
+import Contact from "../components/Contact.astro";
+import Img1 from "../assets/otty_kevin/6.png";
+import MenuLinkNav from "../components/menuLinkNav.astro";
+---
+
+<Layout title="About | otty kevin" description="About otty kevin">
+  <MenuLinkNav namepage="about" />
+  <div class="stack gap-20">
+    <main class="wrapper about">
+      <Hero
+        title="About"
+        tagline="I am dedicated to leveraging my diverse skill set to drive innovation and achieve outstanding results for the projects I am involved in."
+      >
+        <img
+          width="1553"
+          height="873"
+          src={Img1.src}
+          alt="otty kevin at work with a colleague"
+        />
+      </Hero>
+
+      <section>
+        <h2 class="section-title">Background</h2>
+        <div class="content">
+          <p>
+            My name is Otty Kevin. I hold a Bachelor's degree in Computer
+            Systems and Software. I have developed a solid expertise in web and
+            mobile application development, as well as in creating and managing
+            advertising posters for social media. Passionate about technological
+            innovation, my goal is to showcase my technical skills as a web and
+            mobile developer through concrete projects, thereby contributing to
+            the success and growth of businesses.
+          </p>
+        </div>
+      </section>
+      <section>
+        <h2 class="section-title">Education</h2>
+        <div class="content">
+          <p>Corporis voluptates tenetur laudantium.</p>
+        </div>
+      </section>
+      <section>
+        <h2 class="section-title">Skills</h2>
+        <div class="content">
+          <p>
+            Web Development: Laravel, React JS, Next JS, Astro JS, PHP,
+            TypeScript
+          </p>
+          <p>Mobile Development: React Native</p>
+          <p>Graphic Design: Photoshop</p>
+          <p>Additional Skills:</p>
+          <p>Reduce ToolKit</p>
+          <p>SCSS</p>
+          <p>Tailwind</p>
+          <p>jQuery</p>
+          <p>GitHub</p>
+          <p>Community Management</p>
+          <p>Acquisition Management</p>
+          <p>Computer and IT systems maintenance</p>
+          <p>Graphic Design (flyer creation with Illustrator, Canva, etc.)</p>
+        </div>
+      </section>
+    </main>
+
+    <ContactCTA />
+    <div class="wrapper stack gap-20 lg:gap-48">
+      <Contact />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .about {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  img {
+    margin-top: 1.5rem;
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--gray-200);
+  }
+
+  .section-title {
+    grid-column-start: 1;
+    font-size: var(--text-xl);
+    color: var(--gray-0);
+  }
+
+  .content {
+    grid-column: 2 / 4;
+  }
+
+  .content :global(a) {
+    text-decoration: 1px solid underline transparent;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color var(--theme-transition);
+  }
+
+  .content :global(a:hover),
+  .content :global(a:focus) {
+    text-decoration-color: currentColor;
+  }
+
+  @media (min-width: 48em) {
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 60% 1fr;
+    }
+
+    .about > :global(:first-child) {
+      grid-column-start: 2;
+    }
+
+    section {
+      display: contents;
+      font-size: var(--text-lg);
+    }
+  }
+</style> -->

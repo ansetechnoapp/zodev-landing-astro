@@ -1,0 +1,459 @@
+---
+import { getLangFromCookies, getTranslations } from "../i18n/index";
+const lang = getLangFromCookies(Astro.cookies);
+const i18n = getTranslations(lang);
+---
+
+<section id="service" class="services-redesign">
+  <div class="bg-noise"></div>
+  <div class="section-divider-glow"></div>
+  <div class="background-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+  
+  <div class="container relative z-10">
+    <!-- Header avec effet de halo et typographie moderne -->
+    <div class="services-header text-center">
+      <div class="header-glow"></div>
+      <div class="eyebrow-container">
+        <span class="eyebrow-badge">{i18n.services.eyebrow}</span>
+      </div>
+      <h2 class="title-gradient">{i18n.services.title}</h2>
+      <div class="subtitle-wrapper">
+        <p class="subtitle">{i18n.services.subtitle}</p>
+      </div>
+      
+      <div class="header-decoration">
+        <div class="line"></div>
+        <div class="dot"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <!-- Grille de Services Premium -->
+    <div class="services-grid">
+      <!-- Web Development Service -->
+      <div class="premium-card group" data-aos="fade-up" data-aos-delay="100">
+        <div class="border-beam"></div>
+        <div class="card-glass-shine"></div>
+        <div class="card-content">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          <h3>{i18n.services.webDev.title}</h3>
+          <p>{i18n.services.webDev.description}</p>
+          <div class="card-footer">
+            <a href="/work?filter=web" class="premium-link">
+              <span>{i18n.services.learnMore}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-5 h-5"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="M40 128h176m-72-72 72 72-72 72"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Development Service -->
+      <div class="premium-card group" data-aos="fade-up" data-aos-delay="200">
+        <div class="border-beam"></div>
+        <div class="card-glass-shine"></div>
+        <div class="card-content">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+            </svg>
+          </div>
+          <h3>{i18n.services.mobileDev.title}</h3>
+          <p>{i18n.services.mobileDev.description}</p>
+          <div class="card-footer">
+            <a href="/work?filter=mobile" class="premium-link">
+              <span>{i18n.services.learnMore}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-5 h-5"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="M40 128h176m-72-72 72 72-72 72"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- UI/UX Design Service -->
+      <div class="premium-card group" data-aos="fade-up" data-aos-delay="300">
+        <div class="border-beam"></div>
+        <div class="card-glass-shine"></div>
+        <div class="card-content">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
+            </svg>
+          </div>
+          <h3>{i18n.services.uiux.title}</h3>
+          <p>{i18n.services.uiux.description}</p>
+          <div class="card-footer">
+            <a href="/work?filter=design" class="premium-link">
+              <span>{i18n.services.learnMore}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-5 h-5"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="M40 128h176m-72-72 72 72-72 72"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Database & API Service -->
+      <div class="premium-card group" data-aos="fade-up" data-aos-delay="400">
+        <div class="border-beam"></div>
+        <div class="card-glass-shine"></div>
+        <div class="card-content">
+          <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+            </svg>
+          </div>
+          <h3>{i18n.services.database.title}</h3>
+          <p>{i18n.services.database.description}</p>
+          <div class="card-footer">
+            <a href="/work?filter=backend" class="premium-link">
+              <span>{i18n.services.learnMore}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-5 h-5"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="M40 128h176m-72-72 72 72-72 72"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-redesign {
+    padding-block: 8rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Texture de bruit pour l'unité visuelle */
+  .services-redesign .bg-noise {
+    opacity: 0.02;
+    z-index: 1;
+  }
+
+  /* Dégradé de fusion en haut de section */
+  .services-redesign::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(var(--gray-999-basis), 0.3) 50%,
+      var(--gray-900) 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Halo d'accentuation pour lier les sections */
+  .section-divider-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
+    opacity: 0.3;
+    z-index: 2;
+  }
+
+  .section-divider-glow::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 100px;
+    background: var(--accent-light);
+    filter: blur(80px);
+    opacity: 0.1;
+    border-radius: 50%;
+  }
+
+  /* Décorations de fond plus intégrées */
+  .background-blobs {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.1;
+  }
+
+  .blob-1 {
+    top: 10%;
+    right: -5%;
+    width: 400px;
+    height: 400px;
+    background: var(--accent-light);
+  }
+
+  .blob-2 {
+    bottom: 10%;
+    left: -5%;
+    width: 350px;
+    height: 350px;
+    background: var(--accent-secondary);
+  }
+
+  /* Header Styles */
+  .services-header {
+    margin-bottom: 5rem;
+    position: relative;
+  }
+
+  .header-glow {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 100px;
+    background: var(--accent-light);
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  .eyebrow-container {
+    margin-bottom: 1.5rem;
+  }
+
+  .eyebrow-badge {
+    padding: 0.5rem 1.25rem;
+    background: rgba(var(--gray-999-basis), 0.05);
+    border: 1px solid rgba(var(--gray-999-basis), 0.1);
+    border-radius: 99px;
+    color: var(--accent-light);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    backdrop-filter: blur(10px);
+  }
+
+  .title-gradient {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to bottom, var(--gray-0) 30%, var(--gray-200));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    color: var(--secondary-text);
+    font-size: var(--text-lg);
+    max-width: 65ch;
+    margin-inline: auto;
+    line-height: 1.6;
+  }
+
+  .header-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .header-decoration .line {
+    height: 1px;
+    width: 80px;
+    background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
+  }
+
+  .header-decoration .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--accent-light);
+  }
+
+  /* Services Grid */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Premium Card Styles */
+  .premium-card {
+    position: relative;
+    padding: 3rem 2rem;
+    background: rgba(var(--gray-999-basis), 0.3);
+    border: 1px solid rgba(var(--gray-999-basis), 0.1);
+    border-radius: 24px; /* Correspond au border-beam */
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .premium-card:hover {
+    transform: translateY(-10px);
+    background: rgba(var(--gray-999-basis), 0.4);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
+    border-color: rgba(var(--accent-light), 0.2);
+  }
+
+  .card-glass-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .premium-card:hover .card-glass-shine {
+    opacity: 1;
+  }
+
+  .card-content {
+    position: relative;
+    z-index: 2;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .icon-box {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--gray-999-basis), 0.05);
+    border: 1px solid rgba(var(--gray-999-basis), 0.1);
+    border-radius: 18px;
+    color: var(--accent-light);
+    transition: all 0.4s ease;
+  }
+
+  .premium-card:hover .icon-box {
+    background: var(--accent-light);
+    color: white;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 10px 20px rgba(var(--accent-light), 0.3);
+  }
+
+  .premium-card h3 {
+    font-size: 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--gray-0);
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+  }
+
+  .premium-card:hover h3 {
+    color: var(--accent-light);
+  }
+
+  .premium-card p {
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(var(--gray-999-basis), 0.05);
+  }
+
+  .premium-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--gray-0);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  .premium-link span {
+    position: relative;
+  }
+
+  .premium-link span::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent-light);
+    transition: width 0.3s ease;
+  }
+
+  .premium-card:hover .premium-link span::after {
+    width: 100%;
+  }
+
+  .premium-link svg {
+    transition: transform 0.3s ease;
+    color: var(--accent-light);
+  }
+
+  .premium-card:hover .premium-link svg {
+    transform: translateX(5px);
+  }
+
+  /* Mobile Optimizations */
+  @media (max-width: 640px) {
+    .services-redesign {
+      padding-block: 4rem;
+    }
+
+    .title-gradient {
+      font-size: 2.5rem;
+    }
+
+    .premium-card {
+      padding: 2rem;
+    }
+    
+    .header-decoration {
+      display: none;
+    }
+  }
+</style>

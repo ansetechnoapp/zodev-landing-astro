@@ -1,0 +1,72 @@
+---
+// Composant pour améliorer l'accessibilité du site
+---
+
+<!-- Skip to content link - invisible until focused -->
+<a href="#main-content" class="skip-to-content">
+  Aller au contenu principal
+</a>
+
+<script>
+  // Ajouter des attributs ARIA aux éléments interactifs qui n'en ont pas
+  document.addEventListener('DOMContentLoaded', () => {
+    // Ajouter des labels aux boutons sans texte
+    document.querySelectorAll('button:not([aria-label])').forEach(button => {
+      if (!button.textContent.trim()) {
+        // Essayer de trouver une icône à l'intérieur
+        const icon = button.querySelector('svg, i, img');
+        if (icon) {
+          const iconName = icon.getAttribute('class')?.split(' ').find(c => c.includes('icon-'));
+          if (iconName) {
+            const label = iconName.replace('icon-', '').replace(/-/g, ' ');
+            button.setAttribute('aria-label', label);
+          }
+        }
+      }
+    });
+    
+    // Ajouter des attributs ARIA aux menus
+    const navMenus = document.querySelectorAll('nav ul');
+    navMenus.forEach(menu => {
+      if (!menu.getAttribute('role')) {
+        menu.setAttribute('role', 'menu');
+        menu.querySelectorAll('li').forEach(item => {
+          item.setAttribute('role', 'menuitem');
+        });
+      }
+    });
+    
+    // Améliorer l'accessibilité des formulaires
+    document.querySelectorAll('form').forEach(form => {
+      form.querySelectorAll('input, textarea, select').forEach(field => {
+        // S'assurer que chaque champ a un label associé
+        if (!field.getAttribute('id')) {
+          const id = `field-${Math.random().toString(36).substring(2, 9)}`;
+          field.setAttribute('id', id);
+        }
+        
+        // Si le champ est requis, ajouter l'attribut aria-required
+        if (field.hasAttribute('required')) {
+          field.setAttribute('aria-required', 'true');
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-regular);
+    color: white;
+    padding: 8px;
+    z-index: 100;
+    transition: top 0.2s;
+  }
+  
+  .skip-to-content:focus {
+    top: 0;
+  }
+</style>

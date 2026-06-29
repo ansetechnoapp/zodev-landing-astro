@@ -1,0 +1,1132 @@
+---
+import Icon from "./reactJS/Icon";
+import ThemeToggle from "./ThemeToggle.astro";
+import LanguageToggle from "./LanguageToggle.astro";
+import type { iconPaths } from "./IconPaths";
+import { getLangFromCookies, getTranslations } from "../i18n/index";
+
+const lang = getLangFromCookies(Astro.cookies);
+const i18n = getTranslations(lang);
+
+/** Main menu items */
+const textLinks: { label: string; href: string }[] = [
+  { label: i18n.nav.home, href: "/home" },
+  { label: i18n.nav.project, href: "/work/" },
+  { label: i18n.nav.blog, href: "/blog/" },
+  { label: i18n.nav.tools, href: "/widgetCss/" },
+];
+
+/** Icon links to social media — edit these with links to your profiles! */
+const iconLinks: {
+  label: string;
+  href: string;
+  icon: keyof typeof iconPaths;
+}[] = [
+  { label: "Twitter", href: "https://x.com/ottianselme", icon: "twitter-logo" },
+  // { label: 'Twitch', href: 'https://twitch.tv/me', icon: 'twitch-logo' },
+  {
+    label: "GitHub",
+    href: "https://github.com/ansetechnoapp/",
+    icon: "github-logo",
+  },
+  // { label: 'CodePen', href: 'https://codepen.io/me', icon: 'codepen-logo' },
+  // { label: 'dribbble', href: 'https://dribbble.com/me', icon: 'dribbble-logo' },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@anscod/",
+    icon: "youtube-logo",
+  },
+];
+---
+
+<nav>
+  <div class="menu-header">
+    <a href="/home" class="site-title">
+      <!-- Light mode logo with modern image optimization -->
+      <picture class="site-logo light-logo">
+        <source
+          srcset="/assets/Anscod_logo/Anscod_logo_light_mode_320w.avif 320w,
+                  /assets/Anscod_logo/Anscod_logo_light_mode_480w.avif 480w,
+                  /assets/Anscod_logo/Anscod_logo_light_mode_optimized.avif 1x"
+          type="image/avif"
+          sizes="(max-width: 768px) 40px, (max-width: 1024px) 44px, 48px"
+        />
+        <source
+          srcset="/assets/Anscod_logo/Anscod_logo_light_mode_320w.webp 320w,
+                  /assets/Anscod_logo/Anscod_logo_light_mode_480w.webp 480w,
+                  /assets/Anscod_logo/Anscod_logo_light_mode_optimized.webp 1x"
+          type="image/webp"
+          sizes="(max-width: 768px) 40px, (max-width: 1024px) 44px, 48px"
+        />
+        <img
+          src="/assets/Anscod_logo/Anscod_logo_light_mode.png"
+          alt="Anscod Logo - Kevin Otty développeur web et mobile freelance"
+          width="48"
+          height="48"
+          loading="eager"
+          decoding="async"
+        />
+      </picture>
+
+      <!-- Dark mode logo with modern image optimization -->
+      <picture class="site-logo dark-logo">
+        <source
+          srcset="/assets/Anscod_logo/Anscod_logo_dark_mode_320w.avif 320w,
+                  /assets/Anscod_logo/Anscod_logo_dark_mode_480w.avif 480w,
+                  /assets/Anscod_logo/Anscod_logo_dark_mode_optimized.avif 1x"
+          type="image/avif"
+          sizes="(max-width: 768px) 40px, (max-width: 1024px) 44px, 48px"
+        />
+        <source
+          srcset="/assets/Anscod_logo/Anscod_logo_dark_mode_320w.webp 320w,
+                  /assets/Anscod_logo/Anscod_logo_dark_mode_480w.webp 480w,
+                  /assets/Anscod_logo/Anscod_logo_dark_mode_optimized.webp 1x"
+          type="image/webp"
+          sizes="(max-width: 768px) 40px, (max-width: 1024px) 44px, 48px"
+        />
+        <img
+          src="/assets/Anscod_logo/Anscod_logo_dark_mode.png"
+          alt="Anscod Logo - Kevin Otty développeur web et mobile freelance"
+          width="48"
+          height="48"
+          loading="eager"
+          decoding="async"
+        />
+      </picture>
+    </a>
+    <div class="mobile-only-menu">
+      <menu-button>
+        <template>
+          <button class="menu-button" aria-expanded="false">
+            <span class="sr-only">Menu</span>
+            <Icon icon="list" />
+          </button>
+        </template>
+      </menu-button>
+    </div>
+  </div>
+  <!-- Navigation items for desktop -->
+  <div class="desktop-nav">
+    <ul class="nav-items">
+      {
+        textLinks.map(({ label, href }) => (
+          <li>
+            <a
+              aria-current={Astro.url.pathname === href}
+              class:list={[
+                "link",
+                {
+                  active:
+                    Astro.url.pathname === href ||
+                    (href !== "/" && Astro.url.pathname.startsWith(href)),
+                },
+              ]}
+              href={href}
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <!-- Theme toggle and social icons for desktop -->
+  <div class="desktop-theme-toggle">
+    <div class="desktop-socials">
+      {
+        iconLinks.map(({ href, icon, label }) => (
+          <a href={href} class="social" target="_blank">
+            <span class="sr-only">{label}</span>
+            <Icon icon={icon} />
+          </a>
+        ))
+      }
+    </div>
+    <LanguageToggle />
+    <ThemeToggle
+      togglelightdarktheme="togglehigh"
+      toggleiconelightdarktheme="lightx"
+    />
+  </div>
+
+  <!-- Fallback for users with JavaScript disabled -->
+  <noscript>
+    <div class="noscript-nav">
+      <ul class="nav-items">
+        {
+          textLinks.map(({ label, href }) => (
+            <li>
+              <a
+                aria-current={Astro.url.pathname === href}
+                class:list={[
+                  "link",
+                  {
+                    active:
+                      Astro.url.pathname === href ||
+                      (href !== "/" && Astro.url.pathname.startsWith(href)),
+                  },
+                ]}
+                href={href}
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="menu-footer">
+        <div class="socials">
+          {
+            iconLinks.map(({ href, icon, label }) => (
+              <a href={href} class="social" target="_blank">
+                <span class="sr-only">{label}</span>
+                <Icon icon={icon} />
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </noscript>
+
+  <!-- Menu content for mobile with JavaScript enabled -->
+  <div id="menu-content" class="menu-content">
+    <ul class="nav-items">
+      {
+        textLinks.map(({ label, href }) => (
+          <li>
+            <a
+              aria-current={Astro.url.pathname === href}
+              class:list={[
+                "link",
+                {
+                  active:
+                    Astro.url.pathname === href ||
+                    (href !== "/" && Astro.url.pathname.startsWith(href)),
+                },
+              ]}
+              href={href}
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="menu-footer">
+      <div class="socials">
+        {
+          iconLinks.map(({ href, icon, label }) => (
+            <a href={href} class="social" target="_blank">
+              <span class="sr-only">{label}</span>
+              <Icon icon={icon} />
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="theme-toggle">
+        <LanguageToggle />
+        <ThemeToggle
+          togglelightdarktheme="togglehigh"
+          toggleiconelightdarktheme="lightx"
+        />
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Handle navigation scroll effect
+  document.addEventListener("DOMContentLoaded", () => {
+    const nav = document.querySelector("nav");
+
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        nav?.classList.add("scrolled");
+      } else {
+        nav?.classList.remove("scrolled");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    // Initial check
+    handleScroll();
+  });
+
+  class MenuButton extends HTMLElement {
+    constructor() {
+      super();
+
+      // Only initialize the menu button on mobile devices
+      if (window.innerWidth < 768) {
+        // Inject menu toggle button when JS runs.
+        this.appendChild(
+          this.querySelector("template")!.content.cloneNode(true)
+        );
+        const btn = this.querySelector("button")!;
+
+        // Hide menu (shown by default to support no-JS browsers).
+        const menu = document.getElementById("menu-content")!;
+        menu.hidden = true;
+
+        /** Set whether the menu is currently expanded or collapsed. */
+        const setExpanded = (expand: boolean) => {
+          btn.setAttribute("aria-expanded", expand ? "true" : "false");
+          menu.hidden = !expand;
+
+          // Add transition classes
+          if (expand) {
+            menu.classList.add("menu-visible");
+            setTimeout(() => {
+              menu.classList.add("menu-active");
+            }, 10); // Small delay to ensure the transition works
+          } else {
+            menu.classList.remove("menu-active");
+            // Wait for transition to complete before hiding
+            setTimeout(() => {
+              menu.classList.remove("menu-visible");
+            }, 300);
+          }
+        };
+
+        // Toggle menu visibility when the menu button is clicked.
+        btn.addEventListener("click", () => setExpanded(menu.hidden));
+
+        // Close menu when clicking on a navigation link
+        const navLinks = menu.querySelectorAll(".nav-items a");
+        navLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            setExpanded(false);
+          });
+        });
+
+        // Handle window resize to update menu visibility
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 768) {
+            // On desktop, ensure menu is visible
+            menu.hidden = false;
+            menu.classList.remove("menu-visible", "menu-active");
+          } else if (
+            !btn.getAttribute("aria-expanded") ||
+            btn.getAttribute("aria-expanded") === "false"
+          ) {
+            // On mobile, if menu is collapsed, ensure it's hidden
+            menu.hidden = true;
+          }
+        });
+      } else {
+        // On desktop, we don't need to do anything with the mobile menu
+        // as it's hidden via CSS
+      }
+    }
+  }
+  customElements.define("menu-button", MenuButton);
+</script>
+
+<style>
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-family: var(--font-brand);
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(var(--gray-999-basis), 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: var(--space-lg) var(--container-padding);
+    max-width: var(--container-max-width);
+    /* margin-inline: auto; */
+  }
+
+  .site-title {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    line-height: 1.1;
+    color: var(--gray-0);
+    text-decoration: none;
+  }
+
+  .logo-container {
+    padding: 0.3em 0.4em;
+    margin-right: 0.25rem;
+    border-radius: 0.5rem;
+    background: var(--gradient-accent);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .site-title:hover .site-logo {
+    transform: scale(1.05);
+  }
+
+  .site-logo {
+    height: 4rem;
+    transition: transform 0.2s ease-in-out;
+    will-change: transform;
+    display: block;
+  }
+
+  .site-logo img {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.2s ease-in-out;
+    border-radius: 4px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  }
+
+  /* Enhanced logo hover effects */
+  .site-title:hover .site-logo img {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+  }
+
+  /* Logo performance optimizations */
+  .site-logo {
+    contain: layout style paint;
+    will-change: transform;
+  }
+
+  .site-logo img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  /* Logo loading state for better UX */
+  .site-logo img:not([src]) {
+    background: linear-gradient(90deg,
+      rgba(var(--gray-200-basis), 0.3) 25%,
+      rgba(var(--gray-100-basis), 0.5) 50%,
+      rgba(var(--gray-200-basis), 0.3) 75%);
+    background-size: 200% 100%;
+    animation: logoLoading 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  @keyframes logoLoading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Preload critical logo images */
+  .site-logo::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    background-image:
+      url('/assets/Anscod_logo/Anscod_logo_light_mode_optimized.avif'),
+      url('/assets/Anscod_logo/Anscod_logo_dark_mode_optimized.avif');
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .theme-dark .light-logo {
+    display: none;
+  }
+
+  .light-logo {
+    display: block;
+  }
+
+  .theme-dark .dark-logo {
+    display: block;
+  }
+
+  .dark-logo {
+    display: none;
+  }
+
+  /* Mobile-only menu container */
+  .mobile-only-menu {
+    display: none; /* Hidden by default */
+  }
+
+  /* Show mobile menu only on mobile devices */
+  @media (max-width: 47.9em) {
+    .mobile-only-menu {
+      display: block; /* Visible on mobile */
+    }
+  }
+
+  .menu-button {
+    position: relative;
+    display: flex;
+    border: 0;
+    border-radius: 999rem;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    color: var(--gray-300);
+    background: radial-gradient(var(--gray-900), var(--gray-800) 150%);
+    box-shadow:
+      0 0.5px 1px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition:
+      color var(--transition-fast),
+      background var(--transition-fast),
+      box-shadow var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .menu-button[aria-expanded="true"] {
+    color: var(--gray-0);
+    background: var(--accent-regular);
+    box-shadow:
+      0 0 8px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(118, 17, 166, 0.5);
+    transform: scale(1.1);
+  }
+
+  /* Desktop navigation styles */
+  .desktop-nav {
+    display: none; /* Hidden by default on mobile */
+  }
+
+  /* Noscript fallback styles */
+  .noscript-nav {
+    background-color: var(--gray-999);
+    padding: 1rem;
+    border-radius: 0 0 0.75rem 0.75rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .menu-content {
+    /* Default styles for desktop */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Styles de base pour le menu mobile */
+  .menu-content {
+    display: none; /* Caché par défaut */
+  }
+
+  /* Animation et positionnement améliorés pour mobile */
+  @media (max-width: 47.9em) {
+    .menu-content {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      background-color: var(--gray-999);
+      padding: 0;
+      transition:
+        transform var(--transition-medium),
+        opacity var(--transition-medium);
+      opacity: 0;
+      transform: translateY(-1rem);
+      pointer-events: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .menu-content.menu-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .menu-content.menu-active {
+      max-height: calc(100vh - var(--mobile-nav-height));
+      overflow-y: auto;
+    }
+  }
+
+  .nav-items {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding-left: 0;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .link {
+    display: inline-block;
+    color: var(--gray-300);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color var(--transition-medium);
+  }
+
+  .link:hover,
+  .link:focus {
+    color: var(--gray-0);
+  }
+
+  .link.active {
+    color: var(--accent-regular);
+  }
+
+  .menu-footer {
+    --icon-size: 2rem;
+    --icon-padding: 0.5rem;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.5rem 2rem 1.5rem 1.5rem;
+    background-color: var(--gray-999);
+    border-radius: 0 0 0.75rem 0.75rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    font-size: var(--icon-size);
+  }
+
+  .social {
+    display: flex;
+    padding: var(--icon-padding);
+    text-decoration: none;
+    color: var(--accent-dark);
+    transition:
+      color var(--transition-medium),
+      transform var(--transition-medium);
+    position: relative;
+    z-index: 1;
+  }
+
+  .social:hover,
+  .social:focus {
+    color: var(--accent-regular);
+    transform: translateY(-2px);
+  }
+
+  .social::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--accent-subtle-overlay);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity var(--transition-medium);
+  }
+
+  .social:hover::before,
+  .social:focus::before {
+    opacity: 1;
+  }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    height: calc(var(--icon-size) + 2 * var(--icon-padding));
+  }
+
+  /* Desktop theme toggle and socials styles */
+  .desktop-theme-toggle {
+    display: none; /* Hidden by default on mobile */
+  }
+
+  .desktop-socials {
+    display: none; /* Hidden by default on mobile */
+  }
+
+  @media (min-width: 48em) {
+    .desktop-theme-toggle {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .desktop-socials {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  /* Règles spécifiques pour la zone problématique 641px-767px */
+  @media (min-width: 641px) and (max-width: 767px) {
+    nav {
+      height: var(--mobile-nav-height) !important;
+      display: block !important; /* Force le comportement mobile */
+      grid-template-columns: none !important;
+      padding: 0 !important;
+    }
+    
+    .menu-header {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding: 0.5rem var(--container-padding) !important;
+      height: var(--mobile-nav-height) !important;
+      width: 100% !important;
+      max-width: none !important;
+    }
+    
+    /* Force le menu mobile à rester fonctionnel */
+    .mobile-only-menu {
+      display: block !important;
+    }
+    
+    .desktop-nav {
+      display: none !important;
+    }
+    
+    .desktop-theme-toggle {
+      display: none !important;
+    }
+    
+    /* Assure que le logo garde sa taille mobile */
+    .site-logo {
+      height: 40px !important;
+    }
+    
+    .site-logo img {
+      height: 40px !important;
+    }
+    
+    .site-title {
+      font-size: inherit !important;
+    }
+  }
+  
+  /* Règle spécifique pour 764px pour éviter les conflits */
+  @media (min-width: 764px) and (max-width: 767px) {
+    nav {
+      height: var(--mobile-nav-height) !important;
+      display: block !important;
+      grid-template-columns: none !important;
+    }
+    
+    .menu-header {
+      padding: 0.5rem 1rem !important;
+    }
+  }
+
+  @media (max-width: 48em) {
+    .site-logo {
+      height: 40px; /* Taille optimisée pour mobile */
+    }
+
+    .site-logo img {
+      width: auto;
+      height: 40px;
+    }
+
+    /* Hide desktop nav on mobile */
+    .desktop-nav {
+      display: none;
+    }
+
+    /* Optimize spacing on mobile */
+    .nav-items {
+      padding: 1rem 1.25rem;
+      gap: 0.5rem;
+    }
+
+    .menu-footer {
+      padding: 1.25rem 1.25rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .menu-header {
+      padding: 0.5rem 1rem; /* Réduit le padding sur mobile */
+      height: var(--mobile-nav-height);
+      box-sizing: border-box;
+    }
+
+    .menu-button {
+      padding: 0.35rem;
+      font-size: 1.2rem;
+      min-width: var(--mobile-button-size);
+      min-height: var(--mobile-button-size);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Réduire la taille de l'icône SVG dans le bouton */
+    .menu-button svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Améliorer l'apparence des liens de navigation sur mobile */
+    .link {
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background-color: rgba(var(--gray-999-basis), 0.05);
+      font-size: 1rem;
+      font-weight: 500;
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .link:active {
+      background-color: rgba(var(--gray-999-basis), 0.1);
+    }
+
+    .link.active {
+      background-color: var(--accent-regular);
+      color: var(--accent-text-over);
+      box-shadow: 0 2px 10px rgba(118, 17, 166, 0.2);
+    }
+
+    /* Centrer les icônes sociales sur mobile */
+    .socials {
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 0.75rem;
+      gap: 1rem;
+    }
+
+    /* Centrer le toggle de thème sur mobile */
+    .theme-toggle {
+      margin: 0 auto;
+    }
+
+    .social {
+      padding: 0.4rem;
+    }
+  }
+
+  /* Media query pour les écrans de taille moyenne */
+  @media (min-width: 30.1em) and (max-width: 47.9em) {
+    .site-logo {
+      height: 42px; /* Taille intermédiaire pour les écrans moyens */
+    }
+
+    .site-logo img {
+      height: 42px;
+    }
+  }
+
+  @media (max-width: 30em) {
+    .site-logo {
+      height: 36px; /* Réduit la taille du logo sur les petits écrans */
+    }
+
+    .site-logo img {
+      height: 36px;
+    }
+    .site-title {
+      max-width: 65%; /* Réduit davantage la largeur sur les petits écrans */
+    }
+
+    .menu-button {
+      padding: 0.35rem;
+      font-size: 1.1rem;
+    }
+
+    /* Réduire davantage la taille de l'icône SVG dans le bouton */
+    .menu-button svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Ajuster le menu pour les petits écrans */
+    .menu-content {
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+  }
+
+  /* Pour les très petits écrans */
+  @media (max-width: 23.4375em) {
+    /* 375px */
+    .site-logo {
+      height: 30px; /* Réduit encore plus la taille du logo */
+    }
+
+    .site-logo img {
+      height: 30px;
+    }
+    .site-title {
+      max-width: 60%;
+    }
+
+    .menu-button {
+      padding: 0.3rem;
+      font-size: 1rem;
+    }
+
+    /* Réduire encore plus la taille de l'icône SVG dans le bouton */
+    .menu-button svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Réduire le padding du menu-header pour les très petits écrans */
+    .menu-header {
+      padding: 0.4rem 0.75rem;
+    }
+
+    /* Ajuster les liens pour les très petits écrans */
+    .link {
+      padding: 0.6rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (min-width: 48em) {
+    nav {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      padding: 0 1.5rem;
+      gap: 1rem;
+    }
+
+    .menu-header {
+      padding: 0;
+      width: auto;
+      max-width: fit-content;
+    }
+
+    .site-title {
+      font-size: var(--text-lg);
+    }
+
+    .site-logo {
+      height: 2.5rem;
+    }
+
+    .site-logo img {
+      height: 2.5rem;
+    }
+
+    /* Hide mobile menu on desktop */
+    .mobile-only-menu {
+      display: none;
+    }
+
+    /* Show desktop navigation */
+    .desktop-nav {
+      display: block;
+    }
+
+    /* Le menu mobile est déjà masqué par défaut via CSS */
+
+    /* Hide mobile menu theme toggle on desktop */
+    .menu-content .theme-toggle {
+      display: none;
+    }
+
+    .nav-items {
+      position: relative;
+      flex-direction: row;
+      font-size: var(--text-sm1);
+      border-radius: 999rem;
+      border: 1px solid rgba(var(--gray-999-basis), 0.1);
+      padding: 0.2rem 0.5625rem;
+      background: linear-gradient(
+        to right,
+        rgba(var(--gray-999-basis), 0.05),
+        rgba(var(--gray-999-basis), 0.1)
+      );
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+      transition: all var(--transition-medium);
+    }
+
+    .nav-items:hover {
+      border-color: rgba(var(--gray-999-basis), 0.2);
+      box-shadow:
+        0 15px 40px -15px rgba(0, 0, 0, 0.15),
+        0 0 10px rgba(157, 78, 255, 0.1);
+    }
+
+    .nav-items::before {
+      position: absolute;
+      inset: -1px;
+      content: "";
+      background: var(--gradient-stroke);
+      border-radius: 999rem;
+      z-index: -1;
+    }
+
+    .link {
+      padding: 0.5rem 1rem;
+      border-radius: 999rem;
+      transition:
+        color var(--transition-medium),
+        background-color var(--transition-medium),
+        transform var(--transition-medium),
+        box-shadow var(--transition-medium);
+      position: relative;
+      z-index: 1;
+    }
+
+    .link::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 999rem;
+      background: var(--accent-gradient);
+      opacity: 0;
+      z-index: -1;
+      transition: opacity var(--transition-medium);
+    }
+
+    .link:hover,
+    .link:focus {
+      color: var(--gray-0);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .link:hover::before,
+    .link:focus::before {
+      opacity: 0.1;
+    }
+
+    .link.active {
+      color: var(--accent-text-over);
+      background-color: var(--accent-regular);
+      box-shadow: 0 4px 12px rgba(118, 17, 166, 0.4);
+      font-weight: 600;
+    }
+
+    .link.active::before {
+      opacity: 0;
+    }
+
+    .menu-footer {
+      display: none; /* Hide the mobile menu footer on desktop */
+    }
+
+    /* Position the theme toggle correctly on desktop */
+    .theme-toggle {
+      position: absolute;
+      right: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Style des icônes sociales sur desktop */
+    .desktop-socials .social {
+      font-size: 1.25rem;
+      padding: 0.375rem;
+      color: var(--gray-300);
+      transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .desktop-socials .social:hover {
+      color: var(--accent-regular);
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .nav-items {
+      gap: 0.25rem;
+      padding: 0.25rem 0.625rem;
+    }
+
+    .site-logo {
+      height: 2.75rem;
+    }
+
+    .site-logo img {
+      height: 2.75rem;
+    }
+
+    nav {
+      padding: 0.5rem 2.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .site-logo {
+      height: 3rem;
+    }
+
+    .site-logo img {
+      height: 3rem;
+    }
+
+    .nav-items {
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+    }
+
+    .link {
+      padding: 0.5rem 1.25rem;
+      font-size: 0.875rem;
+    }
+
+    .social {
+      padding: 0.5rem;
+    }
+
+    nav {
+      padding: 1rem 5rem;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .link.active {
+      color: SelectedItem;
+    }
+  }
+
+  /* Responsive styling using global variables */
+  @media (max-width: 640px) {
+    nav {
+      margin-bottom: 0;
+      margin-top: 0;
+      padding-top: 0;
+      height: var(--mobile-nav-height);
+    }
+
+    .menu-header {
+      padding: 0.5rem var(--container-padding);
+      height: var(--mobile-nav-height);
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  @media (min-width: 768px) {
+    nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .menu-header {
+      padding-block: 0.3rem;
+    }
+  }
+</style>

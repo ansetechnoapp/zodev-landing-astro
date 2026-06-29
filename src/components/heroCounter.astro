@@ -1,0 +1,83 @@
+---
+---
+
+<div
+          class="hero-counter-wrap"
+        >
+          <div class="counter-item counter-text-wrap">
+            <span class="count-text plus" data-from="0" data-to="7">7</span
+            ><span class="counter-title">Years Of Experience</span>
+          </div>
+          <div class="counter-item counter-text-wrap">
+            <span class="count-text percent" data-from="0" data-to="99">99</span
+            ><span class="counter-title">Client Satisfactions</span>
+          </div>
+        </div>
+
+<style>
+.hero-counter-wrap {
+    padding: 16px 16px;
+    border-radius: 16px;
+    background: var(--gray-1003);
+    visibility: visible;
+    color: var(--gray-300);
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+.hero-counter-wrap .counter-item:not(:last-child) {
+    margin-bottom: 0px;
+  }
+  .hero-counter-wrap .counter-item:not(:first-child) {
+    padding-left: 10px;
+    border-left: 1px solid var(--gray-300);
+  }
+
+  .hero-counter-wrap .count-text {
+    line-height: 1;
+    font-size: 40px;
+    font-weight: 500;
+    color: var(--accent-regular);
+    animation: fadeInUp 0.4s ease-in-out;
+  }
+  .hero-counter-wrap .counter-title {
+    display: block;
+  }
+
+  .hero-counter-wrap .count-text.plus:after {
+    content: "+";
+  }
+  .hero-counter-wrap .count-text.k-plus:after {
+    content: "k+";
+  }
+  .hero-counter-wrap .count-text.percent:after {
+    content: "%+";
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (min-width: 75em) {
+    .hero-counter-wrap {
+        flex-direction:column;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .hero-counter-wrap .counter-item:not(:last-child) {
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--gray-300);
+  }
+  .hero-counter-wrap .counter-item:not(:first-child) {
+    padding-left: 10px;
+    border-left: none;
+  }
+  }
+</style>

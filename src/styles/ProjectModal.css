@@ -1,0 +1,307 @@
+/* Project Modal Animations and Styles */
+
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modal-exit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+}
+
+@keyframes backdrop-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-modal-enter {
+  animation: modal-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modal-exit {
+  animation: modal-exit 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-backdrop-enter {
+  animation: backdrop-enter 0.3s ease-out forwards;
+}
+
+/* Enhanced button hover effects */
+.project-modal-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-modal-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.project-modal-button:hover::before {
+  left: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .project-modal-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: calc(100vh - 2rem);
+  }
+
+  .project-modal-image {
+    min-height: 300px;
+    max-height: 400px;
+  }
+
+  .project-modal-content {
+    padding: 2rem 1.5rem;
+    max-height: calc(100vh - 400px - 4rem);
+    overflow-y: auto;
+    flex: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .project-modal-container {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+    height: auto;
+  }
+
+  .project-modal-grid {
+    height: auto;
+    max-height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-modal-image {
+    min-height: 250px;
+    max-height: 300px;
+    flex-shrink: 0;
+  }
+
+  .project-modal-content {
+    padding: 1.5rem 1rem;
+    max-height: calc(100vh - 300px - 3rem);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .project-modal-title {
+    font-size: 2rem;
+  }
+
+  .project-modal-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .project-modal-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .project-modal-container {
+    margin: 0.5rem;
+    max-height: calc(100vh - 1rem);
+  }
+
+  .project-modal-grid {
+    max-height: calc(100vh - 1rem);
+  }
+
+  .project-modal-image {
+    min-height: 200px;
+    max-height: 250px;
+  }
+
+  .project-modal-content {
+    padding: 1rem 0.75rem;
+    max-height: calc(100vh - 250px - 2rem);
+  }
+
+  .project-modal-title {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+}
+
+/* Focus styles for accessibility */
+.project-modal-close:focus,
+.project-modal-button:focus {
+  outline: 2px solid var(--accent-secondary-light, #4ecdc4);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling for modal content */
+.project-modal-content {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Enable momentum scrolling on iOS */
+}
+
+/* Custom scrollbar for modal content */
+.project-modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.project-modal-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.project-modal-content::-webkit-scrollbar-thumb {
+  background: #14b8a6;
+  border-radius: 3px;
+}
+
+.project-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #0d9488;
+}
+
+/* Mobile scrollbar adjustments */
+@media (max-width: 768px) {
+  .project-modal-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .project-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(20, 184, 166, 0.8);
+    border-radius: 4px;
+  }
+
+  .project-modal-content::-webkit-scrollbar-thumb:active {
+    background: #14b8a6;
+  }
+}
+
+/* Technology tags animation */
+.tech-tag {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+
+.tech-tag:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
+  background: rgba(20, 184, 166, 0.15) !important;
+  border-color: rgba(20, 184, 166, 0.4) !important;
+}
+
+/* Image overlay effects */
+.project-image-overlay {
+  transition: opacity 0.3s ease;
+}
+
+.project-modal-image:hover .project-image-overlay {
+  opacity: 0.3;
+}
+
+/* Gradient text effect for title */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--gray-0, #ffffff),
+    #14b8a6
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading state */
+.project-modal-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(78, 205, 196, 0.3);
+  border-top: 3px solid var(--accent-secondary, #33a6a0);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Enhanced shadow effects */
+.project-modal-shadow {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Backdrop blur fallback */
+@supports not (backdrop-filter: blur(8px)) {
+  .project-modal-backdrop {
+    background: rgba(0, 0, 0, 0.85);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .project-modal-container {
+    border: 2px solid white;
+  }
+  
+  .project-modal-button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-modal-enter,
+  .animate-modal-exit,
+  .animate-backdrop-enter {
+    animation: none;
+  }
+  
+  .project-modal-button,
+  .tech-tag,
+  .project-image-overlay {
+    transition: none;
+  }
+}

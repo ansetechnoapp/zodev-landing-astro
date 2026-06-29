@@ -1,0 +1,285 @@
+---
+interface Props {
+  tagline1?: string;
+}
+
+const { tagline1 } = Astro.props;
+---
+
+<div class="diagonal-card card-right">
+  <div class="portfolio-badge">PORTFOLIO 2024</div>
+  <h2 class="hero-subtitle-modern" aria-label="Développeur, Designer, Freelance, Créatif">
+    <span class="typing-text" id="typing-text" aria-hidden="true">Développeur</span>
+  </h2>
+
+  {tagline1 && (
+    <p class="hero-description-modern">{tagline1}</p>
+  )}
+
+  <div class="hero-cta-container">
+    <button class="cta-primary">
+      <span>Démarrer un projet</span>
+      <svg class="cta-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="cta-glow"></div>
+    </button>
+    <a
+      class="cta-secondary"
+      href="https://bit.ly/CV_otty_kevin"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span>Consulter mon CV</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  /* ===== Diagonal Card Styles ===== */
+  .diagonal-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(100, 116, 162, 0.2);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    animation: cardReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards, floatCard 6s ease-in-out 1s infinite alternate;
+    opacity: 0;
+    transition: 
+      border-color 0.3s ease, 
+      box-shadow 0.3s ease, 
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+      background 0.4s ease;
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+  }
+
+  .diagonal-card:hover {
+    border-color: rgba(20, 184, 166, 0.4);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 20px 48px rgba(20, 184, 166, 0.12), 0 0 60px -15px rgba(20, 184, 166, 0.06);
+  }
+
+  :root.theme-dark .diagonal-card {
+    background: rgba(20, 25, 37, 0.6);
+    border-color: rgba(100, 116, 162, 0.25);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-right {
+    width: 100%;
+    max-width: 540px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.5rem;
+    text-align: left;
+  }
+
+  /* Portfolio Badge */
+  .portfolio-badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    background: rgba(20, 184, 166, 0.12);
+    border: 1px solid rgba(20, 184, 166, 0.3);
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--accent-teal);
+    margin-bottom: 0;
+  }
+
+  /* Subtitle with Typing Effect */
+  .hero-subtitle-modern {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    color: var(--gray-0);
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .typing-text {
+    position: relative;
+    color: var(--gray-0);
+  }
+
+  .typing-text::after {
+    content: "|";
+    animation: blink 1s infinite;
+    color: var(--accent-teal);
+    font-weight: 400;
+  }
+
+  /* Description */
+  .hero-description-modern {
+    font-size: var(--text-base);
+    color: var(--gray-400);
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0;
+  }
+
+  /* CTA Buttons Container */
+  .hero-cta-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0;
+  }
+
+  .cta-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    background: linear-gradient(45deg, var(--accent-purple), var(--accent-teal));
+    background-size: 150% 150%;
+    border: none;
+    border-radius: 0.75rem;
+    color: white;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(116, 17, 166, 0.3);
+  }
+
+  .cta-arrow {
+    transition: transform 0.3s ease;
+  }
+
+  .cta-primary:hover .cta-arrow {
+    transform: translateX(3px);
+  }
+
+  .cta-primary:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(116, 17, 166, 0.4);
+  }
+
+  .cta-primary:hover .cta-glow {
+    opacity: 1;
+  }
+
+  .cta-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .cta-secondary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    background: transparent;
+    border: 2px solid var(--gray-600);
+    border-radius: 0.75rem;
+    color: var(--gray-200);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .cta-secondary:hover {
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+    transform: translateY(-2px);
+  }
+
+  /* Animations */
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  @keyframes floatCard {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-15px); }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .card-right {
+      width: 100%;
+      max-width: 360px;
+    }
+    .hero-subtitle-modern {
+      font-size: var(--text-xl);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .diagonal-card,
+    .card-right {
+      max-width: 420px;
+      width: 100%;
+      min-height: auto;
+      padding: 2rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-subtitle-modern {
+      font-size: var(--text-xl);
+    }
+    .hero-description-modern {
+      text-align: center;
+    }
+    .hero-cta-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .cta-primary,
+    .cta-secondary {
+      width: 100%;
+      max-width: 280px;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .diagonal-card,
+    .card-right {
+      max-width: 100%;
+      padding: 1rem;
+    }
+    .hero-subtitle-modern {
+      font-size: var(--text-lg);
+    }
+    .hero-description-modern {
+      font-size: var(--text-sm);
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .diagonal-card {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

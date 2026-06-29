@@ -1,0 +1,388 @@
+---
+import { getCollection } from "astro:content";
+
+// image paths
+const Img1 = {
+  src: "/assets/otty_kevin_optimized/2.png",
+  srcsetWebp:
+    "/assets/otty_kevin_optimized/2_optimized.webp 1x, /assets/otty_kevin_optimized/2_320w.webp 320w, /assets/otty_kevin_optimized/2_480w.webp 480w, /assets/otty_kevin_optimized/2_640w.webp 640w, /assets/otty_kevin_optimized/2_1024w.webp 1024w",
+  srcsetAvif:
+    "/assets/otty_kevin_optimized/2_optimized.avif 1x, /assets/otty_kevin_optimized/2_320w.avif 320w, /assets/otty_kevin_optimized/2_480w.avif 480w, /assets/otty_kevin_optimized/2_640w.avif 640w, /assets/otty_kevin_optimized/2_1024w.avif 1024w",
+  webp: "/assets/otty_kevin_optimized/2_optimized.webp",
+  avif: "/assets/otty_kevin_optimized/2_optimized.avif",
+  fallback: "/assets/otty_kevin_optimized/2.png",
+};
+const Img2 = {
+  src: "/assets/otty_kevin_optimized/6.png",
+  srcsetWebp:
+    "/assets/otty_kevin_optimized/6_optimized.webp 1x, /assets/otty_kevin_optimized/6_320w.webp 320w, /assets/otty_kevin_optimized/6_480w.webp 480w, /assets/otty_kevin_optimized/6_640w.webp 640w, /assets/otty_kevin_optimized/6_1024w.webp 1024w",
+  srcsetAvif:
+    "/assets/otty_kevin_optimized/6_optimized.avif 1x, /assets/otty_kevin_optimized/6_320w.avif 320w, /assets/otty_kevin_optimized/6_480w.avif 480w, /assets/otty_kevin_optimized/6_640w.avif 640w, /assets/otty_kevin_optimized/6_1024w.avif 1024w",
+  webp: "/assets/otty_kevin_optimized/6_optimized.webp",
+  avif: "/assets/otty_kevin_optimized/6_optimized.avif",
+  fallback: "/assets/otty_kevin_optimized/6.png",
+};
+// Layout import â€” provides basic page elements: <head>, <nav>, <footer> etc.
+import Layout from "../layouts/Layout.astro";
+
+// Component Imports
+import CallToAction from "../components/CallToAction.astro";
+import Hero from "../components/Hero.astro";
+import Icon from "../components/reactJS/Icon";
+import Pill from "../components/reactJS/Pill";
+import PortfolioPreview from "../components/reactJS/PortfolioPreview";
+import Contact from "../components/Contact.astro";
+import Services from "../components/Services.astro";
+import Card from "../components/card.astro";
+import MenuLinkNav from "../components/menuLinkNav.astro";
+// Page section components
+import ContactCTA from "../components/ContactCTA.astro";
+import Skills from "../components/reactJS/Skills";
+import HeroMediaSocialNav from "../components/heroMediaSocialNav.astro";
+import About from "../components/About.astro";
+import Timeline from "../components/reactJS/TimelineExport";
+import timelineEvents from "../data/timelineEvents.json";
+// import HeroCounter from "../components/heroCounter.astro";
+// Content Fetching: List four most recent work projects
+const projects = (await getCollection("work"))
+  .sort((a, b) => b.data.number - a.data.number)
+  .slice(0, 4);
+
+// Full Astro Component Syntax:
+// https://docs.astro.build/core-concepts/astro-components/
+
+import dataUser from "../data/User.json";
+import { getLangFromCookies, getTranslations } from "../i18n/index";
+
+const lang = getLangFromCookies(Astro.cookies);
+const i18n = getTranslations(lang);
+
+// import FilterProjects from "../components/reactJS/FilterProjects";
+interface Props {
+  heroTitle?: string | undefined;
+}
+const { heroTitle = `I am ${dataUser.firstName} ${dataUser.lastName}` } =
+  Astro.props;
+---
+
+<Layout
+  title={`${dataUser.firstName} ${dataUser.lastName} - ${i18n.meta.homeTitle}`}
+  description={i18n.meta.homeDescription.replace('{firstName}', dataUser.firstName).replace('{lastName}', dataUser.lastName).replace('{city}', dataUser.address.city)}
+  image="/assets/social-preview.jpg"
+  type="website"
+>
+  <MenuLinkNav namepage="home" />
+
+  <!-- Modern Hero Section -->
+  <section id="hero_home">
+    <Hero
+      title={heroTitle}
+      tagline={i18n.hero.tagline}
+      tagline1={i18n.hero.tagline1}
+      align="center"
+    >
+      <!-- Hero Image â€” editorial photo treatment -->
+      <div class="hero-image-modern" slot="photo">
+        <div class="image-wrapper">
+          <picture>
+            <source
+              srcset={Img1.srcsetAvif}
+              type="image/avif"
+              sizes="100px"
+            />
+            <source
+              srcset={Img1.srcsetWebp}
+              type="image/webp"
+              sizes="100px"
+            />
+            <img
+              alt={`${dataUser.firstName} ${dataUser.lastName}, ${i18n.meta.imgAlt.replace('{city}', dataUser.address.city).replace('{country}', dataUser.address.country)}`}
+              width="100"
+              height="100"
+              src={Img1.fallback}
+              loading="eager"
+              decoding="async"
+            />
+          </picture>
+        </div>
+      </div>
+
+      <!-- Social Media Navigation -->
+      <div class="hero-social-modern" slot="social">
+        <HeroMediaSocialNav />
+      </div>
+    </Hero>
+  </section>
+
+  <main class="wrapper stack gap-20 lg:gap-35">
+    <Skills client:visible />
+  </main>
+  <main id="about" class="wrapper stack gap-20 lg:gap-35">
+    <About
+      imageSrc={Img2}
+      optimizedImageSrc={{
+        avif: Img2.avif,
+        webp: Img2.webp,
+        fallback: Img2.fallback,
+        srcsetAvif: Img2.srcsetAvif,
+        srcsetWebp: Img2.srcsetWebp,
+      }}
+      contactInfo={{
+        city: dataUser.address.city,
+        street: dataUser.address.rue,
+        email: dataUser.email,
+        phone: dataUser.phone,
+        phonePrefix: dataUser.address.indicatif,
+        occupation: i18n.about.occupation,
+        availability: i18n.about.availability,
+        website: dataUser.website,
+      }}
+    />
+  </main>
+  <section id="journey" class="journey-band">
+    <div class="wrapper stack gap-20 lg:gap-35">
+      <Timeline
+        client:visible
+        title={i18n.timeline.title}
+        subtitle={i18n.timeline.subtitle}
+        events={timelineEvents}
+      />
+    </div>
+  </section>
+
+  <div class="wrapper stack gap-20 lg:gap-35">
+    <Services />
+    <section id="work" class="section with-background with-cta">
+      <header class="section-header stack gap-2 lg:gap-4">
+        <h2>{i18n.projects.title}</h2>
+        <p>
+          {i18n.projects.description}
+        </p>
+      </header>
+
+      <div class="gallery">
+        <Card>
+          {
+            projects.map((project) => (
+              <li>
+                <PortfolioPreview project={project} client:visible />
+              </li>
+            ))
+          }
+        </Card>
+      </div>
+
+      <div class="cta">
+        <CallToAction href="/work/">
+          {i18n.projects.viewAll}
+          <Icon icon="arrow-right" size="1.2em" />
+        </CallToAction>
+      </div>
+    </section>
+  </div>
+
+  <ContactCTA />
+</Layout>
+
+<style>
+  /* Hero Image â€” flexible sizing for identity card photo mask */
+  .hero-image-modern {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .image-wrapper :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  /* Social wrapper â€” reset positioning for sidebar slot */
+  .hero-social-modern {
+    display: contents;
+  }
+
+  /* ====================================================== */
+
+  .section {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .with-background {
+    position: relative;
+  }
+
+  .with-background::before {
+    --hero-bg: var(--bg-image-subtle-2);
+
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    left: 50%;
+    width: 100vw;
+    aspect-ratio: calc(2.25 / var(--bg-scale));
+    top: 0;
+    transform: translateY(-75%) translateX(-50%);
+    background:
+      url("/assets/backgrounds/noise.png") top center/220px repeat,
+      var(--hero-bg) center center / var(--bg-gradient-size) no-repeat,
+      var(--gray-999);
+    background-blend-mode: overlay, normal, normal, normal;
+    mix-blend-mode: var(--bg-blend-mode);
+    z-index: -1;
+  }
+
+  .with-background.bg-variant::before {
+    --hero-bg: var(--bg-image-subtle-1);
+  }
+
+  .section-header {
+    justify-self: center;
+    text-align: center;
+    max-width: 50ch;
+    font-size: var(--text-md);
+    color: var(--gray-300);
+  }
+
+  .section-header h3 {
+    font-size: var(--text-2xl);
+  }
+
+  @media (min-width: 48em) {
+    .section {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-areas: "header header header header" "gallery gallery gallery gallery";
+      gap: 5rem;
+    }
+
+    .section.with-cta {
+      grid-template-areas: "header header header cta" "gallery gallery gallery gallery";
+    }
+
+    .section-header {
+      grid-area: header;
+      font-size: var(--text-lg);
+    }
+
+    .section-header h3 {
+      font-size: var(--text-4xl);
+    }
+
+    .with-cta .section-header {
+      justify-self: flex-start;
+      text-align: left;
+    }
+
+    .gallery {
+      grid-area: gallery;
+    }
+
+    .cta {
+      grid-area: cta;
+    }
+  }
+
+  .filters {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--gray-800);
+    border-radius: 1.5rem;
+    background: var(--gradient-subtle);
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    color: var(--gray-100);
+    border-color: var(--gray-100);
+  }
+
+  .filter-btn.active {
+    background: var(--gradient-accent);
+    border-color: var(--accent-regular);
+    color: var(--accent-text-over);
+  }
+
+  /* ====================================================== */
+
+  .mention-card {
+    display: flex;
+    height: 7rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px solid var(--gray-800);
+    border-radius: 1.5rem;
+    color: var(--gray-300);
+    background: var(--gradient-subtle);
+    box-shadow: var(--shadow-sm);
+  }
+
+  @media (min-width: 48em) {
+    .mention-card {
+      border-radius: 1.5rem;
+      height: 9.5rem;
+    }
+  }
+  .p-left-right-3-rem {
+    padding: 0rem 3rem;
+  }
+
+  /* Timeline section â€” flows with the page like other sections */
+  .journey-band {
+    position: relative;
+    scroll-margin-top: calc(var(--nav-height, 70px) + 1rem);
+  }
+</style>
+
+<script>
+  function setupFilters() {
+    const buttons = document.querySelectorAll(".filter-btn");
+    const portfolioItems = document.querySelectorAll("article");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        // Update active button
+        buttons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        // Update filter in React components
+        const filter = btn.getAttribute("data-filter") || "all";
+        portfolioItems.forEach((item) => {
+          // Force re-render of React component by toggling hidden class
+          item.classList.add("hidden");
+          setTimeout(() => {
+            item.classList.remove("hidden");
+          }, 10);
+
+          // Update data attribute for filtering
+          item.setAttribute("data-active-filter", filter);
+        });
+      });
+    });
+  }
+
+  // Setup on page load
+  setupFilters();
+
+  // Handle view transitions
+  document.addEventListener("astro:page-load", setupFilters);
+</script>

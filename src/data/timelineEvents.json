@@ -1,0 +1,110 @@
+[
+  {
+    "year": 2024,
+    "title": "Freelance",
+    "description": "Développeur web et mobile",
+    "details": "Activité actuelle en freelance, développement de sites web et applications mobiles.",
+    "category": "Professionnelle",
+    "image": "/assets/timeline/freelance.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2023,
+    "title": "PLANETECH SARL",
+    "description": "Développeur mobile & Community Manager",
+    "details": "Développement d'applications mobiles et gestion de la présence sur les réseaux sociaux. Lieu : Cité Houeyiho, 12ᵉ arrondissement, Cotonou.",
+    "category": "Professionnelle",
+    "image": "/assets/timeline/planetech.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2023,
+    "title": "ONE BUILD PLUS OBP",
+    "description": "Développeur web & Community Manager",
+    "details": "Développement de sites web et gestion de la présence sur les réseaux sociaux. Lieu : Akpakpa, Cotonou.",
+    "category": "Professionnelle",
+    "image": "/assets/timeline/onebuild.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2022,
+    "title": "SENA&BIDO",
+    "description": "Responsable de la croissance en ligne",
+    "details": "Gestion de la stratégie de croissance en ligne de l'entreprise. Lieu : Cotonou.",
+    "category": "Professionnelle",
+    "image": "/assets/timeline/sena.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2022,
+    "title": "THE EASYSOFT COMPANY",
+    "description": "Développeur PHP & Designer",
+    "details": "Programmation avec PHP, maintenance informatique, design avec Figma. Lieu : Cotonou.",
+    "category": "Professionnelle",
+    "image": "/assets/timeline/easysoft.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2021,
+    "title": "CITECH",
+    "description": "Développeur Web",
+    "details": "Conception d'une plateforme web de gestion de biens immobiliers.",
+    "category": "Professionnelle",
+    "image": "/assets/timeline/citech.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2021,
+    "title": "Licence Professionnelle",
+    "description": "Systèmes Informatiques et Logiciels (SIL)",
+    "details": "Diplôme obtenu à la Haute École de Commerce et de Management (HECM), Abomey-Calavi.",
+    "category": "Formation",
+    "image": "/assets/timeline/education.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2020,
+    "title": "Formation SGS",
+    "description": "Services d'énergie dans l'administration publique",
+    "details": "Atelier sur les services d'énergie dans l'administration publique.",
+    "category": "Formation",
+    "image": "/assets/timeline/sgs.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2019,
+    "title": "Formation IDE",
+    "description": "Plans d'affaires, analyse financière et tarification",
+    "details": "Formation en plans d'affaires, analyse financière et tarification.",
+    "category": "Formation",
+    "image": "/assets/timeline/ide.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2017,
+    "title": "BAC D",
+    "description": "Diplôme d'études secondaires",
+    "details": "Obtenu au CEG-HEVIE, Abomey-Calavi.",
+    "category": "Formation",
+    "image": "/assets/timeline/bac.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2012,
+    "title": "BEPC",
+    "description": "Brevet d'études du premier cycle",
+    "details": "Obtenu à Bethesda, Cotonou.",
+    "category": "Formation",
+    "image": "/assets/timeline/bepc.jpg",
+    "link": "#"
+  },
+  {
+    "year": 2008,
+    "title": "CEP",
+    "description": "Certificat d'études primaires",
+    "details": "Obtenu à Yemon Le Prince, Cotonou.",
+    "category": "Formation",
+    "image": "/assets/timeline/cep.jpg",
+    "link": "#"
+  }
+] 

@@ -1,0 +1,97 @@
+---
+import Airtable from 'airtable';
+
+interface AirtableRecord {
+  id: string;
+  name: string;
+  notes: string;
+  status: string;
+  assignee: string;
+}
+
+// Initialize Airtable
+const base = new Airtable({
+  apiKey: import.meta.env.PUBLIC_AIRTABLE_API_KEY || process.env.PUBLIC_AIRTABLE_API_KEY
+}).base(import.meta.env.PUBLIC_AIRTABLE_BASE_ID) || process.env.PUBLIC_AIRTABLE_BASE_ID;
+
+// Fetch records from Airtable
+let records: AirtableRecord[] = [];
+let error = null;
+
+try {
+  const results = await base('Table 1')
+    .select({
+      view: 'Grid view',
+      maxRecords: 10,
+      fields: ['Name', 'Notes', 'Status', 'Assignee']
+    })
+    .firstPage();
+
+  records = results.map(record => ({
+    id: record.id,
+    name: record.get('Name') as string,
+    notes: record.get('Notes') as string,
+    status: record.get('Status') as string,
+    assignee: (record.get('Assignee') as any)?.name || 'Unassigned'
+  }));
+} catch (err) {
+  error = (err as Error).message;
+}
+---
+
+<section>
+  {error ? (
+    <p class="error">Error loading data: {error}</p>
+  ) : records.length === 0 ? (
+    <p>No records found</p>
+  ) : (
+    <div class="records-container">
+      {records.map(record => (
+        <article class="record-card">
+          <h3>{record.name}</h3>
+          <p>{record.notes}</p>
+          <div class="meta">
+            <span class={`status-${record.status?.toLowerCase()}`}>
+              {record.status}
+            </span>
+            <span class="assignee">
+              🧑💻 {record.assignee}
+            </span>
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .records-container {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .record-card {
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .status-todo { color: #64748b; }
+  .status-in-progress { color: #f59e0b; }
+  .status-done { color: #10b981; }
+
+  .error {
+    color: #ef4444;
+    padding: 1rem;
+    background-color: #fee2e2;
+    border-radius: 4px;
+  }
+</style>

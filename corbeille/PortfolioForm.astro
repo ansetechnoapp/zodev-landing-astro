@@ -1,0 +1,81 @@
+<!-- ---
+---
+<form id="portfolioForm">
+      <label>
+        GitHub Link:
+        <input type="url" name="github_link" required />
+      </label>
+      <label>
+        Technologies Used:
+        <input type="text" name="technologies" required />
+      </label>
+      <label>
+        Title:
+        <input type="text" name="title" required />
+      </label>
+      <label>
+        Allimage:
+        <input type="text" name="allimage" required />
+      </label>
+      <label>
+        Description:
+        <textarea name="description" required></textarea> 
+      </label>
+      <label>
+        More Information:
+        <textarea name="more_information" required></textarea>
+      </label>
+      <label>
+        See the Website:
+        <input type="url" name="website" required />
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+    
+    <script>
+      import { createClient } from '@supabase/supabase-js'; 
+      const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
+      const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      
+      // Get the form element by ID
+      const form = document.getElementById('portfolioForm');
+      
+      // Add event listener directly to the form element
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!(e.target instanceof HTMLFormElement)) {
+          console.error("Event target is not an HTMLFormElement");
+          return;
+        }
+        
+        const formData = new FormData(e.target);
+        const data = {
+          github_link: formData.get('github_link'),
+          technologies: formData.get('technologies'),
+          title: formData.get('title'),
+          allimage: formData.get('allimage'),
+          description: formData.get('description'),
+          more_information: formData.get('more_information'),
+          website: formData.get('website')8
+        };
+        
+        try {
+          const { data: insertedData, error } = await supabase
+            .from('portfolio_project')
+            .insert(data)
+            .select();
+            
+          if (error) {
+            alert("Error: " + error.message);
+            console.error(error);
+          } else {
+            alert("Data inserted successfully!");
+            e.target.reset(); // Clear the form
+          }
+        } catch (err) {
+          console.error("Unexpected error:", err);
+          alert("An unexpected error occurred. Check the console for details.");
+        }
+      });
+    </script> -->

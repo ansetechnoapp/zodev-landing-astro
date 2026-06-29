@@ -1,0 +1,165 @@
+---
+import Icon from "./reactJS/Icon";
+interface Props {
+  togglelightdarktheme?: "toggleside" | "togglehigh";
+  toggleiconelightdarktheme?: "lightx" | "lighty";
+}
+
+const { togglelightdarktheme, toggleiconelightdarktheme } = Astro.props;
+---
+
+<theme-toggle>
+  <button
+    class:list={[
+      "",
+      {
+        toggleside: togglelightdarktheme === "toggleside",
+        togglehigh: togglelightdarktheme === "togglehigh",
+      },
+    ]}
+  >
+    <span class="sr-only">Dark theme</span>
+    <span
+      class:list={[
+        "icon",
+        {
+          lightx: toggleiconelightdarktheme === "lightx",
+          lighty: toggleiconelightdarktheme === "lighty",
+        },
+      ]}><Icon icon="sun" /></span
+    >
+    <span class="icon dark"><Icon icon="moon-stars" /></span>
+  </button>
+</theme-toggle>
+
+<style>
+  button.togglehigh,
+  button.toggleside {
+    display: flex;
+    border: 0;
+    border-radius: 999rem;
+    padding: 0;
+    background-color: var(--gray-999);
+    box-shadow: inset 0 0 0 1px var(--accent-overlay);
+    cursor: pointer;
+  }
+
+  @media (max-width: 640px) {
+    button.togglehigh,
+    button.toggleside {
+      transform: scale(0.9);
+      margin: var(--space-xs);
+    }
+
+    .icon {
+      padding: 0.4rem;
+      width: 1.8rem;
+      height: 1.8rem;
+    }
+  }
+
+  .icon {
+    z-index: 1;
+    position: relative;
+    display: flex;
+    padding: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    color: var(--accent-overlay);
+  }
+
+  .icon.lightx::before,
+  .icon.lighty::before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background-color: var(--accent-regular);
+    border-radius: 999rem;
+  }
+
+  :global(.theme-dark) .icon.lightx::before {
+    transform: translateX(100%);
+  }
+  :global(.theme-dark) .icon.lighty::before {
+    transform: translateX(100%);
+  }
+
+  :global(.theme-dark) .icon.dark,
+  :global(html:not(.theme-dark)) .icon.light,
+  button.toggleside[aria-pressed="false"] .icon.lightx,
+  button.togglehigh[aria-pressed="false"] .icon.lightx,
+  button.toggleside[aria-pressed="false"] .icon.lighty,
+  button.togglehigh[aria-pressed="false"] .icon.lighty {
+    color: var(--accent-text-over);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .icon,
+    .icon.lightx::before {
+      transition:
+        transform var(--theme-transition),
+        color var(--theme-transition);
+    }
+    .icon,
+    .icon.lighty::before {
+      transition:
+        transform var(--theme-transition),
+        color var(--theme-transition);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .icon.lightx::before {
+      background-color: SelectedItem;
+    }
+    .icon.lighty::before {
+      background-color: SelectedItem;
+    }
+  }
+  @media (min-width: 48em) {
+    button.toggleside {
+      display: block;
+    }
+    :global(.theme-dark) .icon.lighty::before {
+      transform: translateY(100%);
+    }
+  }
+</style>
+
+<script>
+  class ThemeToggle extends HTMLElement {
+    constructor() {
+      super();
+
+      const button = this.querySelector("button")!;
+
+      /** Set the theme to dark/light mode. */
+      const setTheme = (dark: boolean) => {
+        document.documentElement.classList[dark ? "add" : "remove"](
+          "dark",
+          "theme-dark"
+        );
+        button.setAttribute("aria-pressed", String(dark));
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem("theme", dark ? "dark" : "light");
+        }
+      };
+
+      // Toggle the theme when a user clicks the button.
+      button.addEventListener("click", () => setTheme(!this.isDark()));
+
+      // Initialize button state to reflect current theme.
+      setTheme(this.isDark());
+    }
+
+    isDark() {
+      return (
+        document.documentElement.classList.contains("theme-dark") ||
+        document.documentElement.classList.contains("dark")
+      );
+    }
+  }
+  customElements.define("theme-toggle", ThemeToggle);
+</script>

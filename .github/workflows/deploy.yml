@@ -1,0 +1,39 @@
+name: Deploy with SEO Optimization
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run SEO optimizations
+      run: npm run seo:auto
+    
+    - name: Build site
+      run: npm run build
+    
+    # Exemple de déploiement avec GitHub Pages
+    # Remplacez cette étape par votre méthode de déploiement préférée
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: dist # Le dossier de sortie d'Astro
+        # token: ${{ secrets.GITHUB_TOKEN }} # Décommentez si nécessaire
+        
+    # Vous pouvez ajouter d'autres méthodes de déploiement ici
+    # Par exemple, pour Netlify, Vercel, etc.

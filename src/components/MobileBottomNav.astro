@@ -1,0 +1,31 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import MenuLinks from "./reactJS/MenuLinks";
+
+interface Props {
+  namepage?: string | undefined;
+}
+
+const { namepage } = Astro.props;
+---
+
+<div class="mobile-bottom-nav">
+  <MenuLinks client:load namepage={namepage} pathname={Astro.url.pathname} /> 
+</div>
+
+<style>
+  .theme-toggle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  
+  .theme-toggle-container .mobile-label {
+    display: block;
+    font-size: 0.65rem;
+    margin-top: 0.25rem;
+    color: var(--text-secondary-color);
+  }
+</style>

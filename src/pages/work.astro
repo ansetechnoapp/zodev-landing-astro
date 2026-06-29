@@ -1,0 +1,205 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import ContactCTA from "../components/ContactCTA.astro";
+import PortfolioPreview from "../components/reactJS/PortfolioPreview";
+import FilterProjects from "../components/reactJS/FilterProjects";
+import Hero from "../components/Hero.astro";
+import Grid from "../components/Grid.astro";
+import Contact from "../components/Contact.astro";
+import MenuLinkNav from "../components/menuLinkNav.astro";
+
+const projects = (await getCollection("work")).sort(
+  // (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf() filter by date
+  (a, b) => b.data.number - a.data.number
+);
+import dataUser from "../data/User.json";
+import { getLangFromCookies, getTranslations } from "../i18n/index";
+const lang = getLangFromCookies(Astro.cookies);
+const i18n = getTranslations(lang);
+
+interface Props {
+  LayoutTitle?: string | undefined;
+  descriptionLayout?: string | undefined;
+}
+const {
+  LayoutTitle = `${i18n.work.pageTitle} | ${dataUser.firstName} ${dataUser.lastName} - ${i18n.meta.homeTitle}`,
+  descriptionLayout = i18n.meta.homeDescription.replace('{firstName}', dataUser.firstName).replace('{lastName}', dataUser.lastName).replace('{city}', dataUser.address.city),
+} = Astro.props;
+---
+
+<Layout
+  title={LayoutTitle}
+  description={descriptionLayout}
+  image="/assets/social-preview.jpg"
+  type="website"
+>
+  <MenuLinkNav namepage="work" />
+
+  <section class="presentation-section site-content-spacing mt-mobile-0">
+    <div class="presentation-content">
+      <h1>{i18n.work.title}</h1>
+      <p>
+        {i18n.work.intro1}
+      </p>
+      <p>
+        {i18n.work.intro2}
+      </p>
+      <div class="presentation-cta">
+        <a href="#portfolio-section" class="btn">{i18n.work.viewProjects}</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="stack gap-20 site-content-spacing">
+    <main class="stack gap-8 lg:gap-20">
+      <div id="portfolio-section">
+        <FilterProjects client:visible />
+        <Grid variant="small">
+          {
+            projects.map((project) => (
+              <li>
+                <PortfolioPreview project={project} client:visible />
+              </li>
+            ))
+          }
+        </Grid>
+      </div>
+    </main>
+    <ContactCTA />
+    <Contact />
+  </div>
+</Layout>
+
+<script>
+  // Client-side filtering logic
+  document.addEventListener("astro:page-load", () => {
+    const portfolioSection = document.querySelector("#portfolio-section");
+    if (portfolioSection) {
+      portfolioSection.addEventListener("filterChange", (e) => {
+        const customEvent = e as CustomEvent;
+        const filterValue = customEvent.detail;
+        // The FilterProjects component will emit this event and PortfolioPreview components will listen for it
+      });
+    }
+  });
+</script>
+
+<style>
+  /* Fix for top navigation overflow */
+  :global(header) {
+    margin-bottom: 0;
+  }
+
+  .presentation-section {
+    padding: 6rem 0 4rem; /* Réduit légèrement le padding pour un meilleur espacement */
+    text-align: center;
+    position: relative;
+    z-index: 0; /* Lower z-index than header */
+    overflow: hidden;
+  }
+
+  .mt-16 {
+    margin-top: 4rem;
+  }
+  
+  /* Classe spécifique pour le mobile */
+  @media (max-width: 640px) {
+    .mt-mobile-0 {
+      margin-top: 0 !important;
+      padding-top: 1rem !important;
+    }
+    
+    .presentation-section {
+      padding-top: 1rem;
+    }
+  }
+
+  .presentation-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at top right,
+        var(--accent-regular-alpha),
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at bottom left,
+        var(--accent-dark-alpha),
+        transparent 60%
+      );
+    opacity: 0.4;
+    z-index: -1;
+  }
+
+  .presentation-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .presentation-content h1 {
+    font-size: var(--text-3xl);
+    color: var(--gray-0);
+    margin-bottom: 1.5rem;
+  }
+
+  .presentation-content p {
+    font-size: var(--text-lg);
+    color: var(--gray-200);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .presentation-cta {
+    margin-top: 2rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--gradient-accent);
+    color: var(--accent-text-over);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn:hover {
+    box-shadow: 0 0 12px var(--accent-regular);
+    transform: translateY(-2px);
+  }
+
+  .filters {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--gray-800);
+    border-radius: 1.5rem;
+    background: var(--gradient-subtle);
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    color: var(--gray-100);
+    border-color: var(--gray-100);
+  }
+
+  .filter-btn.active {
+    background: var(--gradient-accent);
+    border-color: var(--accent-regular);
+    color: var(--accent-text-over);
+  }
+</style>

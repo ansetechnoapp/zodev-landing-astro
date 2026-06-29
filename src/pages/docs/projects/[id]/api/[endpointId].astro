@@ -1,0 +1,202 @@
+---
+export const prerender = false;
+
+import Layout from "../../../../../layouts/Layout.astro";
+import ApiDocEditor from "../../../../../components/reactJS/ApiDocEditor";
+import { supabase } from "../../../../../lib/supabase";
+import { hasProjectAccess, getProject } from "../../../../../lib/supabase";
+
+// Get the project ID and endpoint ID from the URL
+const { id, endpointId } = Astro.params;
+
+if (!id || !endpointId) {
+  return Astro.redirect('/docs/dashboard');
+}
+
+// Check if user is logged in
+const { data: { session } } = await supabase.auth.getSession();
+if (!session) {
+  return Astro.redirect('/docs/login');
+}
+
+// Check if user has access to this project
+const hasAccess = await hasProjectAccess(id);
+if (!hasAccess) {
+  return Astro.redirect('/docs/dashboard');
+}
+
+// Get project details
+let project;
+try {
+  project = await getProject(id);
+} catch (error) {
+  console.error('Error fetching project:', error);
+  return Astro.redirect('/docs/dashboard');
+}
+
+// Get endpoint details
+const { data: endpoint, error } = await supabase
+  .from('api_endpoints')
+  .select('*')
+  .eq('id', endpointId)
+  .eq('project_id', id)
+  .single();
+
+if (error || !endpoint) {
+  console.error('Error fetching endpoint:', error);
+  return Astro.redirect(`/docs/projects/${id}`);
+}
+
+// Get workspace details
+const { data: workspace } = await supabase
+  .from('workspaces')
+  .select('id, name')
+  .eq('id', project.workspace_id)
+  .single();
+
+// Check if we're in view mode
+const viewMode = Astro.url.searchParams.get('view') === 'true';
+---
+
+<Layout
+  title={`${endpoint.path} - API Documentation`}
+  description={`API documentation for ${endpoint.method} ${endpoint.path}`}
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+      <div class="text-sm breadcrumbs mb-2">
+        <a href="/docs/dashboard" class="text-gray-500 hover:text-gray-700">Dashboard</a>
+        <span class="mx-2 text-gray-400">/</span>
+        <a href={`/docs/workspaces/${workspace?.id}`} class="text-gray-500 hover:text-gray-700">{workspace?.name}</a>
+        <span class="mx-2 text-gray-400">/</span>
+        <a href={`/docs/projects/${id}`} class="text-gray-500 hover:text-gray-700">{project.name}</a>
+        <span class="mx-2 text-gray-400">/</span>
+        <span class="text-gray-700">API: {endpoint.path}</span>
+      </div>
+      
+      {viewMode && (
+        <div class="flex justify-between items-center">
+          <h1 class="text-3xl font-bold">
+            <span class={`inline-block px-2 py-1 text-xs font-bold rounded mr-2 ${
+              endpoint.method === 'GET' ? 'bg-blue-500 text-white' :
+              endpoint.method === 'POST' ? 'bg-green-500 text-white' :
+              endpoint.method === 'PUT' ? 'bg-yellow-500 text-white' :
+              endpoint.method === 'DELETE' ? 'bg-red-500 text-white' :
+              'bg-gray-500 text-white'
+            }`}>
+              {endpoint.method}
+            </span>
+            {endpoint.path}
+          </h1>
+          <a
+            href={`/docs/projects/${id}/api/${endpointId}`}
+            class="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium"
+          >
+            Edit Endpoint
+          </a>
+        </div>
+      )}
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      {viewMode ? (
+        <div class="api-endpoint-view">
+          <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-2">Summary</h2>
+            <p>{endpoint.summary}</p>
+          </div>
+          
+          {endpoint.description && (
+            <div class="mb-8">
+              <h2 class="text-xl font-semibold mb-2">Description</h2>
+              <p>{endpoint.description}</p>
+            </div>
+          )}
+          
+          {Object.keys(endpoint.request_body || {}).length > 0 && (
+            <div class="mb-8">
+              <h2 class="text-xl font-semibold mb-2">Request Body</h2>
+              <pre class="bg-gray-50 p-4 rounded-md overflow-auto">
+                <code>{JSON.stringify(endpoint.request_body, null, 2)}</code>
+              </pre>
+            </div>
+          )}
+          
+          <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-2">Responses</h2>
+            {Object.entries(endpoint.responses || {}).map(([code, response]: [string, any]) => (
+              <div class="mb-4">
+                <h3 class="text-lg font-medium mb-2">
+                  <span class={`inline-block px-2 py-1 text-xs font-bold rounded mr-2 ${
+                    code.startsWith('2') ? 'bg-green-500 text-white' :
+                    code.startsWith('4') ? 'bg-yellow-500 text-white' :
+                    code.startsWith('5') ? 'bg-red-500 text-white' :
+                    'bg-gray-500 text-white'
+                  }`}>
+                    {code}
+                  </span>
+                  {response.description}
+                </h3>
+                
+                {response.content && (
+                  <pre class="bg-gray-50 p-4 rounded-md overflow-auto">
+                    <code>{JSON.stringify(response.content, null, 2)}</code>
+                  </pre>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          <div class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Try It Out</h2>
+            <div class="bg-gray-50 p-4 rounded-md">
+              <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Request URL</label>
+                <div class="flex">
+                  <input
+                    type="text"
+                    value={`https://api.example.com${endpoint.path}`}
+                    readonly
+                    class="flex-1 rounded-l-md border-gray-300 bg-gray-100"
+                  />
+                  <button
+                    class="bg-indigo-600 text-white px-4 py-2 rounded-r-md"
+                    onclick="alert('This is a demo feature. In a real application, this would send a request to the API.')"
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <ApiDocEditor client:load projectId={id} endpointId={endpointId} />
+      )}
+    </div>
+  </main>
+</Layout>
+
+<script define:vars={{ id, endpointId }}>
+  // Add a view mode toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewMode = urlParams.get('view') === 'true';
+    
+    if (!viewMode) {
+      // Add a view button to the toolbar
+      const toolbar = document.querySelector('.api-doc-editor .flex.justify-between.items-center');
+      if (toolbar) {
+        const viewButton = document.createElement('a');
+        viewButton.href = `/docs/projects/${id}/api/${endpointId}?view=true`;
+        viewButton.className = 'py-2 px-4 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 mr-2';
+        viewButton.textContent = 'View Mode';
+        
+        const saveButton = toolbar.querySelector('button');
+        if (saveButton) {
+          toolbar.insertBefore(viewButton, saveButton);
+        }
+      }
+    }
+  });
+</script>

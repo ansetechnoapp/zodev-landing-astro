@@ -1,0 +1,171 @@
+---
+// import Icon from './Icon.astro';
+import type { iconPaths } from "./IconPaths";
+import ThemeToggle from "./ThemeToggle.astro";
+import MenuLinks from "./reactJS/MenuLinks";
+
+interface Props {
+  namepage?: string | undefined;
+}
+
+const { namepage } = Astro.props;
+---
+
+<div class="menu-link-nav">
+  <MenuLinks client:load namepage={namepage} pathname={Astro.url.pathname} />
+  <div class="desktop-theme-toggle">
+    <ThemeToggle
+      togglelightdarktheme="toggleside"
+      toggleiconelightdarktheme="lighty"
+    />
+  </div>
+</div>
+
+<style>
+  .menu-link-nav {
+    box-shadow: var(--shadow-md);
+    width: max-content;
+    display: block;
+    z-index: 2;
+    position: fixed;
+    border-radius: 999rem;
+    backdrop-filter: blur(15px);
+    line-height: 1.2;
+    /* background: radial-gradient(#f3f4f7, #090b11 150%); */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+    /* bottom: 0.1rem; */
+    /* display: flex; */    
+    /* padding: 0.5rem 0.5625rem; */
+  }
+
+  .menu-link-nav a,
+  :global(.menu-link-nav a) {
+    padding: 0.5rem 1rem;
+    border-radius: 999rem;
+    display: flex;
+    font-size: var(--text-sm);
+    color: var(--gray-300);
+    transition:
+      color var(--theme-transition),
+      background-color var(--theme-transition);
+  }
+
+  .menu-link-nav a:hover,
+  :global(.menu-link-nav a:hover) {
+    background: var(--accent-subtle-overlay);
+  }
+
+  .menu-link-nav a.active,
+  :global(.menu-link-nav a.active) {
+    background-color: var(--accent-regular);
+    color: var(--accent-text-over);
+  }
+  /* Styles pour MenuLinks React component - Base styles */
+  :global(.menu-links-container) {
+    display: flex !important;
+    flex-direction: row;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    transition:
+      flex-direction var(--theme-transition),
+      gap var(--theme-transition),
+      justify-content var(--theme-transition),
+      align-items var(--theme-transition);
+  }
+
+  .menu-link-nav .menu-link-item {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem;
+    display: inline-flex;
+    border-radius: 0.75rem;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    z-index: 1;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    min-width: 44px; /* Ensure touch-friendly minimum size */
+    min-height: 44px; /* Ensure touch-friendly minimum size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-link-nav .menu-link-item:hover {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transform: translateY(-3px);
+  }
+
+  .menu-link-nav .menu-link-item.active {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: #000;
+  }
+
+  /* Cacher complètement le menu de navigation sur mobile */
+  @media (max-width: 767px) {
+    .menu-link-nav {
+      display: none !important;
+    }
+    
+    .menu-link-nav .desktop-theme-toggle {
+      display: none !important;
+    }
+  }
+
+  .desktop-theme-toggle {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .menu-link-nav .menu-link-item {
+      padding: 0.4rem;
+      min-width: 40px;
+      min-height: 40px;
+    }
+  }
+
+  /* Desktop styles (screens ≥ 768px) */
+  @media (min-width: 768px) {
+    .menu-link-nav {
+      background: #ead5f285;
+      padding: 1.7rem 0rem 1.7rem 0rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      margin-left: 0.5rem;
+      left: 0;
+      bottom: 0;
+      height: fit-content;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-link-nav theme-toggle {
+      /* code dans ./styles/style.css */
+    }
+
+    /* Styles for MenuLinks React component on desktop (screens ≥ 768px) */
+    @media (min-width: 768px) {
+      :global(.menu-links-container) {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+      }
+    }
+  }
+</style>

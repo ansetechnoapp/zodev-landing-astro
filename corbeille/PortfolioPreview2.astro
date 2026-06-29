@@ -1,0 +1,170 @@
+<!-- ---
+import Pill from "./reactJS/Pill";
+import Icon from "./Icon.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"work">; 
+}
+
+const { data, slug } = Astro.props.project; 
+---
+
+<article class="portfolio_item">
+  <div class="portfolio_item-tags">
+    {data.tech.map((tech: string) => (
+      <span><Pill><Icon icon="code" size="1.1em" />{tech}</Pill></span>
+    ))}
+  </div>
+  
+  <div class="portfolio_item-image">
+    <img src={data.img} alt={data.img_alt || ''} loading="lazy" decoding="async">
+    <div class="layer">
+      <p>{data.description}</p>
+      <a href={`/work/${slug}`} aria-label="View project details"><i class="bx bx-link-external"></i></a>
+    </div>
+  </div>
+  
+  <h3 class="portfolio_item-title">{data.title}</h3>
+  
+  <div class="portfolio_item-cta">
+    {data.github && (
+      <a href={data.github} class="btn" target="_blank" rel="noopener noreferrer">
+        <Pill><Icon icon="github-logo" size="1.33em" /> GitHub</Pill>
+      </a>
+    )}
+    
+    <a href={`/work/${slug}`} class="btn">
+      <Pill><Icon icon="info-circle" size="1.33em" /> Details</Pill>
+    </a>
+    
+    {data.liveDemo && (
+      <a href={data.liveDemo} class="btn" target="_blank" rel="noopener noreferrer">
+        <Pill><Icon icon="rocket-launch" size="1.33em" /> Live Demo</Pill>
+      </a>
+    )}
+  </div>
+</article>
+
+<style>
+  .portfolio_item-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .portfolio_item-title {
+    font-size: 1.5rem;
+    margin: 0.75rem 0;
+    text-align: center;
+  }
+
+  .layer {
+    width: 100%;
+    height: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), var(--accent-regular, #ff004f));
+    position: absolute;
+    border-radius: 8px;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 40px;
+    transition: height 0.5s;
+  }
+
+  .layer p {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s;
+  }
+
+  .layer a {
+    color: var(--accent-regular, #ff004f);
+    background: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s;
+  }
+
+  .portfolio_item {
+    background: var(--gradient-stroke, linear-gradient(to right, #4a4a4a, #2b2b2b));
+    padding: 1.5rem 1rem;
+    border-radius: 0.75rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .portfolio_item:hover {
+    background: var(--gradient-subtle, rgba(0, 0, 0, 0.1));
+    border-color: var(--accent-regular, #ff004f);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .portfolio_item:hover .layer {
+    height: 100%;
+  }
+
+  .portfolio_item:hover .layer p,
+  .portfolio_item:hover .layer a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .portfolio_item-image {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 16/9;
+  }
+
+  .portfolio_item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .portfolio_item:hover .portfolio_item-image img {
+    transform: scale(1.1);
+  }
+
+  .portfolio_item-cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 48em) {
+    .portfolio_item {
+      padding: 1.75rem 1.5rem;
+    }
+    
+    .portfolio_item-cta {
+      justify-content: space-around;
+    }
+  }
+</style> -->

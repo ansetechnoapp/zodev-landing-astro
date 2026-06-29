@@ -1,0 +1,158 @@
+[
+  {
+    "title": "E-Commerce Dashboard",
+    "publishDate": "2023-05-15 00:00:00",
+    "img": "/assets/img/ecommerce-dashboard.jpg",
+    "img_alt": "E-commerce analytics dashboard with colorful charts and metrics",
+    "description": "A responsive dashboard for e-commerce businesses with real-time analytics, inventory management, and sales forecasting.",
+    "tags": [
+      "Frontend",
+      "Data Visualization",
+      "UX Design"
+    ],
+    "tech": [
+      "React",
+      "TypeScript",
+      "D3.js",
+      "Tailwind CSS"
+    ],
+    "github": "https://github.com/username/ecommerce-dashboard",
+    "liveDemo": "https://ecommerce-dashboard-demo.netlify.app",
+    "content": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Project Overview"
+      },
+      {
+        "type": "paragraph",
+        "text": "This dashboard provides e-commerce businesses with powerful analytics tools to track sales, monitor inventory, and forecast future trends. Built with React and TypeScript, it offers a responsive and intuitive interface for businesses of all sizes."
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "Key Features"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Real-time sales analytics with customizable date ranges",
+          "Inventory management with low-stock alerts",
+          "Customer behavior insights and segmentation",
+          "Sales forecasting using machine learning algorithms",
+          "Responsive design for desktop and mobile devices"
+        ]
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "Technical Implementation"
+      },
+      {
+        "type": "paragraph",
+        "text": "The dashboard is built with a modern React architecture using TypeScript for type safety. Data visualization is handled through D3.js, providing interactive and customizable charts. The UI is styled with Tailwind CSS for a clean, responsive design that adapts to any screen size."
+      },
+      {
+        "type": "heading",
+        "level": 4,
+        "text": "Development Challenges"
+      },
+      {
+        "type": "paragraph",
+        "text": "One of the main challenges was optimizing the dashboard for performance with large datasets. We implemented data virtualization and lazy loading techniques to ensure smooth performance even with thousands of records."
+      }
+    ]
+  },
+  {
+    "title": "Task Management App",
+    "publishDate": "2023-02-10 00:00:00",
+    "img": "/assets/img/task-management.jpg",
+    "img_alt": "Task management application with kanban board interface",
+    "description": "A collaborative task management application with kanban boards, time tracking, and team collaboration features.",
+    "tags": [
+      "Productivity",
+      "Team Collaboration",
+      "UX/UI"
+    ],
+    "tech": [
+      "Vue.js",
+      "Firebase",
+      "Vuetify",
+      "PWA"
+    ],
+    "github": "https://github.com/username/task-management-app",
+    "liveDemo": "https://task-app-demo.firebaseapp.com",
+    "content": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Modern Task Management"
+      },
+      {
+        "type": "paragraph",
+        "text": "This task management application helps teams organize work, track progress, and collaborate effectively. With features like kanban boards, time tracking, and real-time updates, it streamlines workflow for remote and in-office teams."
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "Core Functionality"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Drag-and-drop kanban boards for visual task management",
+          "Time tracking with detailed reports",
+          "Team collaboration with comments and file attachments",
+          "Customizable workflows and task statuses",
+          "Progressive Web App for offline functionality"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Personal Finance Tracker",
+    "publishDate": "2022-11-05 00:00:00",
+    "img": "/assets/img/finance-tracker.jpg",
+    "img_alt": "Personal finance application showing expense tracking and budgeting features",
+    "description": "A comprehensive personal finance application for tracking expenses, managing budgets, and setting financial goals.",
+    "tags": [
+      "Finance",
+      "Data Analysis",
+      "Mobile-First"
+    ],
+    "tech": [
+      "React Native",
+      "Node.js",
+      "MongoDB",
+      "Chart.js"
+    ],
+    "github": "https://github.com/username/finance-tracker",
+    "liveDemo": "https://finance-tracker-demo.vercel.app",
+    "content": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Take Control of Your Finances"
+      },
+      {
+        "type": "paragraph",
+        "text": "This personal finance tracker helps users manage their money more effectively through intuitive expense tracking, budget management, and financial goal setting. Available on both mobile and web platforms."
+      },
+      {
+        "type": "heading",
+        "level": 3,
+        "text": "Smart Features"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Automated expense categorization using machine learning",
+          "Budget creation and tracking with visual indicators",
+          "Financial goal setting with progress tracking",
+          "Recurring transaction management",
+          "Secure bank account integration via Plaid API"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,135 @@
+---
+import "../styles/global.css";
+import "../styles/style.css";
+import SchemaOrg from "./SchemaOrg.astro";
+
+interface Props {
+  title?: string | undefined;
+  description?: string | undefined;
+  image?: string | undefined;
+  canonicalURL?: URL | string | undefined;
+  schemaType?: string;
+  datePublished?: string;
+  dateModified?: string;
+}
+
+import dataUser from "../data/User.json";
+
+const {
+  title = `${dataUser.firstName} ${dataUser.lastName}: Portfolio`,
+  description = `Le site personnel de ${dataUser.firstName} ${dataUser.lastName} - Développeur web et mobile freelance spécialisé en React, React Native, Astro.js et technologies web modernes.`,
+  image = "/assets/social-preview.jpg",
+  canonicalURL = new URL(Astro.url.pathname, Astro.site),
+  schemaType = "Person",
+  datePublished = new Date().toISOString(),
+  dateModified = new Date().toISOString(),
+} = Astro.props;
+
+const socialImageURL = new URL(image, Astro.site).href;
+---
+
+<!-- Global Metadata -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="author" content={`${dataUser.firstName} ${dataUser.lastName}`} />
+<meta
+  name="keywords"
+  content="web development, mobile apps, React, React Native, Astro, frontend, backend, developer, portfolio"
+/>
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={socialImageURL} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={socialImageURL} />
+
+<!-- Favicons -->
+<link
+  rel="icon"
+  type="image/svg+xml"
+  href="/assets/zoddev_logo/zoddev_logo_dark.ico"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="/assets/zoddev_logo/apple-touch-icon.png"
+/>
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,700;1,400&family=Rubik:wght@500;600&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- Schema.org Structured Data -->
+<SchemaOrg
+  type={schemaType}
+  name={title}
+  description={description}
+  image={image}
+  datePublished={datePublished}
+  dateModified={dateModified}
+  url={canonicalURL}
+/>
+
+<!-- Security Headers -->
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self'; font-src-elem 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;"
+/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+<meta
+  http-equiv="Permissions-Policy"
+  content="camera=(), microphone=(), geolocation=()"
+/>
+
+<!-- Theme Toggle Script -->
+<script is:inline>
+  // This code is inlined in the head to make dark mode instant & blocking.
+  const getThemePreference = () => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+  const isDark = getThemePreference() === "dark";
+  document.documentElement.classList[isDark ? "add" : "remove"](
+    "dark",
+    "theme-dark"
+  );
+
+  if (typeof localStorage !== "undefined") {
+    // Watch the document element and persist user preference when it changes.
+    const observer = new MutationObserver(() => {
+      const isDark =
+        document.documentElement.classList.contains("theme-dark") ||
+        document.documentElement.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  }
+</script>

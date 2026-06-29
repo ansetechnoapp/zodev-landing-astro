@@ -1,0 +1,131 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "project": "Projets",
+    "blog": "Blog",
+    "tools": "Outils"
+  },
+  "hero": {
+    "tagline": "Développeur web et mobile freelance.",
+    "tagline1": "Je combine une expertise technique avec un design soigné pour créer des applications web et mobiles intuitives, rapides et efficaces. Mon objectif : apporter de la valeur à vos utilisateurs.",
+    "scroll": "Défiler",
+    "typingWords": ["Développeur", "Designer", "Freelance", "Créatif"]
+  },
+  "about": {
+    "title": "À propos",
+    "description": "En tant qu'ingénieur logiciel expérimenté avec une expertise en développement web et mobile, j'apporte un mélange unique de compétences techniques et de vision créative à chaque projet. Ma formation en systèmes informatiques me permet d'architecturer des solutions robustes tandis que ma sensibilité au design garantit des expériences utilisateur exceptionnelles. Je me spécialise dans la création de produits numériques innovants qui génèrent des résultats commerciaux mesurables et améliorent la visibilité de la marque. Je prospère dans des environnements collaboratifs et suis passionné par l'utilisation de technologies de pointe pour résoudre des défis complexes.",
+    "occupation": "Programmeur",
+    "availability": "Freelance Disponible",
+    "yearsExperience": "Ans d'Expérience",
+    "viewCV": "Voir mon CV",
+    "seeMore": "Voir plus",
+    "seeLess": "Voir moins",
+    "toolsSkillsTab": "Outils & Compétences",
+    "languagesTab": "Langues",
+    "contactInfoTab": "Contact",
+    "otherTechnologies": "Autres Technologies",
+    "viewPortfolio": "Voir le Portfolio"
+  },
+  "services": {
+    "eyebrow": "Expertise",
+    "title": "Mes Services",
+    "subtitle": "Solutions spécialisées adaptées à vos besoins numériques",
+    "webDev": {
+      "title": "Développement Web",
+      "description": "Applications web sur mesure construites avec des frameworks modernes comme React, Astro et plus encore. Je crée des sites web réactifs et performants qui offrent des expériences utilisateur exceptionnelles."
+    },
+    "mobileDev": {
+      "title": "Développement Mobile",
+      "description": "Applications mobiles natives et multiplateformes utilisant React Native et Flutter. Je livre des applications intuitives et riches en fonctionnalités qui fonctionnent parfaitement sur iOS et Android."
+    },
+    "uiux": {
+      "title": "Design UI/UX",
+      "description": "Design centré utilisateur qui combine esthétique et fonctionnalité. Je crée des interfaces intuitives et des expériences utilisateur fluides qui engagent et convertissent les visiteurs."
+    },
+    "database": {
+      "title": "Base de données & API",
+      "description": "Solutions backend robustes avec PostgreSQL, MySQL, Firebase et Supabase. Je construis des API sécurisées et évolutives ainsi que des architectures de bases de données qui alimentent vos applications."
+    },
+    "learnMore": "En savoir plus"
+  },
+  "contact": {
+    "getInTouch": "Prendre Contact",
+    "contactInfo": "Informations de Contact",
+    "contactDescription": "N'hésitez pas à me contacter pour toute question ou opportunité. Je suis toujours ouvert à la discussion de nouveaux projets, d'idées créatives ou d'opportunités de faire partie de votre vision. Si vous avez un projet en tête.",
+    "email": "Email",
+    "phone": "Téléphone",
+    "location": "Localisation",
+    "basedIn": "basé à Cotonou, Bénin",
+    "website": "Site web",
+    "followMe": "Suivez-moi",
+    "yourName": "Votre Nom",
+    "yourEmail": "Votre Email",
+    "subject": "Sujet",
+    "yourMessage": "Votre Message",
+    "sendMessage": "Envoyer le Message",
+    "sending": "Envoi en cours...",
+    "namePlaceholder": "Jean Dupont",
+    "emailPlaceholder": "jean@exemple.com",
+    "subjectPlaceholder": "Demande de projet",
+    "messagePlaceholder": "Bonjour, j'aimerais discuter de...",
+    "errors": {
+      "name": "Veuillez entrer votre nom",
+      "email": "Veuillez entrer une adresse email valide",
+      "subject": "Veuillez entrer un sujet",
+      "message": "Veuillez entrer votre message (au moins 10 caractères)"
+    },
+    "success": "Votre message a été envoyé avec succès ! Nous vous répondrons bientôt."
+  },
+  "contactCTA": {
+    "available": "Disponible pour de nouveaux projets",
+    "title": "Créons quelque chose d'incroyable ensemble",
+    "subtitle": "Prêt à discuter de votre prochain projet ? Je suis à un message de vous.",
+    "button": "Envoyez-moi un Message",
+    "copyEmail": "Copier l'email",
+    "copied": "Copié !"
+  },
+  "footer": {
+    "designedWith": "Conçu & Développé avec",
+    "description": "Mon portfolio et un blog sur la programmation et la technologie. C'est un endroit où je partage mes réflexions, idées et expériences dans le domaine. J'espère que vous le trouverez utile et informatif. Je suis toujours ouvert aux commentaires et suggestions, n'hésitez pas à me contacter si vous avez des questions.",
+    "apiDocs": "Documentation API",
+    "docsPlatform": "Plateforme de Documentation",
+    "copyright": "OTTY KEVIN ANSELME. Tous droits réservés."
+  },
+  "timeline": {
+    "title": "Mon Parcours",
+    "subtitle": "Mon expérience professionnelle et ma formation au fil des années"
+  },
+  "projects": {
+    "title": "Projets Sélectionnés",
+    "description": "Découvrez ci-dessous quelques-uns de mes projets phares réalisés pour des clients au cours des dernières années. Chaque projet démontre mon expertise en développement web et mobile.",
+    "viewAll": "Voir Tout"
+  },
+  "work": {
+    "pageTitle": "Portfolio & Projets",
+    "title": "Mon Portfolio",
+    "intro1": "Bienvenue dans ma vitrine de projets. Vous trouverez ici une collection de projets qui démontrent mes compétences et mon expérience en développement web et design.",
+    "intro2": "Chaque projet représente un défi unique et une solution, mettant en avant différentes technologies et approches avec lesquelles j'ai travaillé.",
+    "viewProjects": "Voir les Projets"
+  },
+  "blog": {
+    "pageTitle": "Blog Développement Web & Mobile | Kevin Otty",
+    "pageDescription": "Articles et tutoriels sur le développement web et mobile par Kevin Otty. Découvrez React, React Native, Astro.js, conseils techniques et retours d'expérience de projets concrets.",
+    "title": "Idées & Réflexions",
+    "intro1": "Bienvenue sur mon blog où je partage réflexions, histoires et explorations en design, développement et processus créatif.",
+    "intro2": "Découvrez des articles sur des concepts techniques, des approches créatives et des perspectives du secteur pour vous aider à progresser.",
+    "readLatest": "Lire les Derniers",
+    "browseTopics": "Parcourir les Sujets",
+    "featuredArticles": "Articles à la Une"
+  },
+  "meta": {
+    "homeTitle": "Développeur Web & Mobile Freelance",
+    "homeDescription": "Portfolio de {firstName} {lastName}, développeur freelance à {city}. Expert React, React Native, Astro.js. Applications web et mobiles performantes.",
+    "imgAlt": "développeur web et mobile freelance basé à {city}, {country}. Expert en React, React Native et Astro.js"
+  },
+  "languages": {
+    "french": "Français",
+    "english": "Anglais",
+    "native": "Langue maternelle",
+    "professional": "Compétence professionnelle"
+  }
+}

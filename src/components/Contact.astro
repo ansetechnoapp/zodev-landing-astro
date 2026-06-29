@@ -1,0 +1,361 @@
+---
+import { getLangFromCookies, getTranslations } from "../i18n/index";
+import dataUser from "../data/User.json";
+const lang = getLangFromCookies(Astro.cookies);
+const i18n = getTranslations(lang);
+---
+
+<section id="contact" class="py-16 md:py-24 c1"
+  data-i18n-send={i18n.contact.sendMessage}
+  data-i18n-sending={i18n.contact.sending}
+  data-i18n-success={i18n.contact.success}>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        {i18n.contact.getInTouch.split(' ').slice(0, -1).join(' ')} <span class="gradient-text">{i18n.contact.getInTouch.split(' ').slice(-1)[0]}</span>
+      </h2>
+      <div
+        class="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 mx-auto"
+      >
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row">
+      <div class="md:w-1/2 mb-10 md:mb-0 md:pr-8">
+        <h3 class="text-2xl font-semibold mb-6">{i18n.contact.contactInfo}</h3>
+        <p class="text-gray-600 mb-8">
+          {i18n.contact.contactDescription}
+        </p>
+
+        <div class="space-y-6">
+          <div class="flex items-start">
+            <div
+              class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4 mt-1"
+            >
+              <i class="fas fa-envelope text-blue-500"></i>
+            </div>
+            <div>
+              <h5 class="font-semibold">{i18n.contact.email}</h5>
+              <p class="text-gray-600">{dataUser.email}</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div
+              class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4 mt-1"
+            >
+              <i class="fas fa-phone text-indigo-500"></i>
+            </div>
+            <div>
+              <h5 class="font-semibold">{i18n.contact.phone}</h5>
+              <p class="text-gray-600">+229 97 27 90 01</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div
+              class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4 mt-1"
+            >
+              <i class="fas fa-map-marker-alt text-purple-500"></i>
+            </div>
+            <div>
+              <h5 class="font-semibold">{i18n.contact.location}</h5>
+              <p class="text-gray-600">{i18n.contact.basedIn}</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div
+              class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4 mt-1"
+            >
+              <i class="fas fa-globe text-green-500"></i>
+            </div>
+            <div>
+              <h5 class="font-semibold">{i18n.contact.website}</h5>
+              <p class="text-gray-600">{dataUser.website}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <h5 class="font-semibold mb-4">{i18n.contact.followMe}</h5>
+          <div class="flex space-x-4">
+            <a
+              href="https://github.com/ansetechnoapp"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 hover:bg-blue-500 hover:text-white transition-all"
+              aria-label="GitHub Profile"
+            >
+              <i class="fab fa-github"></i>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/anscod/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 hover:bg-blue-500 hover:text-white transition-all"
+              aria-label="LinkedIn Profile"
+            >
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a
+              href="https://pinterest.com/anscoddesign"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 hover:bg-blue-500 hover:text-white transition-all"
+              aria-label="Pinterest Profile"
+            >
+              <i class="fab fa-pinterest"></i>
+            </a>
+            <a
+              href="https://instagram.com/anscod.otty"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 hover:bg-blue-500 hover:text-white transition-all"
+              aria-label="Instagram Profile"
+            >
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="md:w-1/2 contact-form">
+        <form id="contact-form" class="p-2 rounded-xl shadow-sm">
+          <div class="mb-6">
+            <label for="name" class="block text-gray-700 font-medium mb-2"
+              >{i18n.contact.yourName}</label
+            >
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder={i18n.contact.namePlaceholder}
+              required
+              minlength="2"
+            />
+            <div
+              class="error-message text-red-500 text-sm mt-1 hidden"
+              id="name-error"
+            >
+              {i18n.contact.errors.name}
+            </div>
+          </div>
+          <div class="mb-6">
+            <label for="email" class="block text-gray-700 font-medium mb-2"
+              >{i18n.contact.yourEmail}</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder={i18n.contact.emailPlaceholder}
+              required
+            />
+            <div
+              class="error-message text-red-500 text-sm mt-1 hidden"
+              id="email-error"
+            >
+              {i18n.contact.errors.email}
+            </div>
+          </div>
+          <div class="mb-6">
+            <label for="subject" class="block text-gray-700 font-medium mb-2"
+              >{i18n.contact.subject}</label
+            >
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder={i18n.contact.subjectPlaceholder}
+              required
+            />
+            <div
+              class="error-message text-red-500 text-sm mt-1 hidden"
+              id="subject-error"
+            >
+              {i18n.contact.errors.subject}
+            </div>
+          </div>
+          <div class="mb-6">
+            <label for="message" class="block text-gray-700 font-medium mb-2"
+              >{i18n.contact.yourMessage}</label
+            >
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder={i18n.contact.messagePlaceholder}
+              required
+              minlength="10"></textarea>
+            <div
+              class="error-message text-red-500 text-sm mt-1 hidden"
+              id="message-error"
+            >
+              {i18n.contact.errors.message}
+            </div>
+          </div>
+          <button
+            type="submit"
+            id="submit-button"
+            class="submit w-full px-6 py-3 text-white rounded-lg shadow-md hover:shadow-lg transition-all"
+          >
+            {i18n.contact.sendMessage}
+          </button>
+          <div class="success-message text-green-500 text-sm mt-2 hidden">
+            {i18n.contact.success}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .c1 {
+    background: transparent;
+  }
+  .contact-form form input,
+  form textarea {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--gray-1001);
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    font-size: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .contact-form form > .submit {
+    font-size: 16px;
+    background: var(--gradient-accent-orange);
+    transition: all 0.45s ease;
+  }
+
+  /* Utilisation de la variable CSS pour text-gray-600 */
+  .text-gray-600 {
+    color: var(--text-gray-600);
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+    const nameInput = document.getElementById("name") as HTMLInputElement;
+    const emailInput = document.getElementById("email") as HTMLInputElement;
+    const subjectInput = document.getElementById("subject") as HTMLInputElement;
+    const messageInput = document.getElementById(
+      "message"
+    ) as HTMLTextAreaElement;
+    const submitButton = document.getElementById(
+      "submit-button"
+    ) as HTMLButtonElement;
+    const successMessage = document.querySelector(
+      ".success-message"
+    ) as HTMLElement;
+
+    const nameError = document.getElementById("name-error") as HTMLElement;
+    const emailError = document.getElementById("email-error") as HTMLElement;
+    const subjectError = document.getElementById(
+      "subject-error"
+    ) as HTMLElement;
+    const messageError = document.getElementById(
+      "message-error"
+    ) as HTMLElement;
+
+    const validateEmail = (email: string): boolean => {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+    const validateForm = (): boolean => {
+      let valid = true;
+
+      // Validate name
+      if (!nameInput?.value.trim() || nameInput.value.length < 2) {
+        nameError?.classList.remove("hidden");
+        valid = false;
+      } else {
+        nameError?.classList.add("hidden");
+      }
+
+      // Validate email
+      if (!emailInput?.value.trim() || !validateEmail(emailInput.value)) {
+        emailError?.classList.remove("hidden");
+        valid = false;
+      } else {
+        emailError?.classList.add("hidden");
+      }
+
+      // Validate subject
+      if (!subjectInput?.value.trim()) {
+        subjectError?.classList.remove("hidden");
+        valid = false;
+      } else {
+        subjectError?.classList.add("hidden");
+      }
+
+      // Validate message
+      if (!messageInput?.value.trim() || messageInput.value.length < 10) {
+        messageError?.classList.remove("hidden");
+        valid = false;
+      } else {
+        messageError?.classList.add("hidden");
+      }
+
+      return valid;
+    };
+
+    form?.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      if (validateForm()) {
+        // In a real implementation, you would send the form data to a server
+        // For now, we'll just show a success message
+        if (submitButton) submitButton.disabled = true;
+        const section = document.getElementById('contact');
+        const sendText = section?.getAttribute('data-i18n-send') || 'Send Message';
+        const sendingText = section?.getAttribute('data-i18n-sending') || 'Sending...';
+        if (submitButton) submitButton.innerHTML = sendingText;
+
+        // Simulate form submission
+        setTimeout(() => {
+          form?.reset();
+          if (submitButton) submitButton.disabled = false;
+          if (submitButton) submitButton.innerHTML = sendText;
+          successMessage?.classList.remove("hidden");
+
+          // Hide success message after 5 seconds
+          setTimeout(() => {
+            successMessage?.classList.add("hidden");
+          }, 5000);
+        }, 1500);
+      }
+    });
+
+    // Live validation
+    nameInput?.addEventListener("input", () => {
+      if (nameInput?.value.trim() && nameInput.value.length >= 2) {
+        nameError?.classList.add("hidden");
+      }
+    });
+
+    emailInput?.addEventListener("input", () => {
+      if (emailInput?.value.trim() && validateEmail(emailInput.value)) {
+        emailError?.classList.add("hidden");
+      }
+    });
+
+    subjectInput?.addEventListener("input", () => {
+      if (subjectInput?.value.trim()) {
+        subjectError?.classList.add("hidden");
+      }
+    });
+
+    messageInput?.addEventListener("input", () => {
+      if (messageInput?.value.trim() && messageInput.value.length >= 10) {
+        messageError?.classList.add("hidden");
+      }
+    });
+  });
+</script>

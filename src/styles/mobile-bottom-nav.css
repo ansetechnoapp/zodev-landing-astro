@@ -1,0 +1,124 @@
+/* 
+  mobile-bottom-nav.css - Styles pour la barre de navigation mobile en bas de l'écran
+*/
+
+/* Barre de navigation mobile - cachée par défaut */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* Styles pour la barre de navigation mobile (écrans ≤ 767px) */
+@media (max-width: 767px) {
+  /* Conteneur principal de la barre de navigation */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: var(--mobile-bottom-nav-height, 56px);
+    background-color: rgba(var(--gray-999-basis), 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding: 0 1rem;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid rgba(var(--gray-999-basis), 0.3);
+  }
+
+  /* Mode sombre - améliorer le contraste */
+  @media (prefers-color-scheme: dark) {
+    .mobile-bottom-nav {
+      background-color: rgba(23, 25, 35, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  /* Conteneur des liens de menu */
+  .mobile-bottom-nav .menu-links-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Éléments de lien individuels */
+  .mobile-bottom-nav .menu-link-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    color: var(--text-secondary-color, #666);
+    text-decoration: none;
+    font-size: 0.75rem;
+    gap: 0.25rem;
+    transition: color 0.2s ease;
+    background: transparent;
+    backdrop-filter: none;
+    min-height: var(--mobile-touch-target, 44px); /* Cible tactile suffisamment grande */
+  }
+
+  /* Styles pour les icônes SVG React */
+  .mobile-bottom-nav .menu-link-item svg {
+    width: 20px !important;
+    height: 20px !important;
+    display: block !important;
+    color: inherit;
+    fill: currentColor !important;
+  }
+
+  /* Style pour les liens actifs */
+  .mobile-bottom-nav .menu-link-item.active {
+    color: var(--accent-regular, #7611a6);
+  }
+
+  /* Icônes actives */
+  .mobile-bottom-nav .menu-link-item.active svg {
+    color: var(--accent-regular, #7611a6) !important;
+    fill: currentColor !important;
+  }
+
+  /* Étiquettes de texte pour les liens mobiles */
+  .mobile-bottom-nav .menu-link-item .mobile-label {
+    display: block;
+    font-size: 0.65rem;
+    margin-top: 0.25rem;
+  }
+  
+  /* Cacher les libellés mobiles sur desktop */
+  @media (min-width: 48em) {
+    .mobile-label {
+      display: none !important;
+    }
+  }
+  
+  /* Cacher les libellés desktop sur mobile */
+  @media (max-width: 767px) {
+    .desktop-only {
+      display: none !important;
+    }
+  }
+
+  /* Cacher le ThemeToggle dans la barre de navigation principale sur mobile */
+  .menu-link-nav .desktop-theme-toggle {
+    display: none;
+  }
+
+  /* Ajouter le ThemeToggle à la barre de navigation mobile */
+  .mobile-bottom-nav .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Ajuster le padding du contenu principal pour éviter que la barre de navigation ne cache du contenu */
+  body {
+    padding-bottom: var(--mobile-bottom-nav-height);
+  }
+}

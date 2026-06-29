@@ -1,0 +1,261 @@
+/* Blog-specific styles for enhanced two-column layout */
+
+/* Enhanced prose styling for better readability */
+.blog-content {
+  @apply text-gray-700 dark:text-gray-300 leading-relaxed;
+}
+
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  @apply font-bold text-gray-900 dark:text-white scroll-mt-20;
+}
+
+.blog-content h1 {
+  @apply text-3xl lg:text-4xl mb-6 mt-8;
+}
+
+.blog-content h2 {
+  @apply text-2xl lg:text-3xl mb-5 mt-8;
+}
+
+.blog-content h3 {
+  @apply text-xl lg:text-2xl mb-4 mt-6;
+}
+
+.blog-content h4 {
+  @apply text-lg lg:text-xl mb-3 mt-5;
+}
+
+.blog-content p {
+  @apply mb-4 leading-relaxed;
+}
+
+.blog-content a {
+  @apply text-indigo-600 dark:text-indigo-400 no-underline hover:underline transition;
+}
+
+.blog-content img {
+  @apply rounded-lg shadow-lg mx-auto my-8 max-w-full h-auto;
+}
+
+/* Enhanced blockquotes */
+.blog-content blockquote {
+  @apply border-l-4 border-l-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 py-4 px-6 rounded-r-lg italic text-indigo-900 dark:text-indigo-100 my-6;
+  position: relative;
+}
+
+.blog-content blockquote::before {
+  content: '"';
+  @apply text-4xl text-indigo-500 absolute -top-2 -left-2 font-serif;
+}
+
+/* Code styling */
+.blog-content code {
+  @apply text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded text-sm font-medium;
+}
+
+.blog-content pre {
+  @apply bg-gray-900 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 overflow-x-auto my-6;
+  position: relative;
+}
+
+.blog-content pre code {
+  @apply bg-transparent text-gray-100 p-0;
+}
+
+/* Copy button for code blocks */
+.code-block-wrapper {
+  position: relative;
+}
+
+.copy-code-btn {
+  @apply absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity;
+}
+
+.code-block-wrapper:hover .copy-code-btn {
+  @apply opacity-100;
+}
+
+/* Lists */
+.blog-content ul,
+.blog-content ol {
+  @apply space-y-2 mb-4;
+}
+
+.blog-content li {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.blog-content ul li {
+  @apply relative pl-6;
+}
+
+.blog-content ul li::before {
+  content: '•';
+  @apply absolute left-0 text-indigo-500 font-bold;
+}
+
+.blog-content ol {
+  @apply list-decimal list-inside;
+}
+
+/* Strong and emphasis */
+.blog-content strong {
+  @apply text-gray-900 dark:text-white font-semibold;
+}
+
+.blog-content em {
+  @apply italic;
+}
+
+/* Tables */
+.blog-content table {
+  @apply w-full border-collapse border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden my-6;
+}
+
+.blog-content th,
+.blog-content td {
+  @apply border border-gray-300 dark:border-gray-600 px-4 py-2 text-left;
+}
+
+.blog-content th {
+  @apply bg-gray-100 dark:bg-gray-800 font-semibold text-gray-900 dark:text-white;
+}
+
+.blog-content td {
+  @apply bg-white dark:bg-gray-900;
+}
+
+/* Drop cap styling (optional) */
+.blog-content .drop-cap::first-letter {
+  @apply float-left text-6xl font-bold text-indigo-600 dark:text-indigo-400 leading-none mr-2 mt-1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .blog-two-column {
+    @apply block;
+  }
+  
+  .blog-sidebar {
+    @apply mt-12;
+  }
+}
+
+/* Sidebar sticky positioning */
+@media (min-width: 1024px) {
+  .blog-sidebar {
+    @apply sticky top-24;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+  }
+}
+
+/* Enhanced hover effects */
+.blog-card {
+  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Social share buttons enhancement */
+.social-share-container {
+  @apply flex items-center space-x-3;
+}
+
+.social-share-btn {
+  @apply p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200;
+}
+
+.social-share-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Tag styling */
+.blog-tag {
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm px-3 py-1 rounded-full hover:bg-indigo-100 dark:hover:bg-indigo-900/50 hover:text-indigo-700 dark:hover:text-indigo-300 transition cursor-pointer;
+}
+
+/* Reading progress bar (optional) */
+.reading-progress {
+  @apply fixed top-0 left-0 w-full h-1 bg-indigo-600 z-50 transition-all duration-150;
+  transform-origin: left;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+.blog-content a:focus,
+.social-share-btn:focus,
+.blog-tag:focus {
+  @apply outline-none ring-2 ring-indigo-500 ring-offset-2 dark:ring-offset-gray-900;
+}
+
+/* Print styles */
+@media print {
+  .blog-sidebar,
+  .social-share-container,
+  .newsletter-signup {
+    display: none !important;
+  }
+  
+  .blog-content {
+    @apply text-black;
+  }
+  
+  .blog-content a {
+    @apply text-black underline;
+  }
+  
+  .blog-content a::after {
+    content: " (" attr(href) ")";
+    @apply text-sm;
+  }
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .blog-content img {
+    @apply opacity-90;
+  }
+  
+  .blog-content pre {
+    @apply bg-gray-800 border-gray-600;
+  }
+}
+
+/* Animation for content loading */
+.blog-content-animate {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .blog-content-animate,
+  .blog-card,
+  .social-share-btn {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+}

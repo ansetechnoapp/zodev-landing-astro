@@ -1,0 +1,40 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { SignUp } from "../../components/reactJS/AuthUI";
+import { supabase } from "../../lib/supabase";
+
+// Check if user is already logged in
+const { data: { session } } = await supabase.auth.getSession();
+if (session) {
+  return Astro.redirect('/docs/dashboard');
+}
+---
+
+<Layout
+  title="Create Account - Documentation Platform"
+  description="Create a new account on the documentation platform"
+>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
+      <div class="p-6">
+        <div class="text-center mb-8">
+          <h1 class="text-2xl font-bold">Create Account</h1>
+          <p class="text-gray-600 mt-2">
+            Join the documentation platform to create and share documentation
+          </p>
+        </div>
+        
+        <SignUp client:load />
+        
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-600">
+            Already have an account?{" "}
+            <a href="/docs/login" class="text-indigo-600 hover:text-indigo-800 font-medium">
+              Sign in
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

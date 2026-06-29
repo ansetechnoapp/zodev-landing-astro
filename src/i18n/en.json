@@ -1,0 +1,131 @@
+{
+  "nav": {
+    "home": "Home",
+    "project": "Projects",
+    "blog": "Blog",
+    "tools": "Tools"
+  },
+  "hero": {
+    "tagline": "Freelance web and mobile developer.",
+    "tagline1": "I combine technical expertise with thoughtful design to create intuitive, fast, and efficient web and mobile applications. My goal: to bring value to your users.",
+    "scroll": "Scroll",
+    "typingWords": ["Developer", "Designer", "Freelance", "Creative"]
+  },
+  "about": {
+    "title": "About Me",
+    "description": "As an experienced software engineer with expertise in web and mobile development, I bring a unique blend of technical skills and creative vision to every project. My background in computer systems enables me to architect robust solutions while my design sensibility ensures exceptional user experiences. I specialize in creating innovative digital products that drive measurable business results and enhance brand visibility. I thrive in collaborative environments and am passionate about leveraging cutting-edge technologies to solve complex challenges.",
+    "occupation": "Programmer",
+    "availability": "Freelance Available",
+    "yearsExperience": "Years Experience",
+    "viewCV": "View my CV",
+    "seeMore": "See more",
+    "seeLess": "See less",
+    "toolsSkillsTab": "Tools & Skills",
+    "languagesTab": "Languages",
+    "contactInfoTab": "Contact Info",
+    "otherTechnologies": "Other Technologies",
+    "viewPortfolio": "View Portfolio"
+  },
+  "services": {
+    "eyebrow": "Expertise",
+    "title": "My Services",
+    "subtitle": "Specialized solutions tailored to your digital needs",
+    "webDev": {
+      "title": "Web Development",
+      "description": "Custom web applications built with modern frameworks like React, Astro, and more. I create responsive, high-performance websites that deliver exceptional user experiences."
+    },
+    "mobileDev": {
+      "title": "Mobile Development",
+      "description": "Native and cross-platform mobile applications using React Native and Flutter. I deliver intuitive, feature-rich apps that work flawlessly across iOS and Android devices."
+    },
+    "uiux": {
+      "title": "UI/UX Design",
+      "description": "User-centered design that combines aesthetics with functionality. I create intuitive interfaces and seamless user experiences that engage and convert visitors."
+    },
+    "database": {
+      "title": "Database & API",
+      "description": "Robust backend solutions with PostgreSQL, MySQL, Firebase, and Supabase. I build secure, scalable APIs and database architectures that power your applications."
+    },
+    "learnMore": "Learn More"
+  },
+  "contact": {
+    "getInTouch": "Get In Touch",
+    "contactInfo": "Contact Information",
+    "contactDescription": "Feel free to reach out to me for any questions or opportunities. I'm always open to discussing new projects, creative ideas or opportunities to be part of your vision. If You Have Any Project In Your Mind.",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "basedIn": "based in Cotonou, Benin",
+    "website": "Website",
+    "followMe": "Follow Me",
+    "yourName": "Your Name",
+    "yourEmail": "Your Email",
+    "subject": "Subject",
+    "yourMessage": "Your Message",
+    "sendMessage": "Send Message",
+    "sending": "Sending...",
+    "namePlaceholder": "John Doe",
+    "emailPlaceholder": "john@example.com",
+    "subjectPlaceholder": "Project Inquiry",
+    "messagePlaceholder": "Hello, I would like to talk about...",
+    "errors": {
+      "name": "Please enter your name",
+      "email": "Please enter a valid email address",
+      "subject": "Please enter a subject",
+      "message": "Please enter your message (at least 10 characters)"
+    },
+    "success": "Your message has been sent successfully! We'll get back to you soon."
+  },
+  "contactCTA": {
+    "available": "Available for new projects",
+    "title": "Let's create something amazing together",
+    "subtitle": "Ready to discuss your next project? I'm just a message away.",
+    "button": "Send Me a Message",
+    "copyEmail": "Copy Email",
+    "copied": "Copied!"
+  },
+  "footer": {
+    "designedWith": "Designed & Developed with",
+    "description": "Both my portfolio and a blog about programming and technology. It is a place where I share my thoughts, ideas, and experiences in the field. I hope you find it useful and informative. I am always open to feedback and suggestions, so feel free to reach out to me if you have any questions or comments.",
+    "apiDocs": "API Documentation",
+    "docsPlatform": "Documentation Platform",
+    "copyright": "OTTY KEVIN ANSELME. All rights reserved."
+  },
+  "timeline": {
+    "title": "My Journey",
+    "subtitle": "My professional experience and education through the years"
+  },
+  "projects": {
+    "title": "Selected Projects",
+    "description": "Discover below some of my flagship projects created for clients over the past years. Each project demonstrates my expertise in web and mobile development.",
+    "viewAll": "View All"
+  },
+  "work": {
+    "pageTitle": "Portfolio & Projects",
+    "title": "My Portfolio",
+    "intro1": "Welcome to my work showcase. Here you'll find a collection of projects that demonstrate my skills and experience in web development and design.",
+    "intro2": "Each project represents a unique challenge and solution, showcasing different technologies and approaches I've worked with.",
+    "viewProjects": "View Projects"
+  },
+  "blog": {
+    "pageTitle": "Web & Mobile Development Blog | Kevin Otty",
+    "pageDescription": "Articles and tutorials on web and mobile development by Kevin Otty. Discover React, React Native, Astro.js, technical tips and real project insights.",
+    "title": "Insights & Ideas",
+    "intro1": "Welcome to my blog where I share thoughts, stories, and explorations in design, development, and the creative process.",
+    "intro2": "Discover articles on technical concepts, creative approaches, and industry insights to help you grow.",
+    "readLatest": "Read Latest",
+    "browseTopics": "Browse Topics",
+    "featuredArticles": "Featured Articles"
+  },
+  "meta": {
+    "homeTitle": "Freelance Web & Mobile Developer",
+    "homeDescription": "Portfolio of {firstName} {lastName}, freelance developer in {city}. Expert in React, React Native, Astro.js. High-performance web and mobile applications.",
+    "imgAlt": "freelance web and mobile developer based in {city}, {country}. Expert in React, React Native and Astro.js"
+  },
+  "languages": {
+    "french": "French",
+    "english": "English",
+    "native": "Native",
+    "professional": "Professional Working Proficiency"
+  }
+}

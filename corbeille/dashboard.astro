@@ -1,0 +1,70 @@
+<!-- ---
+import { createClient } from "@supabase/supabase-js";
+import Layout from '../layouts/Layout.astro';
+// import PortfolioForm from '../../corbeille/PortfolioForm.astro';
+// import AirtableData from '../components/AirtableData.astro';
+
+// Retrieve your Supabase URL and anon key from environment variables.
+const SUPABASE_URL =
+  import.meta.env.PUBLIC_SUPABASE_URL ||
+  process.env.PUBLIC_SUPABASE_URL ||
+  "https://ogcmxfieluyuttcbmkcd.supabase.co";
+const SUPABASE_ANON_KEY =
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.PUBLIC_SUPABASE_ANON_KEY ||
+  "ey";
+
+// Initialize the Supabase client.
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Fetch portfolio items from a table named "portfolio".
+const { data: portfolioItems, error } = await supabase
+  .from("portfolio_project")
+  .select("*");
+---
+
+<Layout
+  title="Dashboard - Portfolio"
+  description="Manage your portfolio preview items"
+>
+  <div class="dashboard">
+    <h1>Portfolio Dashboard</h1>
+    {error && <p>Error: {error.message}</p>}
+    {
+      portfolioItems && portfolioItems.length > 0 ? (
+        <ul>
+          {portfolioItems.map((item) => (
+            <li>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <img src={item.img} alt={item.img_alt || ""} loading="lazy" />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Loading...</p>
+      )
+    }
+  </div>
+</Layout>
+
+<style>
+  .dashboard {
+    padding: 2rem;
+  }
+  .dashboard ul {
+    list-style: none;
+    padding: 0;
+  }
+  .dashboard li {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--gray-800);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  .dashboard img {
+    max-width: 200px;
+    display: block;
+    margin-top: 0.5rem;
+  }
+</style> -->

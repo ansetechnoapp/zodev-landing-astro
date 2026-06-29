@@ -1,0 +1,44 @@
+---
+// Composant de secours pour Font Awesome
+// Ce composant charge Font Awesome localement si le CDN échoue
+---
+
+<script is:inline>
+  // Vérifier si Font Awesome est chargé correctement
+  window.addEventListener('DOMContentLoaded', () => {
+    // Fonction pour vérifier si Font Awesome est chargé
+    function isFontAwesomeLoaded() {
+      // Vérifier si les icônes sont correctement affichées
+      const testIcon = document.createElement('i');
+      testIcon.className = 'fas fa-check';
+      testIcon.style.visibility = 'hidden';
+      document.body.appendChild(testIcon);
+      
+      // Obtenir le style calculé
+      const computedStyle = window.getComputedStyle(testIcon);
+      const fontFamily = computedStyle.getPropertyValue('font-family');
+      
+      // Nettoyer
+      document.body.removeChild(testIcon);
+      
+      // Si Font Awesome est chargé, la famille de police contiendra "Font Awesome"
+      return fontFamily.includes('Font Awesome') || fontFamily.includes('FontAwesome');
+    }
+    
+    // Fonction pour charger Font Awesome localement
+    function loadLocalFontAwesome() {
+      console.log('Chargement de Font Awesome localement...');
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = '/assets/fontawesome/all.min.css';
+      document.head.appendChild(link);
+    }
+    
+    // Vérifier après un court délai pour laisser le temps au CDN de charger
+    setTimeout(() => {
+      if (!isFontAwesomeLoaded()) {
+        loadLocalFontAwesome();
+      }
+    }, 1000);
+  });
+</script>

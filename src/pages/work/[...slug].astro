@@ -1,0 +1,1489 @@
+---
+export const prerender = true;
+
+import { type CollectionEntry, getCollection } from "astro:content";
+
+import Layout from "../../layouts/Layout.astro";
+
+import ContactCTA from "../../components/ContactCTA.astro";
+import Hero from "../../components/Hero.astro";
+import Icon from "../../components/reactJS/Icon";
+import Pill from "../../components/reactJS/Pill";
+import TabbedInterface from "../../components/reactJS/TabbedInterface";
+import ProjectFeatures from "../../components/reactJS/ProjectFeatures";
+import ImageGallery from "../../components/reactJS/ImageGallery";
+
+interface Props {
+  entry: CollectionEntry<"work">;
+}
+
+// This is a dynamic route that generates a page for every Markdown file in src/content/
+// Read more about dynamic routes and this `getStaticPaths` function in the Astro docs:
+// https://docs.astro.build/en/core-concepts/routing/#dynamic-routes
+export async function getStaticPaths() {
+  const work = await getCollection("work");
+  return work.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Enhanced SEO metadata for projects
+const projectTitle = `${entry.data.title} | Kevin Otty - Développeur Web & Mobile`;
+const projectDescription = entry.data.description || `Découvrez ${entry.data.title}, un projet de développement ${entry.data.device === 'mobile' ? 'mobile' : 'web'} réalisé par Kevin Otty. Technologies utilisées: ${entry.data.tech?.join(', ') || 'développement moderne'}.`;
+
+// Prepare project metadata for SEO
+const projectMetadata = {
+  publishedTime: entry.data.publishDate
+    ? new Date(entry.data.publishDate).toISOString()
+    : new Date().toISOString(),
+  modifiedTime: new Date().toISOString(),
+  tags: entry.data.tags || [],
+};
+---
+
+<Layout
+  title={projectTitle}
+  description={projectDescription}
+  image={entry.data.img || "/assets/social-preview.jpg"}
+  type="project"
+  article={projectMetadata}
+>
+  <div class="project-container site-content-spacing">
+    <div class="project-header">
+      <div class="header-content">
+        <a class="back-link" href="/work/"
+          ><Icon icon="arrow-left" /> Back to Projects</a
+        >
+        <h1 class="project-title">{entry.data.title}</h1>
+        <p class="project-description">{entry.data.description}</p>
+
+         <!-- Enhanced Hero Image with Professional Mockup Context -->
+    <div class="project-showcase">
+      {
+        entry.data.img && (
+          <div class="main-image-container">
+            <div class="mockup-frame">
+              <div class="main-image">
+                <picture>
+                  {/* AVIF format */}
+                  <source
+                    type="image/avif"
+                    srcset={`${entry.data.img.replace(/\.(jpg|jpeg|png|gif)$/i, "_optimized.avif")} 1x, ${entry.data.img.replace(/\.(jpg|jpeg|png|gif)$/i, "_640w.avif")} 640w, ${entry.data.img.replace(/\.(jpg|jpeg|png|gif)$/i, "_1024w.avif")} 1024w`}
+                    sizes="(max-width: 768px) 100vw, 1200px"
+                    onerror="this.style.display='none'"
+                  />
+                  {/* WebP format */}
+                  <source
+                    type="image/webp"
+                    srcset={`${entry.data.img.replace(/\.(jpg|jpeg|png|gif)$/i, "_optimized.webp")} 1x, ${entry.data.img.replace(/\.(jpg|jpeg|png|gif)$/i, "_640w.webp")} 640w, ${entry.data.img.replace(/\.(jpg|jpeg|png|gif)$/i, "_1024w.webp")} 1024w`}
+                    sizes="(max-width: 768px) 100vw, 1200px"
+                    onerror="this.style.display='none'"
+                  />
+                  {/* Fallback format */}
+                  <img
+                    src={entry.data.img}
+                    alt={entry.data.img_alt || "Project image"}
+                    loading="lazy"
+                    decoding="async"
+                    onerror="this.style.display='none'; console.warn('Failed to load image:', this.src);"
+                  />
+                </picture>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div>
+
+        <!-- Project Introduction & Details Section -->
+        <div class="project-intro-section">
+          <div class="intro-content">
+            <div class="project-overview">
+              <h2>Project Overview</h2>
+              <p class="overview-text">
+                {entry.data.description}
+              </p>
+            </div>
+
+            <div class="project-details-box">
+              <h3>Project Details</h3>
+              <div class="details-grid">
+                {entry.data.client && (
+                  <div class="detail-item">
+                    <span class="detail-label">Client:</span>
+                    <span class="detail-value">{entry.data.client}</span>
+                  </div>
+                )}
+                {entry.data.services && (
+                  <div class="detail-item">
+                    <span class="detail-label">Services:</span>
+                    <span class="detail-value">{entry.data.services.join(', ')}</span>
+                  </div>
+                )}
+                {entry.data.publishDate && (
+                  <div class="detail-item">
+                    <span class="detail-label">Date:</span>
+                    <span class="detail-value">{new Date(entry.data.publishDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                  </div>
+                )}
+                {entry.data.duration && (
+                  <div class="detail-item">
+                    <span class="detail-label">Duration:</span>
+                    <span class="detail-value">{entry.data.duration}</span>
+                  </div>
+                )}
+                {entry.data.projectType && (
+                  <div class="detail-item">
+                    <span class="detail-label">Type:</span>
+                    <span class="detail-value">{entry.data.projectType}</span>
+                  </div>
+                )}
+              </div>
+
+              <div class="tech-showcase">
+                <h4>Technologies Used</h4>
+                <div class="tech-pills">
+                  {entry.data.tech?.map((tech) => (
+                    <Pill>{tech}</Pill>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta-container">
+          <div class="tags-container">
+            <h3>Category</h3>
+            <div class="tags">
+              {entry.data.tags.map((t) => <Pill>{t}</Pill>)}
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-buttons">
+          {
+            entry.data.liveDemo && entry.data.liveDemo.startsWith('http') && (
+              <a
+                href={entry.data.liveDemo}
+                class="btn primary enhanced-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon icon="rocket-launch" />
+                <span>Live Demo</span>
+                <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+              </a>
+            )
+          }
+          {
+            entry.data.github && entry.data.github.startsWith('http') && (
+              <a
+                href={entry.data.github}
+                class="btn secondary enhanced-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon icon="github-logo" />
+                <span>View Code</span>
+                <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+              </a>
+            )
+          }
+          <button
+            class="btn tertiary enhanced-btn share-btn"
+            onclick="shareProject()"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16,6 12,2 8,6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            <span>Share Project</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Challenge & Solution Narrative Section -->
+    {(entry.data.challenge || entry.data.solution) && (
+      <div class="narrative-section">
+        <div class="narrative-container">
+          {entry.data.challenge && (
+            <div class="challenge-section">
+              <h2>
+                <svg class="section-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+                </svg>
+                The Challenge
+              </h2>
+              <div class="narrative-content">
+                <p>{entry.data.challenge}</p>
+              </div>
+            </div>
+          )}
+
+          {entry.data.solution && (
+            <div class="solution-section">
+              <h2>
+                <svg class="section-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                The Solution
+              </h2>
+              <div class="narrative-content">
+                <p>{entry.data.solution}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    <div class="project-content">
+      <div class="content-wrapper">
+        {entry.data.features && entry.data.features.length > 0 ? (
+          <div class="project-tabs">
+            <!-- Tab Navigation -->
+            <div class="tab-nav border-b border-gray-200 dark:border-gray-700 mb-6">
+              <nav class="tab-nav-container" role="tablist">
+                <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">
+                  <span class="tab-icon">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </span>
+                  <span class="tab-label">Project Overview</span>
+                </button>
+                <button class="tab-btn" data-tab="features" role="tab" aria-selected="false">
+                  <span class="tab-icon">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </span>
+                  <span class="tab-label">Key Features</span>
+                </button>
+                <button class="tab-btn" data-tab="technologies" role="tab" aria-selected="false">
+                  <span class="tab-icon">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                  </span>
+                  <span class="tab-label">Technologies Used</span>
+                </button>
+              </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+              <div id="overview-tab" class="tab-panel active" role="tabpanel">
+                <Content />
+              </div>
+
+              <div id="features-tab" class="tab-panel hidden" role="tabpanel">
+                <ProjectFeatures
+                  client:load
+                  features={entry.data.features}
+                />
+              </div>
+
+              <div id="technologies-tab" class="tab-panel hidden space-y-6" role="tabpanel">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {entry.data.tech?.map((tech, index) => (
+                    <div key={index} class="tech-card bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                          <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                          </svg>
+                        </div>
+                        <span class="font-medium text-gray-900 dark:text-white">{tech}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div class="prose dark:prose-invert max-w-none">
+                  <h3>Technology Stack Details</h3>
+                  <p>This project leverages modern web technologies to deliver a robust and scalable solution. Each technology was carefully chosen to optimize performance, maintainability, and user experience.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Content />
+        )}
+      </div>
+
+      {
+        entry.data.additionalImages &&
+          entry.data.additionalImages.length > 0 && (
+            <div class="additional-images">
+              <h2>Project Gallery</h2>
+              <ImageGallery
+                client:load
+                images={entry.data.additionalImages.map(img => ({
+                  url: img.url,
+                  alt: img.alt || "",
+                  caption: img.caption
+                }))}
+                columns={3}
+                class="mt-6"
+              />
+            </div>
+          )
+      }
+    </div>
+
+    <!-- Project Navigation -->
+    <div class="project-navigation">
+      <div class="nav-container">
+        <a href="/work/" class="nav-link all-projects">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3h18v18H3zM9 9h6v6H9z"/>
+          </svg>
+          All Projects
+        </a>
+
+        <div class="nav-arrows">
+          <button class="nav-link prev-project" onclick="navigateToProject('prev')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+            Previous Project
+          </button>
+
+          <button class="nav-link next-project" onclick="navigateToProject('next')">
+            Next Project
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Call-to-Action Section -->
+    <div class="enhanced-cta-section">
+      <div class="cta-content">
+        <div class="cta-text">
+          <h2>Ready to Start Your Project?</h2>
+          <p>Let's discuss how I can help bring your ideas to life with modern web development solutions.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="/#contact-cta" class="cta-primary-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Get In Touch
+          </a>
+          <a href="/work/" class="cta-secondary-btn">
+            View More Projects
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    
+  </div>
+</Layout>
+
+<style>
+  /* Modern Project Detail Page Styling */
+  .project-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .project-header {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .header-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-sm);
+    color: var(--gray-400);
+    margin-bottom: 2rem;
+    transition: color 0.2s ease;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--accent-regular);
+  }
+
+  .project-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: var(
+      --gradient-text,
+      linear-gradient(to right, var(--gray-0), var(--accent-light))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .project-description {
+    font-size: var(--text-lg);
+    max-width: 65ch;
+    margin-bottom: 3rem;
+    color: var(--gray-300);
+    line-height: 1.6;
+  }
+
+  .meta-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    border-top: 1px solid var(--gray-800);
+    border-bottom: 1px solid var(--gray-800);
+    padding: 2rem 0;
+  }
+
+  .tags-container h3,
+  .tech-container h3 {
+    font-size: var(--text-md);
+    margin-bottom: 1rem;
+    color: var(--gray-200);
+  }
+
+  .tags,
+  .tech-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .btn.primary {
+    background: var(--accent-regular);
+    color: var(--gray-999);
+  }
+
+  .btn.primary:hover {
+    background: var(--accent-light);
+  }
+
+  .btn.secondary {
+    background: var(--gray-800);
+    color: var(--gray-100);
+  }
+
+  .btn.secondary:hover {
+    background: var(--gray-700);
+  }
+
+  .btn.tertiary {
+    background: transparent;
+    color: var(--gray-200);
+    border: 2px solid var(--gray-700);
+  }
+
+  .btn.tertiary:hover {
+    background: var(--gray-800);
+    border-color: var(--gray-600);
+  }
+
+  /* Enhanced button styles */
+  .enhanced-btn {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 140px;
+  }
+
+  .enhanced-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .enhanced-btn:hover::before {
+    left: 100%;
+  }
+
+  .btn-arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .enhanced-btn:hover .btn-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .share-btn {
+    position: relative;
+  }
+
+  .share-btn.copied::after {
+    content: 'Copied!';
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-regular);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    animation: fadeInOut 2s ease;
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    20%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .project-showcase {
+    margin: 3rem 0;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
+    background: var(--gradient-subtle);
+  }
+
+  .main-image {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .project-content {
+    max-width: 900px;
+    margin: 4rem auto;
+  }
+
+  .content-wrapper {
+    font-size: var(--text-md);
+    line-height: 1.8;
+    color: var(--gray-300);
+  }
+
+  .content-wrapper :global(h1),
+  .content-wrapper :global(h2) {
+    margin: 2.5rem 0 1.5rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.2;
+    color: var(--gray-100);
+  }
+
+  .content-wrapper :global(h3),
+  .content-wrapper :global(h4) {
+    margin: 2rem 0 1rem;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    line-height: 1.3;
+    color: var(--gray-100);
+  }
+
+  .content-wrapper :global(p) {
+    margin-bottom: 1.5rem;
+  }
+
+  .content-wrapper :global(ul),
+  .content-wrapper :global(ol) {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .content-wrapper :global(li) {
+    margin-bottom: 0.75rem;
+  }
+
+  .content-wrapper :global(blockquote) {
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    border-left: 4px solid var(--accent-regular);
+    background: var(--gray-900);
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  .content-wrapper :global(blockquote p) {
+    font-size: var(--text-lg);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gray-200);
+  }
+
+  .content-wrapper :global(pre) {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    background: var(--gray-950);
+    overflow-x: auto;
+  }
+
+  .content-wrapper :global(img) {
+    max-width: 100%;
+    border-radius: 0.75rem;
+    margin: 2rem 0;
+  }
+
+  .additional-images {
+    margin-top: 4rem;
+  }
+
+  .additional-images h2 {
+    margin-bottom: 2rem;
+    font-size: var(--text-xl);
+    color: var(--gray-100);
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gallery-image {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .gallery-image:hover {
+    transform: translateY(-5px);
+  }
+
+  .gallery-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+
+  /* Project Introduction & Details Section */
+  .project-intro-section {
+    margin: 3rem 0;
+    padding: 3rem 0;
+    border-top: 1px solid var(--gray-800);
+    /* border-bottom: 1px solid var(--gray-800); */
+  }
+
+  .intro-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .project-overview h2 {
+    font-size: var(--text-xl);
+    margin-bottom: 1.5rem;
+    color: var(--gray-100);
+  }
+
+  .overview-text {
+    font-size: var(--text-lg);
+    line-height: 1.7;
+    color: var(--gray-300);
+  }
+
+  .project-details-box {
+    background: var(--gray-950);
+    border: 1px solid var(--gray-800);
+    border-radius: 1rem;
+    padding: 2rem;
+    height: fit-content;
+  }
+
+  .project-details-box h3 {
+    font-size: var(--text-lg);
+    margin-bottom: 1.5rem;
+    color: var(--gray-100);
+    border-bottom: 2px solid var(--accent-regular);
+    padding-bottom: 0.5rem;
+  }
+
+  .details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-800);
+  }
+
+  .detail-item:last-child {
+    border-bottom: none;
+  }
+
+  .detail-label {
+    font-weight: 600;
+    color: var(--gray-200);
+    font-size: var(--text-sm);
+  }
+
+  .detail-value {
+    color: var(--gray-300);
+    font-size: var(--text-sm);
+    text-align: right;
+    max-width: 60%;
+  }
+
+  .tech-showcase h4 {
+    font-size: var(--text-md);
+    margin-bottom: 1rem;
+    color: var(--gray-200);
+  }
+
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Enhanced Hero Image with Mockup */
+  .main-image-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .mockup-frame {
+    position: relative;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-950) 100%);
+    border-radius: 1.5rem;
+    box-shadow:
+      0 20px 40px -15px rgba(0, 0, 0, 0.4),
+      0 0 0 1px var(--gray-800);
+  }
+
+  .mockup-frame::before {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    height: 2rem;
+    background: var(--gray-800);
+    border-radius: 0.5rem 0.5rem 0 0;
+    border-bottom: 1px solid var(--gray-700);
+  }
+
+  .mockup-frame::after {
+    content: '';
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    background: #ff5f57;
+    border-radius: 50%;
+    box-shadow:
+      1rem 0 0 #ffbd2e,
+      2rem 0 0 #28ca42;
+  }
+
+  /* Challenge & Solution Narrative */
+  .narrative-section {
+    margin: 4rem 0;
+    background: var(--gray-950);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    border: 1px solid var(--gray-800);
+  }
+
+  .narrative-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    gap: 3rem;
+  }
+
+  .challenge-section,
+  .solution-section {
+    position: relative;
+  }
+
+  .challenge-section h2,
+  .solution-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: var(--text-xl);
+    margin-bottom: 1.5rem;
+    color: var(--gray-100);
+  }
+
+  .section-icon {
+    color: var(--accent-regular);
+    flex-shrink: 0;
+  }
+
+  .narrative-content {
+    font-size: var(--text-lg);
+    line-height: 1.7;
+    color: var(--gray-300);
+  }
+
+  .challenge-section {
+    padding-left: 2rem;
+    border-left: 3px solid #ff6b6b;
+  }
+
+  .solution-section {
+    padding-left: 2rem;
+    border-left: 3px solid #51cf66;
+  }
+
+  /* Project Navigation */
+  .project-navigation {
+    margin: 4rem 0 2rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--gray-800);
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .nav-arrows {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--gray-700);
+    border-radius: 0.5rem;
+    color: var(--gray-300);
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: var(--text-sm);
+  }
+
+  .nav-link:hover {
+    border-color: var(--accent-regular);
+    color: var(--accent-regular);
+    background: var(--gray-900);
+  }
+
+  /* Enhanced CTA Section */
+  .enhanced-cta-section {
+    margin: 3rem 0;
+    background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent-regular) 100%);
+    border-radius: 1.5rem;
+    padding: 4rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .enhanced-cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.1;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-text h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    margin-bottom: 1rem;
+    color: white;
+    font-weight: 700;
+  }
+
+  .cta-text p {
+    font-size: var(--text-lg);
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary-btn,
+  .cta-secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: var(--text-md);
+  }
+
+  .cta-primary-btn {
+    background: white;
+    color: var(--accent-dark);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .cta-primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .cta-secondary-btn {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .cta-secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+  }
+
+  @media (min-width: 768px) {
+    .meta-container {
+      grid-template-columns: 1fr;
+    }
+
+    .project-header {
+      padding: 4rem 0 3rem;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .intro-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .project-details-box {
+      order: -1;
+    }
+
+    .narrative-section {
+      padding: 2rem;
+    }
+
+    .enhanced-cta-section {
+      padding: 3rem 2rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .cta-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .project-header {
+      padding: 1rem 0 2rem;
+    }
+
+    .project-intro-section {
+      padding: 2rem 0;
+    }
+
+    .mockup-frame {
+      padding: 1rem;
+    }
+
+    .mockup-frame::before {
+      height: 1.5rem;
+    }
+
+    .narrative-container {
+      gap: 2rem;
+    }
+
+    .challenge-section,
+    .solution-section {
+      padding-left: 1rem;
+    }
+
+    .nav-container {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .nav-arrows {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .cta-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cta-primary-btn,
+    .cta-secondary-btn {
+      width: 100%;
+      max-width: 300px;
+      justify-content: center;
+    }
+  }
+
+  /* Modal and component animations */
+  @keyframes modal-enter {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  :global(.animate-modal-enter) {
+    animation: modal-enter 0.2s ease-out;
+  }
+
+  :global(.animate-fade-in) {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  /* Tech card styles */
+  :global(.tech-card) {
+    transition: all 0.2s ease;
+  }
+
+  :global(.tech-card:hover) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Line clamp utility */
+  :global(.line-clamp-3) {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Enhanced project showcase */
+  .project-showcase {
+    position: relative;
+  }
+
+  .project-showcase::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: linear-gradient(45deg, var(--accent-light), var(--accent-secondary-light));
+    border-radius: 1.5rem;
+    opacity: 0.1;
+    z-index: -1;
+  }
+
+  /* Improved content sections */
+  .content-wrapper :global(.tabbed-interface) {
+    margin-top: 2rem;
+  }
+
+  .content-wrapper :global(.tab-nav) {
+    border-bottom: 2px solid var(--gray-800);
+    margin-bottom: 2rem;
+  }
+
+  .content-wrapper :global(.feature-card) {
+    border: 1px solid var(--gray-800);
+    background: var(--gray-950);
+  }
+
+  .content-wrapper :global(.feature-card:hover) {
+    border-color: var(--accent-regular);
+    box-shadow: 0 8px 25px rgba(118, 17, 166, 0.15);
+  }
+
+  /* Tab styles */
+  .project-tabs {
+    margin-top: 2rem;
+  }
+
+  .tab-nav {
+    border-bottom: 2px solid var(--gray-800);
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .tab-nav-container {
+    display: flex;
+    gap: 2.5rem; /* Increased from 2rem for better visual separation */
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 1px; /* Prevent border cutoff */
+  }
+
+  .tab-nav-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.25rem;
+    border: none;
+    background: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    font-medium: 500;
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    min-height: 44px; /* Touch target */
+    position: relative;
+  }
+
+  .tab-btn.active {
+    border-bottom-color: var(--accent-regular);
+    color: var(--accent-regular);
+  }
+
+  .tab-btn:hover:not(.active) {
+    color: var(--gray-300);
+    border-bottom-color: var(--gray-600);
+  }
+
+  .tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tab-label {
+    flex-shrink: 0;
+  }
+
+  .tab-panel {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Mobile-specific tab styles */
+  @media (max-width: 768px) {
+    .tab-nav-container {
+      padding: 0 1rem;
+      margin: 0 -1rem;
+    }
+
+    .tab-btn {
+      padding: 1rem 0.5rem;
+      font-size: 0.8rem;
+      min-width: auto;
+      flex-direction: column;
+      gap: 0.25rem;
+      text-align: center;
+    }
+
+    .tab-icon {
+      margin-bottom: 0.125rem;
+    }
+
+    .tab-label {
+      line-height: 1.2;
+      max-width: 80px;
+      word-wrap: break-word;
+      hyphens: auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tab-nav-container {
+      /* gap: 0.75rem;  */
+      padding: 0 0.75rem;
+      margin: 0 -0.75rem;
+    }
+
+    .tab-btn {
+      padding: 0.875rem 0.375rem;
+      font-size: 0.75rem;
+      min-width: 70px;
+    }
+
+    .tab-label {
+      max-width: 60px;
+      font-size: 0.7rem;
+    }
+
+    .tab-icon svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  /* Scroll indicators for mobile */
+  @media (max-width: 768px) {
+    .tab-nav::before,
+    .tab-nav::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .tab-nav::before {
+      left: 0;
+      background: linear-gradient(to right, var(--gray-999), transparent);
+    }
+
+    .tab-nav::after {
+      right: 0;
+      background: linear-gradient(to left, var(--gray-999), transparent);
+    }
+  }
+</style>
+
+<script>
+  // Share project functionality
+  function shareProject() {
+    const shareBtn = document.querySelector('.share-btn');
+    const projectTitle = document.querySelector('.project-title')?.textContent || 'Project';
+    const projectUrl = window.location.href;
+
+    if (navigator.share) {
+      // Use native sharing if available
+      navigator.share({
+        title: projectTitle,
+        url: projectUrl,
+        text: `Check out this project: ${projectTitle}`
+      }).catch(console.error);
+    } else {
+      // Fallback to clipboard
+      navigator.clipboard.writeText(projectUrl).then(() => {
+        shareBtn?.classList.add('copied');
+        setTimeout(() => {
+          shareBtn?.classList.remove('copied');
+        }, 2000);
+      }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = projectUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        shareBtn?.classList.add('copied');
+        setTimeout(() => {
+          shareBtn?.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  }
+
+  // Make function globally available
+  window.shareProject = shareProject;
+
+  // Project navigation functionality
+  async function navigateToProject(direction) {
+    try {
+      // Get all projects
+      const response = await fetch('/api/projects.json');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const projects = await response.json();
+      
+      if (!Array.isArray(projects) || projects.length === 0) {
+        throw new Error('Invalid projects data received');
+      }
+
+      // Find current project index
+      const currentSlug = window.location.pathname.split('/').pop();
+      const currentIndex = projects.findIndex(p => p && p.slug === currentSlug);
+
+      if (currentIndex === -1) {
+        console.warn('Current project not found in projects list');
+        return;
+      }
+
+      let targetIndex;
+      if (direction === 'next') {
+        targetIndex = currentIndex + 1 >= projects.length ? 0 : currentIndex + 1;
+      } else {
+        targetIndex = currentIndex - 1 < 0 ? projects.length - 1 : currentIndex - 1;
+      }
+
+      const targetProject = projects[targetIndex];
+      if (targetProject && targetProject.slug) {
+        window.location.href = `/work/${targetProject.slug}`;
+      } else {
+        throw new Error('Target project not found or invalid');
+      }
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback to projects page
+      window.location.href = '/work/';
+    }
+  }
+
+  // Make navigation function globally available
+  window.navigateToProject = navigateToProject;
+
+  // Tab functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+
+        // Remove active class from all buttons
+        tabButtons.forEach(btn => {
+          btn.classList.remove('active');
+        });
+
+        // Add active class to clicked button
+        button.classList.add('active');
+
+        // Hide all tab panels
+        tabPanels.forEach(panel => {
+          panel.classList.add('hidden');
+          panel.classList.remove('active');
+        });
+
+        // Show target tab panel
+        const targetPanel = document.getElementById(`${targetTab}-tab`);
+        if (targetPanel) {
+          targetPanel.classList.remove('hidden');
+          targetPanel.classList.add('active');
+        }
+
+        // Scroll the active tab into view on mobile
+        if (window.innerWidth <= 768) {
+          button.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }
+      });
+    });
+
+    // Add touch-friendly scroll behavior for mobile
+    const tabNavContainer = document.querySelector('.tab-nav-container');
+    if (tabNavContainer && window.innerWidth <= 768) {
+      let isScrolling = false;
+
+      tabNavContainer.addEventListener('scroll', () => {
+        if (!isScrolling) {
+          window.requestAnimationFrame(() => {
+            // Update scroll indicators if needed
+            isScrolling = false;
+          });
+          isScrolling = true;
+        }
+      });
+    }
+  });
+</script>
+</style>

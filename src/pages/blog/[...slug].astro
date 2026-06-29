@@ -1,0 +1,449 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import { getPostBySlug, parsePostDates, getAllPosts, getRelatedPosts, getAllCategories, getAdjacentPosts } from "../../data/blog/index.js";
+import BlogSidebar from "../../components/BlogSidebar.astro";
+import SocialShare from "../../components/SocialShare.astro";
+import RelatedArticles from "../../components/RelatedArticles.astro";
+import AuthorBio from "../../components/AuthorBio.astro";
+import userData from "../../data/User.json";
+import "../../styles/blog.css";
+
+export function getStaticPaths() {
+  // This function is needed for Astro to generate static pages
+  // The actual data fetching happens in the component
+  return [
+    { params: { slug: "face-swap-tools" } },
+    { params: { slug: "hackintosh-hp-probook" } },
+    { params: { slug: "hibernate-swap-file" } },
+    { params: { slug: "hibernate" } },
+    { params: { slug: "windows-default-boot-grub" } },
+    { params: { slug: "configurer-email-gmail-zoho-cloudflare" } },
+  ];
+}
+
+const { slug } = Astro.params;
+const postData = getPostBySlug(slug);
+
+// Parse dates from ISO strings to Date objects
+const post = parsePostDates(postData);
+
+// If post not found, redirect to 404
+if (!post) {
+  return Astro.redirect("/404");
+}
+
+// Get formatted date in French
+const formattedDate = new Date(post.pubDate).toLocaleDateString("fr-FR", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const formattedUpdatedDate = post.updatedDate
+  ? new Date(post.updatedDate).toLocaleDateString("fr-FR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : null;
+
+// Prepare article metadata for SEO
+const articleMetadata = {
+  publishedTime: post.pubDate.toISOString(),
+  modifiedTime: post.updatedDate
+    ? post.updatedDate.toISOString()
+    : post.pubDate.toISOString(),
+  tags: post.tags || [],
+  authors: post.author ? [post.author] : [userData.firstName + " " + userData.lastName],
+};
+
+// Calculate reading time (rough estimate)
+const wordCount = post.markdown.split(/\s+/).length;
+const readingTime = Math.max(1, Math.round(wordCount / 200));
+
+// Get related posts and other data for sidebar
+const allPosts = getAllPosts();
+const recentPosts = allPosts.slice(0, 5).filter(p => p.slug !== slug);
+const relatedPosts = getRelatedPosts(post, 3);
+const { prev, next } = getAdjacentPosts(slug);
+const categories = getAllCategories();
+
+// Author information
+const author = {
+  name: userData.firstName + " " + userData.lastName,
+  bio: userData.profile,
+  avatar: "/assets/img/kevin-otty-avatar.jpg", // You'll need to add this image
+  social: userData.socialMedia
+};
+
+const postUrl = new URL(`/blog/${post.slug}`, Astro.site).href;
+---
+
+<Layout
+  title={`${post.title} | Blog Kevin Otty - Développeur Web & Mobile`}
+  description={post.description || `Article de blog par Kevin Otty sur ${post.title}. Découvrez des conseils et techniques de développement web et mobile, React, React Native, et technologies modernes.`}
+  image={post.heroImage || "/assets/social-preview.jpg"}
+  type="article"
+  article={articleMetadata}
+>
+  <!-- Two-column layout container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+      <!-- Main content column (70% width on desktop) -->
+      <article class="lg:col-span-3">
+        <!-- Breadcrumb -->
+        <nav class="py-6 text-sm" aria-label="Breadcrumb">
+          <ol class="flex items-center space-x-1 text-gray-500 dark:text-gray-400">
+            <li>
+              <a
+                href="/"
+                class="hover:text-gray-900 dark:hover:text-white transition">Accueil</a
+              >
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 mx-1" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </li>
+            <li>
+              <a
+                href="/blog"
+                class="hover:text-gray-900 dark:hover:text-white transition">Blog</a
+              >
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 mx-1" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </li>
+            <li class="text-gray-800 dark:text-gray-200 font-medium truncate">
+              {post.title}
+            </li>
+          </ol>
+        </nav>
+
+        <!-- Hero Image (if available) -->
+        {
+          post.heroImage && (
+            <div class="relative w-full h-[50vh] lg:h-[60vh] mb-8 rounded-xl overflow-hidden">
+              <picture>
+                {/* AVIF format */}
+                <source
+                  type="image/avif"
+                  srcset={`${post.heroImage.replace(/\.(jpg|jpeg|png|gif)$/i, "_optimized.avif")} 1x, ${post.heroImage.replace(/\.(jpg|jpeg|png|gif)$/i, "_640w.avif")} 640w, ${post.heroImage.replace(/\.(jpg|jpeg|png|gif)$/i, "_1024w.avif")} 1024w`}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 900px"
+                />
+                {/* WebP format */}
+                <source
+                  type="image/webp"
+                  srcset={`${post.heroImage.replace(/\.(jpg|jpeg|png|gif)$/i, "_optimized.webp")} 1x, ${post.heroImage.replace(/\.(jpg|jpeg|png|gif)$/i, "_640w.webp")} 640w, ${post.heroImage.replace(/\.(jpg|jpeg|png|gif)$/i, "_1024w.webp")} 1024w`}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 900px"
+                />
+                {/* Fallback format */}
+                <img
+                  src={post.heroImage}
+                  alt={`Image d'illustration pour l'article "${post.title}" par Kevin Otty, développeur web et mobile`}
+                  width="1200"
+                  height="600"
+                  class="w-full h-full object-cover"
+                  loading="eager"
+                  decoding="async"
+                />
+              </picture>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div class="absolute bottom-0 left-0 w-full p-6 lg:p-8 text-white">
+                {post.tags && (
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    {post.tags.map((tag) => (
+                      <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight">
+                  {post.title}
+                </h1>
+                {post.description && (
+                  <p class="text-base lg:text-lg text-white/90 mt-3 lg:mt-4 max-w-2xl">
+                    {post.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          )
+        }
+
+        {
+          !post.heroImage && (
+            <header class="mb-8 pt-8">
+              {post.tags && (
+                <div class="flex flex-wrap gap-2 mb-6">
+                  {post.tags.map((tag) => (
+                    <span class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-200 text-xs font-medium px-3 py-1 rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                {post.title}
+              </h1>
+              {post.description && (
+                <p class="text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {post.description}
+                </p>
+              )}
+            </header>
+          )
+        }
+
+        <!-- Enhanced Article Metadata -->
+        <div class="mb-8 pb-6 border-b border-gray-200 dark:border-gray-800">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex items-center space-x-4">
+              <div class="h-12 w-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                {author.name.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <div class="font-medium text-gray-900 dark:text-white">
+                  <a href="/#about" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                    {author.name}
+                  </a>
+                </div>
+                <div class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2 flex-wrap">
+                  <time datetime={post.pubDate.toISOString()}>
+                    {formattedDate}
+                  </time>
+                  <span class="inline-block h-1 w-1 rounded-full bg-gray-400"></span>
+                  <span>Lecture : {readingTime} min</span>
+                  {post.tags && post.tags.length > 0 && (
+                    <>
+                      <span class="inline-block h-1 w-1 rounded-full bg-gray-400"></span>
+                      <span>{post.tags.join(", ")}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <!-- Social Share Component -->
+            <SocialShare
+              title={post.title}
+              url={postUrl}
+              description={post.description}
+            />
+          </div>
+        </div>
+
+        <!-- Enhanced Content with better typography -->
+        <div
+          class="blog-content blog-content-animate prose prose-lg dark:prose-invert max-w-none
+          prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:scroll-mt-20
+          prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed
+          prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline prose-a:transition
+          prose-img:rounded-lg prose-img:shadow-lg prose-img:mx-auto
+          prose-blockquote:border-l-4 prose-blockquote:border-l-indigo-500 prose-blockquote:bg-indigo-50 dark:prose-blockquote:bg-indigo-900/20 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:italic prose-blockquote:text-indigo-900 dark:prose-blockquote:text-indigo-100
+          prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-code:bg-indigo-50 dark:prose-code:bg-indigo-900/30 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-medium
+          prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:shadow-lg
+          prose-ul:space-y-2 prose-ol:space-y-2
+          prose-li:text-gray-700 dark:prose-li:text-gray-300
+          prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-semibold
+          mb-12"
+          set:html={post.content}
+        />
+
+        <!-- Article Footer with Tags -->
+        {post.tags && post.tags.length > 0 && (
+          <div class="mb-8 pb-8 border-b border-gray-200 dark:border-gray-800">
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Tags de l'article</h3>
+            <div class="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <span class="blog-tag">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+      </article>
+
+      <!-- Sidebar (30% width on desktop) -->
+      <aside class="lg:col-span-1 blog-sidebar">
+        <BlogSidebar
+          author={author}
+          recentPosts={recentPosts}
+          categories={categories}
+        />
+      </aside>
+    </div>
+
+    <!-- Full-width sections below the two-column layout -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+      <!-- Enhanced Author Bio -->
+      <AuthorBio author={author} />
+
+      <!-- Related Articles -->
+      <RelatedArticles posts={relatedPosts} />
+
+      <!-- Next/Previous Article Navigation -->
+      {(prev || next) && (
+        <div class="border-t border-gray-200 dark:border-gray-800 py-10 mb-10">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {prev ? (
+              <a
+                href={`/blog/${prev.slug}`}
+                class="group flex flex-col border border-gray-200 dark:border-gray-800 rounded-xl p-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition"
+              >
+                <span class="text-sm text-gray-500 dark:text-gray-400 mb-2">Article précédent</span>
+                <span class="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                  {prev.title}
+                </span>
+              </a>
+            ) : <div />}
+            {next ? (
+              <a
+                href={`/blog/${next.slug}`}
+                class="group flex flex-col border border-gray-200 dark:border-gray-800 rounded-xl p-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition text-right"
+              >
+                <span class="text-sm text-gray-500 dark:text-gray-400 mb-2">Article suivant</span>
+                <span class="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                  {next.title}
+                </span>
+              </a>
+            ) : <div />}
+          </div>
+        </div>
+      )}
+
+      <!-- Newsletter Signup -->
+      <div
+        class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-8 mb-16 text-white"
+      >
+        <div class="max-w-lg mx-auto text-center">
+          <h3 class="text-xl font-bold mb-2">Restez informé</h3>
+          <p class="mb-6 opacity-90">
+            Recevez une notification lors de la publication de nouveaux articles
+          </p>
+          <form class="flex flex-col sm:flex-row gap-3">
+            <input
+              type="email"
+              placeholder="Votre adresse email"
+              class="px-4 py-3 rounded-lg bg-white/20 backdrop-blur-sm placeholder-white/70 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 flex-grow"
+            />
+            <button
+              type="submit"
+              class="px-6 py-3 bg-white text-indigo-600 font-medium rounded-lg hover:bg-opacity-90 transition"
+            >
+              S'abonner
+            </button>
+          </form>
+          <p class="mt-4 text-xs opacity-75">
+            Nous respectons votre vie privée. Désabonnement possible à tout moment.
+          </p>
+        </div>
+      </div>
+
+      <!-- Back to Blog -->
+      <div class="text-center mb-12">
+        <a
+          href="/blog"
+          class="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
+        >
+          <svg
+            class="mr-2 w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Retour au Blog
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Add copy buttons to code blocks
+  document.addEventListener('DOMContentLoaded', function() {
+    const codeBlocks = document.querySelectorAll('pre code');
+
+    codeBlocks.forEach((codeBlock, index) => {
+      const pre = codeBlock.parentElement;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper relative';
+
+      // Wrap the pre element
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+
+      // Create copy button
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-code-btn absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity';
+      copyButton.textContent = 'Copier';
+      copyButton.setAttribute('aria-label', 'Copier le code');
+
+      // Add click event
+      copyButton.addEventListener('click', async function() {
+        const code = codeBlock.textContent;
+
+        try {
+          await navigator.clipboard.writeText(code);
+          copyButton.textContent = 'Copié !';
+          copyButton.classList.add('bg-green-600');
+
+          setTimeout(() => {
+            copyButton.textContent = 'Copier';
+            copyButton.classList.remove('bg-green-600');
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy code: ', err);
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = code;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+
+          copyButton.textContent = 'Copié !';
+          copyButton.classList.add('bg-green-600');
+
+          setTimeout(() => {
+            copyButton.textContent = 'Copier';
+            copyButton.classList.remove('bg-green-600');
+          }, 2000);
+        }
+      });
+
+      wrapper.appendChild(copyButton);
+
+      // Show button on hover
+      wrapper.addEventListener('mouseenter', () => {
+        copyButton.classList.remove('opacity-0');
+        copyButton.classList.add('opacity-100');
+      });
+
+      wrapper.addEventListener('mouseleave', () => {
+        copyButton.classList.remove('opacity-100');
+        copyButton.classList.add('opacity-0');
+      });
+    });
+  });
+</script>

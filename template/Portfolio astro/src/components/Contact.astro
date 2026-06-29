@@ -1,0 +1,132 @@
+<div class="contact-text">
+  <h2>Contact <span>Me!</span></h2>
+  <h4>If You Have Any Project In Your Mind.</h4>
+  <p>
+    I'm a UI/UX Designer - creating bold & brave interface design for companies
+    all across the world.
+  </p>
+  <div class="list">
+    <li><a href="#">01646895741</a></li>
+    <li><a href="#">hello@gmail.com</a></li>
+    <li><a href="#">Like Share & Subscribe</a></li>
+  </div>
+
+  <div class="contact-icons">
+    <a href="#"><i class="bx bxl-facebook"></i></a>
+    <a href="#"><i class="bx bxl-twitter"></i></a>
+    <a href="#"><i class="bx bxl-instagram-alt"></i></a>
+    <a href="#"><i class="bx bxl-youtube"></i></a>
+  </div>
+</div>
+
+<div class="contact-form">
+  <form action="">
+    <input type="text" placeholder="Your Name" required />
+    <input type="email" placeholder="Your Email Address" required />
+    <input type="number" placeholder="Your Mobile Number" required />
+    <textarea
+      name=""
+      id=""
+      cols="35"
+      rows="10"
+      placeholder="How Can I Help You"
+      required></textarea>
+    <input type="submit" value="Send Message" class="submit" required />
+  </form>
+</div>
+
+<style>
+  .contact-text h4 {
+    color: var(--text-color);
+    margin: 18px 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .contact-text h2 {
+    font-size: var(--h2-font);
+    line-height: 1;
+  }
+
+  .contact-text p {
+    color: var(--second-color);
+    font-size: var(--p-font);
+    line-height: 1.8;
+    margin-bottom: 30px;
+  }
+
+  .list {
+    margin-bottom: 2.8rem;
+  }
+
+  .list li {
+    margin-bottom: 12px;
+  }
+
+  .list li a {
+    display: block;
+    color: var(--second-color);
+    font-size: 14px;
+    transition: all 0.45s ease;
+  }
+
+  .list li a:hover {
+    color: var(--text-color);
+    transform: translateX(5px);
+  }
+
+  .contact-icons i {
+    height: 45px;
+    width: 45px;
+    background: var(--main-color);
+    color: var(--text-color);
+    font-size: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-right: 15px;
+    transition: all 0.45s ease;
+  }
+
+  .contact-icons i:hover {
+    background: var(--text-color);
+    color: var(--main-color);
+  }
+
+  .contact-form form {
+    position: relative;
+  }
+
+  .contact-form form input,
+  form textarea {
+    width: 100%;
+    padding: 14px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    font-size: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .contact-form textarea {
+    resize: none;
+    height: 240px;
+  }
+
+  .contact-form form > .submit {
+    display: inline-block;
+    font-size: 16px;
+    background: var(--main-color);
+    color: var(--text-color);
+    width: 160px;
+    transition: all 0.45s ease;
+  }
+
+  .contact-form .submit:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+</style>

@@ -1,0 +1,318 @@
+---
+// Learn about using Astro layouts:
+// https://docs.astro.build/en/core-concepts/layouts/
+
+// Component Imports
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import GlobalCanvas from "../components/GlobalCanvas.astro";
+import AccessibilityFeatures from "../components/AccessibilityFeatures.astro";
+import SEO from "../components/SEO.astro";
+import MobileBottomNav from "../components/MobileBottomNav.astro";
+import "../styles/global.css";
+import "../styles/mobile.css";
+import "../styles/mobile-bottom-nav.css";
+import { getLangFromCookies } from "../i18n/index";
+
+const lang = getLangFromCookies(Astro.cookies);
+
+interface Props {
+  title?: string | undefined;
+  description?: string | undefined;
+  image?: string | undefined;
+  type?: string | undefined;
+  noindex?: boolean;
+  robots?: string;
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    tags?: string[];
+    authors?: string[];
+  };
+}
+
+const {
+  title,
+  description,
+  image = "/assets/social-preview.jpg",
+  type = "website",
+  noindex,
+  robots,
+  article,
+} = Astro.props;
+
+const normalizedPathname =
+  Astro.url.pathname === "/"
+    ? "/"
+    : Astro.url.pathname.replace(/\/+$/, "");
+
+const autoNoIndex =
+  normalizedPathname === "/404" ||
+  normalizedPathname === "/demo-images" ||
+  normalizedPathname === "/generalFedapayCallback" ||
+  normalizedPathname === "/docs" ||
+  normalizedPathname.startsWith("/docs/") ||
+  normalizedPathname.startsWith("/portfolio/");
+
+const googleSiteVerification =
+  import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || undefined;
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth">
+  <head>
+    <!-- Utilisation du composant SEO pour toutes les balises meta -->
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      noindex={noindex ?? autoNoIndex}
+      robots={robots}
+      googleSiteVerification={googleSiteVerification}
+      article={article}
+    />
+
+    <!-- Autres balises head spécifiques à cette page -->
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen font-[Inter]"
+    style="margin: 0; padding: 0;"
+  >
+    <GlobalCanvas />
+    <AccessibilityFeatures />
+    <div class="stack backgrounds" style="margin-top: 0; padding-top: 0; top: 0; position: absolute; width: 100%; left: 0;">
+      <Nav />
+
+      <main id="main-content" class="site-content-spacing">
+        <slot />
+      </main>
+
+      <Footer />
+      
+      <!-- Barre de navigation mobile en bas de l'écran -->
+      <MobileBottomNav namepage={Astro.url.pathname.split('/')[1] || 'home'} />
+    </div>
+
+    <script>
+      // Add "loaded" class once the document has completely loaded.
+      addEventListener("load", () =>
+        document.documentElement.classList.add("loaded")
+      );
+
+      // Check if the user prefers dark mode (if not already handled by MainHead)
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark", "theme-dark");
+      } else {
+        document.documentElement.classList.remove("dark", "theme-dark");
+      }
+
+      const deferNonCritical = (callback) => {
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(callback, { timeout: 1200 });
+          return;
+        }
+
+        window.setTimeout(callback, 200);
+      };
+
+      // Enhanced micro-interactions script
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+
+        // Smooth transition between sections
+        const setupSectionTransitions = () => {
+          // Exclude sections managed by Framer Motion (they handle their own animations)
+          const sections = document.querySelectorAll("section:not([data-framer-motion])");
+          const options = {
+            root: null,
+            rootMargin: "0px",
+            threshold: 0.1,
+          };
+
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("section-visible");
+              }
+            });
+          }, options);
+
+          sections.forEach((section) => {
+            // Skip sections that use Framer Motion (have style attribute with opacity managed by FM)
+            if (section.closest('[data-framer-motion]') || section.hasAttribute('data-projection-id')) return;
+            section.classList.add("section-transition");
+            observer.observe(section);
+          });
+        };
+
+        deferNonCritical(setupSectionTransitions);
+      });
+    </script>
+
+    <style>
+      :root {
+        --_placeholder-bg: linear-gradient(transparent, transparent);
+        --bg-image-main: url("/assets/backgrounds/bg-main-light-800w_optimized.webp");
+        --bg-image-main-curves: url("/assets/backgrounds/bg-main-light.svg");
+        --bg-image-subtle-1: var(--_placeholder-bg);
+        --bg-image-subtle-2: var(--_placeholder-bg);
+        --bg-image-footer: var(--_placeholder-bg);
+        --bg-svg-blend-mode: overlay;
+        --bg-blend-mode: darken;
+        --bg-image-aspect-ratio: 2.25;
+        --bg-scale: 1.68;
+        --bg-aspect-ratio: calc(var(--bg-image-aspect-ratio) / var(--bg-scale));
+        --bg-gradient-size: calc(var(--bg-scale) * 100%);
+      }
+
+      :root.theme-dark {
+        --bg-image-main: url("/assets/backgrounds/bg-main-dark-800w_optimized.webp");
+        --bg-image-main-curves: url("/assets/backgrounds/bg-main-dark.svg");
+        --bg-svg-blend-mode: darken;
+        --bg-blend-mode: lighten;
+      }
+
+      /* These backgrounds are displayed below the fold, so we lazy load them
+         once the `.loaded` class has been set.  */
+      :root.loaded {
+        --bg-image-subtle-1: url("/assets/backgrounds/bg-subtle-1-light-800w_optimized.webp");
+        --bg-image-subtle-2: url("/assets/backgrounds/bg-subtle-2-light-800w_optimized.webp");
+        --bg-image-footer: url("/assets/backgrounds/bg-footer-light-800w_optimized.webp");
+      }
+      :root.loaded.theme-dark {
+        --bg-image-subtle-1: url("/assets/backgrounds/bg-subtle-1-dark-800w_optimized.webp");
+        --bg-image-subtle-2: url("/assets/backgrounds/bg-subtle-2-dark-800w_optimized.webp");
+        --bg-image-footer: url("/assets/backgrounds/bg-footer-dark-800w_optimized.webp");
+      }
+
+      @media (min-width: 48em) {
+        :root {
+          --bg-scale: 1;
+          --bg-image-main: url("/assets/backgrounds/bg-main-light-1440w_optimized.webp");
+        }
+        :root.theme-dark {
+          --bg-image-main: url("/assets/backgrounds/bg-main-dark-1440w_optimized.webp");
+        }
+
+        :root.loaded {
+          --bg-image-subtle-1: url("/assets/backgrounds/bg-subtle-1-light-1440w_optimized.webp");
+          --bg-image-subtle-2: url("/assets/backgrounds/bg-subtle-2-light-1440w_optimized.webp");
+          --bg-image-footer: url("/assets/backgrounds/bg-footer-light-1440w_optimized.webp");
+        }
+        :root.loaded.theme-dark {
+          --bg-image-subtle-1: url("/assets/backgrounds/bg-subtle-1-dark-1440w_optimized.webp");
+          --bg-image-subtle-2: url("/assets/backgrounds/bg-subtle-2-dark-1440w_optimized.webp");
+          --bg-image-footer: url("/assets/backgrounds/bg-footer-dark-1440w_optimized.webp");
+        }
+      }
+
+      .backgrounds {
+        min-height: 100%;
+        isolation: isolate;
+        background:
+          /*noise*/
+          url("/assets/backgrounds/noise.png") top center/220px repeat,
+          /*footer*/ var(--bg-image-footer) bottom
+            center/var(--bg-gradient-size) no-repeat,
+          /*header1*/ var(--bg-image-main-curves) top
+            center/var(--bg-gradient-size) no-repeat,
+          /*header2*/ var(--bg-image-main) top center/var(--bg-gradient-size)
+            no-repeat,
+          /*base*/ var(--gray-999);
+        background-blend-mode: /*noise*/
+          overlay,
+          /*footer*/ var(--bg-blend-mode),
+          /*header1*/ var(--bg-svg-blend-mode),
+          /*header2*/ normal,
+          /*base*/ normal;
+        margin-top: 0;
+        padding-top: 0;
+        top: 0;
+      }
+      
+      /* Assurer que tout le contenu est collé au bord supérieur sur mobile */
+      @media (max-width: 640px) {
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        
+        .stack.backgrounds {
+          margin-top: 0;
+          padding-top: 0;
+        }
+        
+        #main-content {
+          padding-top: 0;
+        }
+      }
+      
+      @media (forced-colors: active) {
+        /* Deactivate custom backgrounds for high contrast users. */
+        .backgrounds {
+          background: none;
+          background-blend-mode: none;
+          --bg-gradient-size: none;
+        }
+      }
+
+      /* Micro-interactions styles */
+      .section-transition {
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+
+      .section-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Respect user's reduced motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        .section-transition,
+        .section-visible {
+          transition: none;
+          transform: none;
+          animation: none;
+        }
+      }
+
+      /* Ajout pour garantir un espacement constant entre la navigation et le contenu principal */
+      #main-content {
+        padding-top: var(--space-md);
+        /* margin-top: var(--nav-height, 70px); */
+        position: relative;
+      }
+
+      @media (max-width: 640px) {
+        #main-content {
+          padding-top: 0;
+          /* margin-top: var(--mobile-nav-height, 60px); */
+        }
+      }
+    </style>
+  </body>
+</html>
