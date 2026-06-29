@@ -24,7 +24,7 @@ const formatDevice = (device?: string) => {
 export const LandingProjects = ({ projects }: { projects: Project[] }) => {
   return (
     <section
-      id="selected-projects"
+      id="projects"
       className="relative overflow-hidden bg-white py-14 text-slate-900 dark:bg-slate-950 dark:text-slate-50 md:py-20"
     >
       <div className="absolute inset-0 pointer-events-none">
@@ -39,15 +39,17 @@ export const LandingProjects = ({ projects }: { projects: Project[] }) => {
               Projets
             </p>
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Sélection de réalisations
+              Projets sélectionnés
             </h2>
           </div>
 
           <a
-            href="/work/"
+            href="https://my.zodev.live"
+            target="_blank"
+            rel="noreferrer"
             className="inline-flex items-center gap-2 self-start rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-cyan-500/40 hover:bg-slate-200 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300 dark:hover:bg-slate-800/80"
           >
-            Voir tout le portfolio
+            Voir le portfolio complet
             <ExternalLink className="h-4 w-4 text-slate-400" />
           </a>
         </div>

@@ -34,8 +34,8 @@ interface Props {
 import dataUser from "../data/User.json";
 
 // Enhanced default values with better SEO optimization
-const defaultTitle = `${dataUser.firstName} ${dataUser.lastName} - Expert Développeur Web & Mobile | React, Astro.js, React Native`;
-const defaultDescription = `Portfolio professionnel de ${dataUser.firstName} ${dataUser.lastName}, développeur web et mobile freelance basé à ${dataUser.address.city}. Spécialisé en React, React Native, Astro.js, Next.js et technologies web modernes. Création d'applications web et mobiles performantes.`;
+const defaultTitle = `${dataUser.firstName} ${dataUser.lastName} - Développeur Web & Mobile | React, Astro.js, React Native`;
+const defaultDescription = `Landing page de ${dataUser.firstName} ${dataUser.lastName}, développeur web et mobile freelance basé à ${dataUser.address.city}. Spécialisé en React, React Native, Astro.js, Next.js et technologies web modernes.`;
 
 const {
   title = defaultTitle,
@@ -96,7 +96,7 @@ const twitterData = {
 <!-- Enhanced keywords with location and specific technologies -->
 <meta
   name="keywords"
-  content={`développeur web ${dataUser.address.city}, développeur mobile ${dataUser.address.country}, React developer, React Native, Astro.js, Next.js, TypeScript, JavaScript, freelance developer, portfolio, ${dataUser.firstName} ${dataUser.lastName}, développement web, application mobile, frontend, backend, Supabase, Firebase, Tailwind CSS`}
+  content={`développeur web ${dataUser.address.city}, développeur mobile ${dataUser.address.country}, React developer, React Native, Astro.js, Next.js, TypeScript, JavaScript, freelance developer, landing page, ${dataUser.firstName} ${dataUser.lastName}, développement web, application mobile, frontend, backend, Supabase, Firebase, Tailwind CSS`}
 />
 
 <!-- Additional SEO meta tags -->

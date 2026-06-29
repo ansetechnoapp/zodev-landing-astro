@@ -1,5 +1,5 @@
 {
-  "name": "portfolio",
+  "name": "zodev-landing-astro",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -16,7 +16,7 @@
     "generate-sitemap": "node scripts/enhanced-sitemap-generator.js",
     "optimize-links": "node scripts/internal-linking-optimizer.js",
     "seo-full": "node scripts/comprehensive-seo-audit.js && node scripts/enhanced-sitemap-generator.js && node scripts/internal-linking-optimizer.js",
-    "pre-deploy": "npm run optimize-images && npm run generate-sitemap && npm run seo-audit",
+    "pre-deploy": "pnpm run optimize-images && pnpm run generate-sitemap && pnpm run seo-audit",
     "deploy-check": "node scripts/vercel-deploy.js"
   },
   "dependencies": {

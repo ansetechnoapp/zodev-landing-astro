@@ -1,5 +1,11 @@
-import React from 'react';
-import { RiHome5Line, RiToolsFill, RiUser3Line, RiCodeSSlashLine, RiBriefcase2Line, RiMailLine } from 'react-icons/ri';
+import React from "react";
+import {
+    RiHome5Line,
+    RiToolsFill,
+    RiCodeSSlashLine,
+    RiBriefcase2Line,
+    RiMailLine
+} from "react-icons/ri";
 
 interface MenuLinksProps {
     namepage?: string;
@@ -13,150 +19,50 @@ interface IconLink {
 }
 
 const MenuLinks: React.FC<MenuLinksProps> = ({ namepage, pathname }) => {
+    const isActiveLink = (href: string) => {
+        if (href === "/#hero") {
+            return pathname === "/";
+        }
+
+        return pathname === href;
+    };
+
     const getIconLinks = (): IconLink[] => {
-        let iconLinks: IconLink[] = [];
+        const landingLinks: IconLink[] = [
+            {
+                icon: <RiHome5Line size={20} />,
+                href: "/#hero",
+                label: "Accueil"
+            },
+            {
+                icon: <RiToolsFill size={20} />,
+                href: "/#services",
+                label: "Services"
+            },
+            {
+                icon: <RiBriefcase2Line size={20} />,
+                href: "/#projects",
+                label: "Projets"
+            },
+            {
+                icon: <RiMailLine size={20} />,
+                href: "/#contact",
+                label: "Contact"
+            }
+        ];
 
-        if (namepage === "home") {
-            iconLinks = [
-                {
-                    icon: <RiHome5Line size={20} />,
-                    href: "/home#hero_home",
-                    label: "Accueil"
-                },
-                {
-                    icon: <RiToolsFill size={20} />,
-                    href: "/home#skills",
-                    label: "Compétences"
-                },
-                {
-                    icon: <RiUser3Line size={20} />,
-                    href: "/home#about",
-                    label: "À propos"
-                },
-                {
-                    icon: <RiCodeSSlashLine size={20} />,
-                    href: "/home#service",
-                    label: "Services"
-                },
-                {
-                    icon: <RiBriefcase2Line size={20} />,
-                    href: "/home#work",
-                    label: "Travaux"
-                },
-                {
-                    icon: <RiMailLine size={20} />,
-                    href: "/home#contact",
-                    label: "Contact"
-                }
-            ];
-        } else if (namepage === "blog") {
-            iconLinks = [
-                {
-                    icon: <RiHome5Line size={20} />,
-                    href: "/home#hero_home",
-                    label: "Accueil"
-                },
-                {
-                    icon: <RiToolsFill size={20} />,
-                    href: "/home#skills",
-                    label: "Compétences"
-                },
-                {
-                    icon: <RiUser3Line size={20} />,
-                    href: "/home#about",
-                    label: "À propos"
-                },
-                {
-                    icon: <RiCodeSSlashLine size={20} />,
-                    href: "/home#service",
-                    label: "Services"
-                },
-                {
-                    icon: <RiBriefcase2Line size={20} />,
-                    href: "/home#work",
-                    label: "Travaux"
-                },
-                {
-                    icon: <RiMailLine size={20} />,
-                    href: "/home#contact",
-                    label: "Contact"
-                }
-            ];
-        } else if (namepage === "work") {
-            iconLinks = [
-                {
-                    icon: <RiHome5Line size={20} />,
-                    href: "/home#hero_home",
-                    label: "Accueil"
-                },
-                {
-                    icon: <RiToolsFill size={20} />,
-                    href: "/home#skills",
-                    label: "Compétences"
-                },
-                {
-                    icon: <RiUser3Line size={20} />,
-                    href: "/home#about",
-                    label: "À propos"
-                },
-                {
-                    icon: <RiCodeSSlashLine size={20} />,
-                    href: "/home#service",
-                    label: "Services"
-                },
-                {
-                    icon: <RiBriefcase2Line size={20} />,
-                    href: "#work",
-                    label: "Travaux"
-                },
-                {
-                    icon: <RiMailLine size={20} />,
-                    href: "#contact",
-
-                    label: "Contact"
-                }
-            ];
-        } else if (namepage === "widgetCss") {
-            iconLinks = [
+        if (namepage === "widgetCss") {
+            return [
                 {
                     icon: <RiCodeSSlashLine size={20} />,
                     href: "/docs/",
                     label: "Documentation"
                 },
-                {
-                    icon: <RiHome5Line size={20} />,
-                    href: "/home#hero_home",
-                    label: "Accueil"
-                },
-                {
-                    icon: <RiToolsFill size={20} />,
-                    href: "/home#skills",
-                    label: "Compétences"
-                },
-                {
-                    icon: <RiUser3Line size={20} />,
-                    href: "/home#about",
-                    label: "À propos"
-                },
-                {
-                    icon: <RiCodeSSlashLine size={20} />,
-                    href: "/home#service",
-                    label: "Services"
-                },
-                {
-                    icon: <RiBriefcase2Line size={20} />,
-                    href: "/home#work",
-                    label: "Travaux"
-                },
-                {
-                    icon: <RiMailLine size={20} />,
-                    href: "/home#contact",
-                    label: "Contact"
-                }
+                ...landingLinks
             ];
         }
 
-        return iconLinks;
+        return landingLinks;
     };
 
     return (
@@ -164,9 +70,9 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ namepage, pathname }) => {
             {getIconLinks().map(({ href, icon, label }) => (
                 <li key={href}>
                     <a
-                        aria-current={pathname === href}
+                        aria-current={isActiveLink(href)}
                         href={href}
-                        className={`menu-link-item ${pathname === href ? 'active' : ''}`}
+                        className={`menu-link-item ${isActiveLink(href) ? 'active' : ''}`}
                         title={label}
                     >
                         {icon}

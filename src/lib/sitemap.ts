@@ -1,8 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getCollection } from "astro:content";
-import allPosts from "../data/blog/all-posts.json";
 import { canonicalSiteOrigin, resolveCanonicalUrl } from "../config/site.js";
 
 export type SitemapEntry = {
@@ -27,24 +25,6 @@ const staticPages: Array<{
     source: "src/pages/index.astro",
     priority: "1.0",
     changefreq: "weekly",
-  },
-  {
-    url: "/work/",
-    source: "src/pages/work.astro",
-    priority: "0.9",
-    changefreq: "weekly",
-  },
-  {
-    url: "/blog/",
-    source: "src/pages/blog/index.astro",
-    priority: "0.8",
-    changefreq: "weekly",
-  },
-  {
-    url: "/widgetCss/",
-    source: "src/pages/widgetCss.astro",
-    priority: "0.6",
-    changefreq: "monthly",
   },
 ];
 
@@ -94,37 +74,6 @@ export async function buildSitemapEntries() {
       lastmod: await getFileLastMod(page.source),
       changefreq: page.changefreq,
       priority: page.priority,
-    });
-  }
-
-  const workEntries = await getCollection("work");
-  for (const entry of workEntries) {
-    addUrlEntry(urls, {
-      loc: resolveCanonicalUrl(
-        normalizePathname(`/work/${entry.slug}`)
-      ),
-      lastmod: normalizeDateValue(entry.data.publishDate),
-      changefreq: "monthly",
-      priority: "0.7",
-    });
-  }
-
-  for (const post of allPosts as Array<{
-    slug?: string;
-    pubDate?: string;
-    updatedDate?: string;
-  }>) {
-    if (!post.slug) {
-      continue;
-    }
-
-    addUrlEntry(urls, {
-      loc: resolveCanonicalUrl(
-        normalizePathname(`/blog/${post.slug}`)
-      ),
-      lastmod: normalizeDateValue(post.updatedDate || post.pubDate),
-      changefreq: "monthly",
-      priority: "0.7",
     });
   }
 

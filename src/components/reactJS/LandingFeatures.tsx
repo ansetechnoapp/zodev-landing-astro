@@ -4,26 +4,26 @@ import { MonitorSmartphone, Code2, Palette, Zap, Sparkles } from "lucide-react";
 
 const features = [
   {
-    title: "Responsive",
-    copy: "Pensé pour rester lisible et élégant sur mobile, tablette et desktop.",
+    title: "Développement web",
+    copy: "Sites vitrines, dashboards et interfaces rapides, lisibles et bien structurées.",
     icon: MonitorSmartphone,
     accent: "text-cyan-500 dark:text-cyan-400",
   },
   {
-    title: "UI animée",
-    copy: "Des micro-interactions discrètes qui donnent du relief sans gêner la lecture.",
+    title: "Développement mobile",
+    copy: "Applications React Native pensées pour la fluidité, la stabilité et l’usage réel.",
     icon: Zap,
     accent: "text-amber-500 dark:text-amber-400",
   },
   {
-    title: "Design system",
-    copy: "Des blocs cohérents pour montrer la qualité de l’interface et la rigueur visuelle.",
+    title: "Intégration produit",
+    copy: "UI sur mesure, composants réutilisables et connexion propre aux API et aux données.",
     icon: Palette,
     accent: "text-fuchsia-500 dark:text-fuchsia-400",
   },
   {
-    title: "Code moderne",
-    copy: "Une structure propre, maintenable et pensée pour évoluer avec de nouveaux projets.",
+    title: "Maintenance & évolution",
+    copy: "Corrections, améliorations continues et montée en version sans casser l’existant.",
     icon: Code2,
     accent: "text-emerald-500 dark:text-emerald-400",
   },
@@ -31,7 +31,10 @@ const features = [
 
 export const LandingFeatures = () => {
   return (
-    <section className="relative overflow-hidden border-y border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950">
+    <section
+      id="services"
+      className="relative overflow-hidden border-y border-slate-200/80 bg-white dark:border-slate-800/80 dark:bg-slate-950"
+    >
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute left-1/2 top-0 h-px w-[70%] -translate-x-1/2 bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
         <div className="absolute -left-24 top-1/2 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
@@ -48,14 +51,14 @@ export const LandingFeatures = () => {
           >
             <p className="mb-3 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.28em] text-cyan-500 dark:text-cyan-400">
               <Sparkles className="h-4 w-4" />
-              Mise en avant
+              Services & savoir-faire
             </p>
             <h2 className="max-w-xl text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 md:text-5xl">
-              Une page d’accueil qui montre le niveau dès le premier scroll.
+              Une base claire pour présenter ce que je fais, sans surcharger le message.
             </h2>
             <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 dark:text-slate-400">
-              Le but n’est pas de tout raconter ici, mais de donner une première impression forte:
-              du rythme, de la clarté et des détails qui donnent envie d’ouvrir la galerie complète.
+              Cette section met en avant les missions que je sais traiter avec
+              sérieux, du produit simple au projet plus ambitieux.
             </p>
           </motion.div>
 

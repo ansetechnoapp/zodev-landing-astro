@@ -16,8 +16,8 @@ interface Props {
 import dataUser from "../data/User.json";
 
 const {
-  title = `${dataUser.firstName} ${dataUser.lastName}: Portfolio`,
-  description = `Le site personnel de ${dataUser.firstName} ${dataUser.lastName} - Développeur web et mobile freelance spécialisé en React, React Native, Astro.js et technologies web modernes.`,
+  title = `${dataUser.firstName} ${dataUser.lastName} | Développeur web & mobile`,
+  description = `Landing page de ${dataUser.firstName} ${dataUser.lastName} - Développeur web et mobile freelance spécialisé en React, React Native, Astro.js, Next.js et technologies web modernes.`,
   image = "/assets/social-preview.jpg",
   canonicalURL = new URL(Astro.url.pathname, Astro.site),
   schemaType = "Person",
@@ -40,7 +40,7 @@ const socialImageURL = new URL(image, Astro.site).href;
 <meta name="author" content={`${dataUser.firstName} ${dataUser.lastName}`} />
 <meta
   name="keywords"
-  content="web development, mobile apps, React, React Native, Astro, frontend, backend, developer, portfolio"
+  content="web development, mobile apps, React, React Native, Astro, Next.js, frontend, backend, developer, landing page"
 />
 <link rel="canonical" href={canonicalURL} />
 

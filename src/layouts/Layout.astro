@@ -52,7 +52,14 @@ const autoNoIndex =
   normalizedPathname === "/generalFedapayCallback" ||
   normalizedPathname === "/docs" ||
   normalizedPathname.startsWith("/docs/") ||
-  normalizedPathname.startsWith("/portfolio/");
+  normalizedPathname.startsWith("/portfolio/") ||
+  normalizedPathname === "/home" ||
+  normalizedPathname === "/work" ||
+  normalizedPathname.startsWith("/work/") ||
+  normalizedPathname === "/blog" ||
+  normalizedPathname.startsWith("/blog/") ||
+  normalizedPathname === "/widgetCss" ||
+  normalizedPathname === "/widgetCss/";
 
 const googleSiteVerification =
   import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || undefined;
